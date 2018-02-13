@@ -1,0 +1,348 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><style type="text/css">.gm-err-container{height:100%;width:100%;display:table;background-color:#e0e0e0;position:relative;left:0;top:0}.gm-err-content{border-radius:1px;padding-top:0;padding-left:10%;padding-right:10%;position:static;vertical-align:middle;display:table-cell}.gm-err-content a{color:#4285f4}.gm-err-icon{text-align:center}.gm-err-title{margin:5px;margin-bottom:20px;color:#616161;font-family:Roboto,Arial,sans-serif;text-align:center;font-size:24px}.gm-err-message{margin:5px;color:#757575;font-family:Roboto,Arial,sans-serif;text-align:center;font-size:12px}.gm-err-autocomplete{padding-left:20px;background-repeat:no-repeat;background-size:15px 15px}</style><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+	<title>INFORM Global dashboard</title>
+
+	<!-- General META -->
+	<meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<!-- Semantic META -->
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+
+	<!-- Fav Icon -->
+	<link href="/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+	<!--Application CSS Files-->
+	<link rel="stylesheet" href="bower_components/build/bower/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="bower_components/build/custom/bootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="bower_components/build/bower/cartodb.js/css/cartodb.css">
+	<link rel="stylesheet" href="bower_components/build/bower/dcjs/css/dc.css">
+	<link rel="stylesheet" href="bower_components/build/custom/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="bower_components/lib/leaflet/dist/leaflet.css">
+	<link rel="stylesheet" href="bower_components/lib/dc-addons/dist/leaflet-map/dc-leaflet-legend.css">
+	<link rel="stylesheet" href="css/dashboards.css">
+	<link rel="stylesheet" href="css/header.css">
+
+</head>
+
+<body class="">
+
+	<section class="content">
+		<section class="container-fluid">
+				
+			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+
+				<div class="navbar-header">
+					<a class="navbar-brand" href="/#!/">
+						<img src="img/inform_logo.png" class="logo">
+						INFORM Dashboard
+					</a>
+				</div>
+
+				<!-- start: export nav -->
+				<ul class="nav navbar-top-links navbar-right">
+						<li class="dropdown">
+							<a href="http://www.inform-index.org" target="_blank">INFORM Home</a>
+						</li>
+				</ul>
+				<ul class="nav navbar-top-links navbar-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							How it works
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu export-items">
+							<li>
+								<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/communityprofiles" target="_blank">Github</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<ul class="nav navbar-top-links navbar-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+							<img class="export-icon" src="img/icon-download-options.svg" alt="download options">
+								  Export Options
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu export-items">
+							<li>
+								<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a id="download" ng-click="export_csv()">Export (CSV)</a>
+							</li>
+						</ul>
+						<!-- /.dropdown-tasks -->
+					</li>
+				</ul>
+				<!-- end: export nav -->
+			</nav>
+			<!-- end: navbar-header -->
+		
+			<div class="content-wrapper">
+		
+				<div id="spinner"></div>
+			
+				<!-- start: sidebar -->
+				<div class="navbar-default sidebar" role="navigation">
+					
+					<!-- start: zoom navigation -->
+					<div class="zoom-level-nav">
+						<div class="btn-group zoom-level" role="group">
+							<button style="background-color: #1a9641; color:white; width:210px;" type="button" class="btn btn-secondary">
+								<i class="fa fa-tachometer" aria-hidden="true"></i>
+								<span class="button-label metric_label">{{metric_label}}</span>
+							</button>
+							<button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+								<i class="fa fa-globe" aria-hidden="true"></i>
+								<span class="button-label country_selection">{{country_selection}}</span>
+							</button>
+							<!-- <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
+								<i class="fa fa-th-large" aria-hidden="true"></i>
+								<span class="button-label">{{level2_selection}}</span>
+							</button>
+							<button id="level4" type="button" class="btn btn-secondary">
+								<i class="fa fa-th" aria-hidden="true"></i>
+								<span class="button-label">{{level3_selection}}</span>
+							</button> -->
+						</div>
+					</div>
+					<!-- end: zoom navigation -->
+					
+					<!-- start: community profiles -->
+					<div class="community-profiles-wrapper">
+						<div id="count-info" class="general-info">
+							<!-- <div><span class="community-title">{{name_selection}}</span></div> -->
+							<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"><span class="subtype_selection">{{subtype_selection}}</span> selected</span>
+							<a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
+						</div>
+						<div class="row"></div>
+						<div class='tablearea' id='general'></div>
+						<div class="row"></div>
+					</div>
+					<!-- end: community profiles -->
+
+					
+					<!-- start: accordion with stats  -->
+					<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+						<div class="card">
+							<div class="card-header accordion-header" role="tab" id="headingOne" style="background-color:#b0ded3">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									<span class="panel-header-icon">
+										<img src="img/INFORM.png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="map_coloring('INFORM')">Risk Score - <span class="component-score" id="risk_score_main"></span>
+											<span class="score-helptext">/10</span>
+										</span>
+										<span class="panel-header-description">Overall composite risk score</span>
+									</span>
+								</a>
+							</div>
+							<!-- <div id="collapseOne" class="collapse in" role="tabpanel" aria-labelledby="headingOne">
+								<div class="card-block" id="scores"></div>
+							</div> -->
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header" role="tab" id="headingTwo">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+									<span class="panel-header-icon">
+										<img src="img/VU.png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="map_coloring('VU')">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
+											<span class="score-helptext">/10</span>
+										</span>
+										<span class="panel-header-description">Click for vulnerability components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+								<div class="card-block" id="VU"></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header" role="tab" id="headingThree">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+									<span class="panel-header-icon">
+										<img src="img/HA.png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="map_coloring('HA')">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
+											<span class="score-helptext">/10</span>
+										</span>
+										<span class="panel-header-description">Click for hazard components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+								<div class="card-block" id="HA"></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header" role="tab" id="headingFour">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+									<span class="panel-header-icon">
+										<img src="img/CC.png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="map_coloring('CC')">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
+											<span class="score-helptext">/10</span>
+										</span>
+										<span class="panel-header-description">Click for coping capacity components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+								<div class="card-block" id="CC"></div>
+							</div>
+						</div>
+						<div class="card"></div>
+					</div>
+					<!-- end: accordion with stats -->
+
+
+				</div>
+				<!-- end: sidebar -->
+
+				<!-- start: map -->
+				<div class="map-wrapper" style="position: relative">
+
+					<div id="map-chart" style="position:absolute; width:100%; height:100%"></div> 
+					
+					
+					
+
+					<!-- the above div and inline styles are only for placement -->
+					<div id="mapPopup" class="map-popup" style="position:absolute;">
+						<div class="popup-header">
+							<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+								<i class="fa fa-search-plus pull-right big-icon"></i>
+							</button>
+							<span class="name_popup">{{name_popup}}</span>
+						</div>
+						<div class="popup-score">
+						  <div class="score-label"><span class="metric_label">{{metric_label}}</span></div>
+						  <span class="value_popup">{{value_popup}}</span>
+						</div>
+					  </div>
+
+
+				</div>
+				<!-- end: map -->
+
+			</div>
+
+			<!-- start: risk score modal -->
+			<div id="infoModal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<span class="panel-header-icon">
+								<img src="{{metric_icon}}">
+							</span>
+							<h3 class="modal-title"><span class="metric_label">{{metric_label}}</span></h3>
+						</div>
+						<div class="modal-body">
+							<h5><b>Year source:</b> <span class="metric_year">{{metric_year}}</span></h5><br>
+							<h5><b>Source link:</b> <a href={{metric_source}} target="_blank"><span class="metric_source">{{metric_source}}</a></h5><br>
+							<h5><b>Description:</b> <span class="metric_desc">{{metric_desc}}</span></h5><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: risk score modal -->
+			
+			<!-- start: phone device message -->
+			<div class="mobile-message">
+				<p>For best experience please use a tablet device, laptop or desktop computer.
+					<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
+				</p>
+			</div>
+			<!-- end: phone device message -->
+
+			<!-- start: IE message -->
+			<div id="IEmodal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<h3 class="modal-title">Warning</h3>
+						</div>
+						<div class="modal-body">
+							<p>This beta-version is currently best viewed in Google Chrome, and second-best in Firefox or Safari. Internet Explorer works, but has substantial interaction downsides.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: IE message -->
+		
+		</section>
+	</section>
+
+
+	<!--Embedding The User Object-->
+	<script async="" src="https://www.google-analytics.com/analytics.js"></script><script type="text/javascript" style="">
+		var user = "";
+	</script>
+	<script>
+		var ie = (function(){
+			var undef,rv = -1; // Return value assumes failure.
+			var ua = window.navigator.userAgent;
+			var msie = ua.indexOf('MSIE ');
+			var trident = ua.indexOf('Trident/');
+
+			if (msie > 0) {
+				// IE 10 or older => return version number
+				rv = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+			} else if (trident > 0) {
+				// IE 11 (or newer) => return version number
+				var rvNum = ua.indexOf('rv:');
+				rv = parseInt(ua.substring(rvNum + 3, ua.indexOf('.', rvNum)), 10);
+			}
+
+			return ((rv > -1) ? rv : undef);
+		}());
+		if (ie) {
+			L_PREFER_CANVAS = true;
+		}
+	</script>
+
+	<!--Application JavaScript Files-->
+	<script type="text/javascript" src="bower_components/build/bower/jquery/js/jquery.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/crossfilter/js/crossfilter.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/lodash/js/lodash.underscore.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/leaflet/js/leaflet.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/leaflet-ajax/js/leaflet.ajax.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/d3/js/d3.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/dcjs/js/dc.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/custom/dc-leaflet/js/dc-leaflet-dev.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/underscore/js/underscore.js"></script>
+	<script type="text/javascript" src="bower_components/build/bower/leaflet-gps/js/leaflet-gps.min.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&amp;sensor=true"></script>
+	<script type="text/javascript" src="bower_components/build/custom/spin.js/spin.min.js"></script>
+	<script type="text/javascript" src="bower_components/lib/topojson/topojson.min.js"></script>
+	<script type="text/javascript" src="bower_components/build/custom/dc-addons/js/dc-addons.js"></script>
+	<!-- <script type="text/javascript" src="bower_components/build/bower/d3-tip/js/index.js"></script> -->
+	<script type="text/javascript" src="bower_components/build/custom/google-spreadsheets-parser/dist/googleSpreadsheetsParser.js"></script>
+	<script type="text/javascript" src="js/site.js"></script>
+
+</body>
+</html>

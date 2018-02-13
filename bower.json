@@ -1,0 +1,84 @@
+{
+  "name": "Food Security dashboard",
+  "version": "0.0.1",
+  "description": "Dashboard ",
+  "dependencies": {
+    "bootstrap": "3.3.6",
+    "jquery": "~2.2.3",
+    "leaflet": "0.7.7",
+    "cartodb.js": "3.15.9",
+    "dcjs": "2.0.0-beta.3",
+    "lodash": "2.4.2",
+    "leaflet-ajax": "~2.0.0",
+    "d3": "4.4.0",
+    "crossfilter": "*",
+	"underscore": "1.8.*",
+	"leaflet-gps": "1.0.*",
+	"topojson": "1.6.26",
+	"spin.js": "*",
+	"dc-addons": "*",
+	"google-spreadsheets-parser": "*"
+  },
+  "resolutions": {
+	"d3": "3.5.17"
+  },
+  "install": {
+    "base": "bower_components/build/bower",
+    "path": {
+      "js": "{name}/js",
+      "css": "{name}/css",
+      "scss": "{name}/css",
+      "map": "{name}/css",
+      "eot": "{name}/fonts",
+      "svg": "{name}/fonts",
+      "ttf": "{name}/fonts",
+      "woff": "{name}/fonts",
+      "woff2": "{name}/fonts",
+      "png": "{name}/img"
+    },
+    "sources": {
+      "bootstrap": [
+        "bower_components/lib/bootstrap/dist/js/bootstrap.min.js",
+        "bower_components/lib/bootstrap/dist/css/bootstrap.min.css",
+		"bower_components/lib/bootstrap/dist/css/bootstrap.min.css.map",
+        "bower_components/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.eot",
+        "bower_components/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.svg",
+        "bower_components/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.ttf",
+        "bower_components/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff",
+		"bower_components/lib/bootstrap/dist/fonts/glyphicons-halflings-regular.woff2"
+      ],
+      "jquery": [
+        "bower_components/lib/jquery/dist/jquery.min.js"
+      ],
+      "cartodb.js": [
+        "bower_components/lib/cartodb.js/cartodb_noleaflet.js",
+        "bower_components/lib/cartodb.js/themes/css/cartodb.css"
+      ],
+      "crossfilter": [
+        "bower_components/lib/crossfilter/crossfilter.min.js"
+      ],
+      "lodash": [
+        "bower_components/lib/lodash/dist/lodash.underscore.min.js"
+      ],
+	  "leaflet": [
+        "bower_components/lib/leaflet/dist/leaflet.js",
+        "bower_components/lib/leaflet/dist/leaflet-src.js"
+      ],
+	  "leaflet-search": [
+        "bower_components/lib/leaflet-search/dist/leaflet-search.min.js",
+        "bower_components/lib/leaflet-search/dist/leaflet-search.min.css",
+		"bower_components/lib/leaflet-search/dist/leaflet-search.src.js",
+        "bower_components/lib/leaflet-search/dist/leaflet-search.src.css"
+      ],
+	  "d3": [
+        "bower_components/lib/d3/d3.min.js",
+        "bower_components/lib/d3/d3.js"
+      ],
+	  "dcjs": [
+        "bower_components/lib/dcjs/dc.min.js",
+        "bower_components/lib/dcjs/dc.js",
+        "bower_components/lib/dcjs/dc.css"
+      ]
+    }
+  }
+}

@@ -774,7 +774,7 @@ var generateCharts = function (d){
 			
 		} else {
 			if (risk_score) {
-				risk_score.textContent = null; //keyvalue.INFORM; //risk_score;
+				risk_score.textContent = ''; //keyvalue.INFORM; //risk_score;
 				//risk_score.setAttribute('class','component-score ' + high_med_low('INFORM','INFORM'));	
 				//risk_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
@@ -844,12 +844,11 @@ var generateCharts = function (d){
 					// if (bar_par) {bar_par.remove();}
 					
 					var div1a = document.getElementById(record.name);
-					div1a.innerHTML = null; //keyvalue[record.name];
+					div1a.innerHTML = '';//null; //keyvalue[record.name];
 					div1a.setAttribute('style','border:none');
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:0%'); //'+ width + '%');
-					div2a1.innerHTML = null; //dec1Format(keyvalue[record.name]);
 					
 					
 				}

@@ -17,7 +17,7 @@ body {
   top: 51px;
   width: 380px;
   z-index: 2;
-  background-color: #b0ded3; /*#ffffff;*/
+  background-color: #F3EEE3;
 }
 .map-wrapper {
   background: #accfff;
@@ -42,7 +42,7 @@ body {
   background: #f1f1f1;
   border-radius: 0px; /*4px;*/
   color: #bbbbbb;
-  margin-right: 3px;
+  /* margin-right: 3px; */
   text-align: left;
   font-size: 12px;
   display: block;
@@ -55,11 +55,16 @@ body {
   color: #ffffff;
 }
 .zoom-level button.btn-active {
-  background: #4C8293;
-  color: #ffffff;
+  background: #d9dcdc;
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
   padding-left: 15px;
   padding-right: 15px;
   text-align: left;
+}
+.metric_label{
+  text-transform:uppercase;
 }
 .zoom-level .button-label {
   font-size: 12px;
@@ -145,7 +150,7 @@ body {
   background: #e2e7ee;
   border-radius: 5px;
   height: 12px;
-  margin-top: 10px;
+  margin-top: 0px; /*10px;*/
   position: relative;
   margin-left: 10%;
   width: 100%;
@@ -155,7 +160,7 @@ body {
   border-radius: 5px;
   height: 12px;
   margin-left: 0%;
-  margin-top: 10px;
+  margin-top: 0px; /*10px;*/
   position: relative;
 }
 
@@ -174,7 +179,10 @@ body {
 .score-bar.bad {
   background: #d7191c;
 }
-
+.component-score {
+  color: black; /*#951301;*/
+}
+/*
 .component-score.good {
   color: #1a9641;
 }
@@ -193,9 +201,11 @@ body {
 .component-score.notavailable {
   color: #cccccc;
 }
+*/
 
 .component-score {
 	font-weight: bold;
+    /* text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey; */
 }
 .scale-icon {
   background: #4C8293; /*#397ab0*/;
@@ -671,5 +681,17 @@ body {
 } 
 .accordion .opened-for-codepen {
   display: block;
+}
+
+
+
+#table-chart th span { /*Glyphicon style*/
+  float: right;
+  font-size: 1em;
+  color: #0080bf;
+  display: inline-block;
+}
+#table-chart th {
+  cursor: pointer;
 }
 

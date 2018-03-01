@@ -22,9 +22,10 @@
 	<link rel="stylesheet" href="bower_components/build/bower/dcjs/css/dc.css">
 	<link rel="stylesheet" href="bower_components/build/custom/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="bower_components/lib/leaflet/dist/leaflet.css">
-	<link rel="stylesheet" href="bower_components/lib/dc-addons/dist/leaflet-map/dc-leaflet-legend.css">
+	<link rel="stylesheet" href="bower_components/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css">
 	<link rel="stylesheet" href="css/dashboards.css">
 	<link rel="stylesheet" href="css/header.css">
+	<link rel="stylesheet" href="css/core.css">
 
 </head>
 
@@ -81,10 +82,24 @@
 								<a id="download" ng-click="export_csv()">Export (CSV)</a>
 							</li>
 						</ul>
-						<!-- /.dropdown-tasks -->
 					</li>
 				</ul>
-				<!-- end: export nav -->
+				<ul class="nav navbar-top-links navbar-left">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+								  COUNTRY
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu submenu-items">
+							<li>
+								<a class="submenu-item" onclick="load_dashboard('INFORM2017')" role="button">INFORM 2017</a>
+							</li>
+							<li>
+								<a class="submenu-item" onclick="load_dashboard('INFORM_LBN')" role="button">INFORM Lebanon</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</nav>
 			<!-- end: navbar-header -->
 		
@@ -98,53 +113,52 @@
 					<!-- start: zoom navigation -->
 					<div class="zoom-level-nav">
 						<div class="btn-group zoom-level" role="group">
-							<button style="background-color: #1a9641; color:white; width:210px;" type="button" class="btn btn-secondary">
-								<i class="fa fa-tachometer" aria-hidden="true"></i>
-								<span class="button-label metric_label">{{metric_label}}</span>
+							<button style="width:49%; float:left" id="level2" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
+								<span class="button-label">Map View</span>
 							</button>
-							<button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
+							<button style="width:49%; float:right;" id="level2" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
+								<span class="button-label">Tabular View</span>
+							</button>
+						</div>
+						<div class="btn-group zoom-level" role="group">
+							<button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary">
+								<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
+								<span class="button-label metric_label">INFORM RISK INDEX</span>
+							</button>
+							<!-- <button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
 								<i class="fa fa-globe" aria-hidden="true"></i>
 								<span class="button-label country_selection">{{country_selection}}</span>
-							</button>
-							<!-- <button id="level3" type="button" class="btn btn-secondary" ng-click="zoom_out(3)">
-								<i class="fa fa-th-large" aria-hidden="true"></i>
-								<span class="button-label">{{level2_selection}}</span>
-							</button>
-							<button id="level4" type="button" class="btn btn-secondary">
-								<i class="fa fa-th" aria-hidden="true"></i>
-								<span class="button-label">{{level3_selection}}</span>
 							</button> -->
 						</div>
 					</div>
 					<!-- end: zoom navigation -->
 					
 					<!-- start: community profiles -->
-					<div class="community-profiles-wrapper">
-						<div id="count-info" class="general-info">
-							<!-- <div><span class="community-title">{{name_selection}}</span></div> -->
-							<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"><span class="subtype_selection">{{subtype_selection}}</span> selected</span>
-							<a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a>
-						</div>
-						<div class="row"></div>
-						<div class='tablearea' id='general'></div>
-						<div class="row"></div>
-					</div>
+					<!-- <div class="community-profiles-wrapper"> -->
+						<!-- <div id="count-info" class="general-info"> -->
+							<!-- <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"><span class="subtype_selection">Countries</span> selected</span> -->
+							<!-- <a class="reset-button" href="javascript:dc.filterAll();dc.redrawAll();">Select all</a> -->
+						<!-- </div> -->
+						<!-- <div class="row"></div> -->
+						<!-- <div class='tablearea' id='general'></div> -->
+						<!-- <div class="row"></div> -->
+					<!-- </div> -->
 					<!-- end: community profiles -->
 
 					
 					<!-- start: accordion with stats  -->
 					<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
 						<div class="card">
-							<div class="card-header accordion-header" role="tab" id="headingOne" style="background-color:#b0ded3">
+							<div class="card-header accordion-header level0" role="tab" id="headingOne" style="background-color:#d9dcdc">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 									<span class="panel-header-icon">
 										<img src="img/INFORM.png">
 									</span>
 									<span class="panel-header-content">
-										<span class="panel-header-title" onclick="map_coloring('INFORM')">Risk Score - <span class="component-score" id="risk_score_main"></span>
-											<span class="score-helptext">/10</span>
+										<span class="panel-header-title" onclick="map_coloring('INFORM')">INFORM Risk Index - <span class="component-score" id="risk_score_main"></span>
+											<!-- <span class="score-helptext">/10</span> -->
 										</span>
-										<span class="panel-header-description">Overall composite risk score</span>
+										<!-- <span class="panel-header-description">Overall composite risk score</span> -->
 									</span>
 								</a>
 							</div>
@@ -153,56 +167,56 @@
 							</div> -->
 						</div>
 						<div class="card">
-							<div class="card-header accordion-header" role="tab" id="headingTwo">
-								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
-									<span class="panel-header-icon">
-										<img src="img/VU.png">
-									</span>
-									<span class="panel-header-content">
-										<span class="panel-header-title" onclick="map_coloring('VU')">Vulnerability Score - <span class="component-score" id="vulnerability_score_main"></span>
-											<span class="score-helptext">/10</span>
-										</span>
-										<span class="panel-header-description">Click for vulnerability components</span>
-									</span>
-								</a>
-							</div>
-							<div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
-								<div class="card-block" id="VU"></div>
-							</div>
-						</div>
-						<div class="card">
-							<div class="card-header accordion-header" role="tab" id="headingThree">
+							<div class="card-header accordion-header level0" role="tab" id="headingThree">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
 									<span class="panel-header-icon">
 										<img src="img/HA.png">
 									</span>
 									<span class="panel-header-content">
-										<span class="panel-header-title" onclick="map_coloring('HA')">Hazard Score - <span class="component-score" id="hazard_score_main"></span>
-											<span class="score-helptext">/10</span>
+										<span class="panel-header-title" onclick="map_coloring('HA')">Hazards & Exposure Index - <span class="component-score" id="hazard_score_main"></span>
+											<!-- <span class="score-helptext">/10</span> -->
 										</span>
 										<span class="panel-header-description">Click for hazard components</span>
 									</span>
 								</a>
 							</div>
-							<div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+							<div id="collapseThree" class="collapse level0" role="tabpanel" aria-labelledby="headingThree">
 								<div class="card-block" id="HA"></div>
 							</div>
 						</div>
 						<div class="card">
-							<div class="card-header accordion-header" role="tab" id="headingFour">
+							<div class="card-header accordion-header level0" role="tab" id="headingTwo">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+									<span class="panel-header-icon">
+										<img src="img/VU.png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="map_coloring('VU')">Vulnerability Index - <span class="component-score" id="vulnerability_score_main"></span>
+											<!-- <span class="score-helptext">/10</span> -->
+										</span>
+										<span class="panel-header-description">Click for vulnerability components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse level0" role="tabpanel" aria-labelledby="headingTwo">
+								<div class="card-block" id="VU"></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header level0" role="tab" id="headingFour">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
 									<span class="panel-header-icon">
 										<img src="img/CC.png">
 									</span>
 									<span class="panel-header-content">
-										<span class="panel-header-title" onclick="map_coloring('CC')">Coping Capacity Score - <span class="component-score" id="coping_capacity_score_main"></span>
-											<span class="score-helptext">/10</span>
+										<span class="panel-header-title" onclick="map_coloring('CC')">Lack of Coping Capacity Index - <span class="component-score" id="coping_capacity_score_main"></span>
+											<!-- <span class="score-helptext">/10</span> -->
 										</span>
 										<span class="panel-header-description">Click for coping capacity components</span>
 									</span>
 								</a>
 							</div>
-							<div id="collapseFour" class="collapse" role="tabpanel" aria-labelledby="headingFour">
+							<div id="collapseFour" class="collapse level0" role="tabpanel" aria-labelledby="headingFour">
 								<div class="card-block" id="CC"></div>
 							</div>
 						</div>
@@ -217,7 +231,15 @@
 				<!-- start: map -->
 				<div class="map-wrapper" style="position: relative">
 
-					<div id="map-chart" style="position:absolute; width:100%; height:100%"></div> 
+					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
+					<div id="row-chart" style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff"></div>
+					<!-- <table class='table table-hover table-striped table-bordered' id='table-chart' style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff">
+					  <thead>
+						<tr class='table-header'>
+						</tr>
+					  </thead>
+					</table> -->
+					<!-- <div id="table-chart" style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff"></div> -->
 					
 					
 					
@@ -225,9 +247,9 @@
 					<!-- the above div and inline styles are only for placement -->
 					<div id="mapPopup" class="map-popup" style="position:absolute;">
 						<div class="popup-header">
-							<button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
+							<!-- <button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
 								<i class="fa fa-search-plus pull-right big-icon"></i>
-							</button>
+							</button> -->
 							<span class="name_popup">{{name_popup}}</span>
 						</div>
 						<div class="popup-score">
@@ -252,7 +274,7 @@
 								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 							</button>
 							<span class="panel-header-icon">
-								<img src="{{metric_icon}}">
+								<img class="metric_icon">
 							</span>
 							<h3 class="modal-title"><span class="metric_label">{{metric_label}}</span></h3>
 						</div>
@@ -339,7 +361,7 @@
 	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&amp;sensor=true"></script>
 	<script type="text/javascript" src="bower_components/build/custom/spin.js/spin.min.js"></script>
 	<script type="text/javascript" src="bower_components/lib/topojson/topojson.min.js"></script>
-	<script type="text/javascript" src="bower_components/build/custom/dc-addons/js/dc-addons.js"></script>
+	<script type="text/javascript" src="bower_components/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js"></script>
 	<!-- <script type="text/javascript" src="bower_components/build/bower/d3-tip/js/index.js"></script> -->
 	<script type="text/javascript" src="bower_components/build/custom/google-spreadsheets-parser/dist/googleSpreadsheetsParser.js"></script>
 	<script type="text/javascript" src="js/site.js"></script>

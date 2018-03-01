@@ -270,19 +270,13 @@ var generateCharts = function (d){
 	//First PIVOT the INFORM data from row*indicator level to row level (with indicators als columns)
 	var grouped = [];
 	d.inform_data.forEach(function (a) {
-		// check if title is not in hash table
 		if (!this[a.Iso3]) {
-			// if not, create new object with title and values array
-			// and assign it with the title as hash to the hash table
 			this[a.Iso3] = { pcode: a.Iso3, values: [] };
-			// add the new object to the result set, too
 			grouped.push(this[a.Iso3]);
 		}
-		// create a new object with the other values and push it
-		// to the array of the object of the hash table
 		this[a.Iso3].values.push({ IndicatorId: a.IndicatorId, IndicatorScore: a.IndicatorScore });
-		//this[a.Iso3].values.push({ [a.IndicatorId]: a.IndicatorScore });
 	}, Object.create(null)); // Object.create creates an empty object without prototypes
+	
 	var data_final = [];
 	for (var i=0; i < grouped.length; i++) {
 		var record = {};
@@ -307,9 +301,9 @@ var generateCharts = function (d){
 		
 	// Create the groups for these two dimensions (i.e. sum the metric)
 	var whereGroupSum = whereDimension.group().reduceSum(function(d) {return d[metric];});
-	var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[metric]) { return d[metric];} else { return d[meta_scorevar[metric]];};});
-	var whereGroupSum_tab_scores = whereDimension_tab.group().reduceSum(function(d) { if (!meta_scorevar[metric]) { return d[metric];} else { return d[meta_scorevar[metric]];};});
-		
+	var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+	var whereGroupSum_tab_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+			
 	// group with all, needed for data-count
 	var all = cf.groupAll();
 	// get the count of the number of rows in the dataset (total and filtered)
@@ -437,19 +431,19 @@ var generateCharts = function (d){
 	};
 	mapchartColors = mapchartColors_func();
 	
-	var color_cat = function(ind) {
+	color_cat = function(ind) {
 		
-		var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+		var width = keyvalue[ind]; //dimensions_scores[ind].top(1)[0].value.finalVal;
 		
 		var color_group = ind.split('.')[0].concat((ind.split('.')[1]) ? '.'.concat(ind.split('.')[1]) : '');
 		color_ranges = [];
 		for (j=0;j<d.Colors.length;j++) {
 			if (d.Colors[j].Indicator_code == color_group && d.Colors[j].ValueTo !== 'NULL') {
-				var record = {threshold: d.Colors[j].ValueTo.replace(',','.'), HEX: d.Colors[j].HEX};
+				var record = {threshold: d.Colors[j].ValueTo.replace(',','.')*1, HEX: d.Colors[j].HEX};
 				color_ranges.push(record);
 			}
 		}
-		color_range.sort(function(a,b) {
+		color_ranges.sort(function(a,b) {
 			return parseFloat(a.threshold) - parseFloat(b.threshold);
 		});
 		if (isNaN(width)) {return '#ccc';}	
@@ -458,21 +452,9 @@ var generateCharts = function (d){
 		else if (width<=color_ranges[2].threshold) {return color_ranges[2].HEX;} 
 		else if (width<=color_ranges[3].threshold) {return color_ranges[3].HEX;} 
 		else if (width<=color_ranges[4].threshold) {return color_ranges[4].HEX;} 
-	};					
-				
-	// var high_med_low = function(ind,ind_score) {
-		
-		// if (dimensions_scores[ind]) {
-			// var width = dimensions_scores[ind].top(1)[0].value.finalVal;
-			// if (isNaN(width)) {return 'notavailable';}
-			// else if (width < 3.5) { return 'good';} 
-			// else if (width <= 4.5) {return 'medium-good';}
-			// else if (width <= 5.5) {return 'medium';}
-			// else if (width <= 6.5) {return 'medium-bad';}
-			// else if (width > 6.5) { return 'bad';} 
-		// }				
-	// };	
+	};	
 	
+				
 
 	
 	
@@ -548,28 +530,27 @@ var generateCharts = function (d){
 				img1.setAttribute('src',icon);
 				div0.appendChild(img1);
 				var div1 = document.createElement('div');
-				div1.setAttribute('class','col-md-3 component-label');
+				div1.setAttribute('class','col-md-4 component-label');
 				div1.setAttribute('onclick','map_coloring(\''+record.name+'\')');
 				div1.innerHTML = meta_label[record.name];
 				div.appendChild(div1);	
-				var div1a = document.createElement('div');
-				div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
-				div1a.setAttribute('id',record.name);
-				//div1a.innerHTML = keyvalue[record.name];
-				div1.appendChild(div1a);
 				var div2 = document.createElement('div');
-				div2.setAttribute('class','col-md-5');
+				div2.setAttribute('class','col-md-5 bar-container');
 				div.appendChild(div2);
+				var div1a = document.createElement('div');
+				div1a.setAttribute('class','component-score-small');
+				div1a.setAttribute('id',record.name);
+				div2.appendChild(div1a);
 				var div2a = document.createElement('div');
 				div2a.setAttribute('class','component-scale');
 				div2.appendChild(div2a);
-				 var div2a1 = document.createElement('div');
+				var div2a1 = document.createElement('div');
 				div2a1.setAttribute('class','score-bar'); // + color_cat(record.name,record.scorevar_name));
 				div2a1.setAttribute('id','bar-'+record.name);
-				div2a1.setAttribute('style','width:0%; background:' + color_cat(record.name)); //'+ width + '%');
+				div2a1.setAttribute('style','width:0%;border:none'); //; background:' + color_cat(record.name)); //'+ width + '%');
 				div2a.appendChild(div2a1);
 				var div3 = document.createElement('div');
-				div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+				div3.setAttribute('class','col-sm-1 col-md-1 no-padding');
 				div.appendChild(div3);
 				var button = document.createElement('button');
 				button.setAttribute('type','button');
@@ -579,7 +560,7 @@ var generateCharts = function (d){
 				div3.appendChild(button);
 				var img3 = document.createElement('img');
 				img3.setAttribute('src','img/icon-popup.svg');
-				img3.setAttribute('style','height:17px');
+				img3.setAttribute('style','height:17px;margin-bottom:3px;');
 				button.appendChild(img3);
 				
 			} 
@@ -627,30 +608,29 @@ var generateCharts = function (d){
 				//img1.setAttribute('src',icon);
 				//div0.appendChild(img1);
 				var div1 = document.createElement('div');
-				div1.setAttribute('class','col-md-5 component-label');
+				div1.setAttribute('class','col-md-6 component-label');
 				div1.setAttribute('style','padding-left: 5px');
 				div1.setAttribute('onclick','map_coloring(\''+record.name+'\')');
 				div1.innerHTML = meta_label[record.name];
 				//$compile(div1)($scope);
 				div.appendChild(div1);	
-				var div1a = document.createElement('div');
-				div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
-				div1a.setAttribute('id',record.name);
-				//div1a.innerHTML = keyvalue[record.name];
-				div1.appendChild(div1a);
 				var div2 = document.createElement('div');
-				div2.setAttribute('class','col-md-5');
+				div2.setAttribute('class','col-md-5 bar-container');
 				div.appendChild(div2);
+				var div1a = document.createElement('div');
+				div1a.setAttribute('class','component-score-small');
+				div1a.setAttribute('id',record.name);
+				div2.appendChild(div1a);
 				var div2a = document.createElement('div');
 				div2a.setAttribute('class','component-scale');
 				div2.appendChild(div2a);
 				var div2a1 = document.createElement('div');
 				div2a1.setAttribute('class','score-bar ');// + color_cat(record.name,record.scorevar_name));
 				div2a1.setAttribute('id','bar-'+record.name);
-				div2a1.setAttribute('style','width:0%; background:' + color_cat(record.name)); //'+ width + '%');'); //'+ width + '%');
+				div2a1.setAttribute('style','width:0%;border:none');//; background:' + color_cat(record.name)); //'+ width + '%');'); //'+ width + '%');
 				div2a.appendChild(div2a1);
 				var div3 = document.createElement('div');
-				div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+				div3.setAttribute('class','col-sm-1 col-md-1 no-padding');
 				div.appendChild(div3);
 				var button = document.createElement('button');
 				button.setAttribute('type','button');
@@ -693,30 +673,29 @@ var generateCharts = function (d){
 				//img1.setAttribute('src',icon);
 				//div0.appendChild(img1);
 				var div1 = document.createElement('div');
-				div1.setAttribute('class','col-md-5 component-label');
+				div1.setAttribute('class','col-md-6 component-label');
 				div1.setAttribute('style','padding-left: 5px');
 				div1.setAttribute('onclick','map_coloring(\''+record.name+'\')');
 				div1.innerHTML = meta_label[record.name];
 				//$compile(div1)($scope);
 				div.appendChild(div1);	
-				var div1a = document.createElement('div');
-				div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
-				div1a.setAttribute('id',record.name);
-				//div1a.innerHTML = keyvalue[record.name];
-				div1.appendChild(div1a);
 				var div2 = document.createElement('div');
-				div2.setAttribute('class','col-md-5');
+				div2.setAttribute('class','col-md-5 bar-container');
 				div.appendChild(div2);
+				var div1a = document.createElement('div');
+				div1a.setAttribute('class','component-score');
+				div1a.setAttribute('id',record.name);
+				div2.appendChild(div1a);
 				var div2a = document.createElement('div');
 				div2a.setAttribute('class','component-scale');
 				div2.appendChild(div2a);
 				var div2a1 = document.createElement('div');
-				div2a1.setAttribute('class','score-bar ');// + color_cat(record.name,record.scorevar_name));
+				div2a1.setAttribute('class','score-bar');
 				div2a1.setAttribute('id','bar-'+record.name);
-				div2a1.setAttribute('style','width:0%; background:' + color_cat(record.name)); //'+ width + '%');'); //'+ width + '%');
+				div2a1.setAttribute('style','width:0%; border:none');
 				div2a.appendChild(div2a1);
 				var div3 = document.createElement('div');
-				div3.setAttribute('class','col-sm-2 col-md-2 no-padding');
+				div3.setAttribute('class','col-sm-1 col-md-1 no-padding');
 				div.appendChild(div3);
 				var button = document.createElement('button');
 				button.setAttribute('type','button');
@@ -734,10 +713,11 @@ var generateCharts = function (d){
 	}
 	createHTML_level3();
 	
+	var keyvalue = [];
 	var keyvalues1 = function(filters) {
 		
 		var data_area = data_final.filter(function(obj) { return filters[0] == obj.pcode; });	
-		var keyvalue = [];
+		keyvalue = [];
 		tables.forEach(function(t) {
 			var key = t.name;
 			//keyvalue[key] = dec1Format(data_area[0][key]);
@@ -747,10 +727,11 @@ var generateCharts = function (d){
 		
 	};
 	
+	var keyvalue2 = [];
 	var keyvalues2 = function(filters) {
 		
 		var data_area = data_final.filter(function(obj) { return filters[1] == obj.pcode; });	
-		var keyvalue2 = [];
+		keyvalue2 = [];
 		tables.forEach(function(t) {
 			var key = t.name;
 			//keyvalue2[key] = dec1Format(data_area[0][key]);
@@ -768,22 +749,22 @@ var generateCharts = function (d){
 		var coping_score = document.getElementById('coping_capacity_score_main');
 		if (mapfilters_length == 1) {
 			if (risk_score) {
-				risk_score.textContent = keyvalue.INFORM; //risk_score;
+				risk_score.textContent = dec1Format(keyvalue.INFORM); //risk_score;
 				//risk_score.setAttribute('class','component-score ');// + high_med_low('INFORM','INFORM'));
 				risk_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));							
 			}
 			if (vulnerability_score) {
-				vulnerability_score.textContent = keyvalue.VU;
+				vulnerability_score.textContent = dec1Format(keyvalue.VU);
 				//vulnerability_score.setAttribute('class','component-score ');// + high_med_low('VU','VU'));		
 				//vulnerability_score.setAttribute('style','color: ' + color_cat('VU'));									
 			}
 			if (hazard_score) {
-				hazard_score.textContent = keyvalue.HA;
+				hazard_score.textContent = dec1Format(keyvalue.HA);
 				//hazard_score.setAttribute('class','component-score ');// + high_med_low('HA','HA'));
 				//hazard_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
 			if (coping_score) {
-				coping_score.textContent = keyvalue.CC;
+				coping_score.textContent = dec1Format(keyvalue.CC);
 				//coping_score.setAttribute('class','component-score ');// + high_med_low('CC','CC'));
 				//coping_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
@@ -829,12 +810,14 @@ var generateCharts = function (d){
 					
 					var width = keyvalue[record.name]*10; //dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 					var div1a = document.getElementById(record.name);
-					div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
+					div1a.setAttribute('class','component-score-small'); // ' + high_med_low(record.name,record.scorevar_name));
+					div1a.setAttribute('style','border:solid; border-width:1px; border-color:black');
 					
-					div1a.innerHTML = dec1Format(keyvalue[record.name]);
+					div1a.innerHTML = isNaN(keyvalue[record.name]) ? '-' : dec1Format(keyvalue[record.name]);
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
+					//div2a1.innerHTML = dec1Format(keyvalue[record.name]);
 				
 				// } else if (mapfilters_length == 2) {
 					
@@ -860,9 +843,11 @@ var generateCharts = function (d){
 					
 					var div1a = document.getElementById(record.name);
 					div1a.innerHTML = null; //keyvalue[record.name];
+					div1a.setAttribute('style','border:none');
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:0%'); //'+ width + '%');
+					div2a1.innerHTML = null; //dec1Format(keyvalue[record.name]);
 					
 					
 				}
@@ -909,8 +894,7 @@ var generateCharts = function (d){
 			if (!meta_scorevar[metric]){
 				return d ? mapChart.colors()(d) : '#cccccc';
 			} else {
-				if (d==0) {return '#cccccc';} 
-				//else if (d<3.5) {return '#1a9641';} else if (d<=4.5) {return '#a6d96a';} else if (d<=5.5) {return '#f1d121';} else if (d<=6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+				if (!d) {return '#cccccc';} 
 				else if (d<=color_range[0].threshold) {return color_range[0].HEX;} 
 				else if (d<=color_range[1].threshold) {return color_range[1].HEX;} 
 				else if (d<=color_range[2].threshold) {return color_range[2].HEX;} 
@@ -995,15 +979,13 @@ var generateCharts = function (d){
 		.height((15 + 5) * 191 + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab_scores)
-		// .data(function(group) {
-			// return group.top(Infinity);
-		// })
 		.ordering(function(d) {return -d.value;})
 		.fixedBarHeight(15)
 		.colors(mapchartColors)
 		.colorCalculator(function(d){
-			if (d.value==0) {return '#cccccc';}
-			else if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
+			//if (d.value==0) {return '#cccccc';}
+			//else 
+			if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
 			else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
 			else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
 			else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
@@ -1012,7 +994,7 @@ var generateCharts = function (d){
 		.label(function(d) {
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
-		.labelOffsetX(function(d) {return (rowChart.width()-50) * (d.value / 10) + 10;})
+		.labelOffsetX(function(d) {return (rowChart.width()-50) * (d.value / 11) + 10;})
 		.title(function(d) {
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
@@ -1023,14 +1005,14 @@ var generateCharts = function (d){
 				if (filters.length == 0) {$('.filter-count')[i].innerHTML = data_final.length; }
 				else { $('.filter-count')[i].innerHTML = filters.length; }
 			};	
-			if (filters.length == 1) {var keyvalue = keyvalues();}
-			if (filters.length == 2) {var keyvalue2 = keyvalues2();}
+			if (filters.length == 1) {var keyvalue = keyvalues1(filters);}
+			if (filters.length == 2) {var keyvalue2 = keyvalues2(filters);}
 			updateHTML(keyvalue,keyvalue2);	
 			var resetbutton = document.getElementsByClassName('reset-button')[0];	
 			if (filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
 		})
 		.elasticX(false)
-		.x(d3.scale.linear().range([0,(rowChart.width()-50)]).domain([0,10]))
+		.x(d3.scale.linear().range([0,(rowChart.width()-50)]).domain([0,11]))
 		.xAxis().scale(rowChart.x())
 		//.xAxis().ticks(10)
 		;
@@ -1154,8 +1136,8 @@ var generateCharts = function (d){
 		metric_label = meta_label[id];
 		mapchartColors = mapchartColors_func();
 		whereGroupSum_scores.dispose();
-		whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (!meta_scorevar[metric]) {return d[metric];} else { return d[meta_scorevar[metric]];};});
-		whereGroupSum_tab_scores = whereDimension_tab.group().reduceSum(function(d) { if (!meta_scorevar[metric]) {return d[metric];} else { return d[meta_scorevar[metric]];};});
+		whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+		whereGroupSum_tab_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
 		mapChart
 			.group(whereGroupSum_scores)
 			.colors(mapchartColors)
@@ -1163,8 +1145,7 @@ var generateCharts = function (d){
 				if (!meta_scorevar[metric]){
 					return d ? mapChart.colors()(d) : '#cccccc';
 				} else {
-					if (d==0) {return '#cccccc';} 
-					//else if (d<3.5) {return '#1a9641';} else if (d<=4.5) {return '#a6d96a';} else if (d<=5.5) {return '#f1d121';} else if (d<=6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
+					if (typeof d == 'undefined') {return '#cccccc';} 
 					else if (d<=color_range[0].threshold) {return color_range[0].HEX;} 
 					else if (d<=color_range[1].threshold) {return color_range[1].HEX;} 
 					else if (d<=color_range[2].threshold) {return color_range[2].HEX;} 
@@ -1180,12 +1161,13 @@ var generateCharts = function (d){
 				if (!meta_scorevar[metric]){
 					return d ? mapChart.colors()(d) : '#cccccc';
 				} else {
-					if (d.value==0) {return '#cccccc';} 
-						else if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
-						else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
-						else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
-						else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
-						else if (d.value<=color_range[4].threshold) {return color_range[4].HEX;} 
+					//if (d.value==0) {return '#cccccc';} 
+					//else 
+					if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
+					else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
+					else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
+					else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
+					else if (d.value<=color_range[4].threshold) {return color_range[4].HEX;} 
 					}
 				})
 		;
@@ -1345,14 +1327,18 @@ var generateCharts = function (d){
 		$('#map-chart').show();
 		
 		//Zoom to selected countries in row-chart
-		var districts_temp = JSON.parse(JSON.stringify(d.Districts));
-		districts_temp.features = [];
-		for (var i=0;i<d.Districts.features.length;i++){
-			if (row_filters.indexOf(d.Districts.features[i].id) > -1) {
-				districts_temp.features.push(d.Districts.features[i]);
+		if (row_filters.length == 0) {
+			zoomToGeom(d.Districts);
+		} else {
+			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			districts_temp.features = [];
+			for (var i=0;i<d.Districts.features.length;i++){
+				if (row_filters.indexOf(d.Districts.features[i].id) > -1) {
+					districts_temp.features.push(d.Districts.features[i]);
+				}
 			}
+			zoomToGeom(districts_temp);
 		}
-		zoomToGeom(districts_temp);
 	}
 	
 	tabularShow = function() {

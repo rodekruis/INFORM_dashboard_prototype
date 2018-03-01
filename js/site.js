@@ -92,7 +92,9 @@ load_dashboard = function(inform_model) {
 		d3.json('data/metadata' + country_code + '.json', function(meta_data) {
 			//console.log(meta_data);
 			d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 && e.VisibilityLevel <= inform_levels; });
-			inform_indicators = d.Metadata.map(a => a.OutputIndicatorName);
+			inform_indicators = [];
+			for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
+			//inform_indicators = d.Metadata.map(a => a.OutputIndicatorName);
 			
 			//API-link with all needed indicators
 			var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();

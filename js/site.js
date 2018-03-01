@@ -115,7 +115,7 @@ load_dashboard = function(inform_model) {
 						d.Colors = color_data;
 						
 						//Print data to screen
-						//console.log(d);
+						console.log(d);
 						
 						// generate the actual content of the dashboard
 						generateCharts(d);
@@ -295,10 +295,11 @@ var generateCharts = function (d){
 		}
 		data_final[i] = record;
 	}
-	d.Rapportage = data_final;
 	
 	// Start crossfilter
-	var cf = crossfilter(d.Rapportage);
+	var cf = crossfilter(data_final);
+	for (var i=0;i<$('.total-count').length;i++){ $('.total-count')[i].innerHTML = data_final.length; };	
+	for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = data_final.length; };	
 	
 	// The wheredimension returns the unique identifier of the geo area
 	var whereDimension = cf.dimension(function(d) { return d.pcode; });
@@ -379,40 +380,41 @@ var generateCharts = function (d){
 	///////////////////////////////
 	
 	//Create table with current crossfilter-selection output, so that you can also access this in other ways than through DC.js
-	var fill_keyvalues = function() {
-		var keyvalue = [];
-		tables.forEach(function(t) {
-			var key = t.name;
-			if (t.propertyPath === 'value.finalVal') {
-				if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
-					keyvalue[key] =  'N.A. on this level'; 
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
-					keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
-				} else if(t.format /*meta_format[t.name]*/ === 'percentage'){
-					keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
-					keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal1'){
-					keyvalue[key] = dec1Format(dimensions[t.name].top(1)[0].value.finalVal);
-				}
-			} else if(t.propertyPath === 'value') {
-				if (isNaN(dimensions[t.name].top(1)[0].value)) {
-					keyvalue[key] =  'N.A. on this level'; 
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
-					keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
-				} else if(t.format /*meta_format[t.name]*/ === 'percentage'){
-					keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
-					keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
-				} else if(t.format /*meta_format[t.name]*/ === 'decimal1'){
-					keyvalue[key] = dec1Format(dimensions[t.name].top(1)[0].value.finalVal);
-				}
-			}
-		});
-		//console.log(keyvalue);
-		return keyvalue;
-	};
-	var keyvalue = fill_keyvalues();
+	// var fill_keyvalues = function() {
+		// var keyvalue = [];
+		// tables.forEach(function(t) {
+			// var key = t.name;
+			// if (t.propertyPath === 'value.finalVal') {
+				// if (isNaN(dimensions[t.name].top(1)[0].value.finalVal)) {
+					// keyvalue[key] =  'N.A. on this level'; 
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
+					// keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value.finalVal);
+				// } else if(t.format /*meta_format[t.name]*/ === 'percentage'){
+					// keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value.finalVal);
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
+					// keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value.finalVal);
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal1'){
+					// keyvalue[key] = dec1Format(dimensions[t.name].top(1)[0].value.finalVal);
+				// }
+			// } else if(t.propertyPath === 'value') {
+				// if (isNaN(dimensions[t.name].top(1)[0].value)) {
+					// keyvalue[key] =  'N.A. on this level'; 
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal0'){
+					// keyvalue[key] = dec0Format(dimensions[t.name].top(1)[0].value);
+				// } else if(t.format /*meta_format[t.name]*/ === 'percentage'){
+					// keyvalue[key] = percFormat(dimensions[t.name].top(1)[0].value);
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal2'){
+					// keyvalue[key] = dec2Format(dimensions[t.name].top(1)[0].value);
+				// } else if(t.format /*meta_format[t.name]*/ === 'decimal1'){
+					// keyvalue[key] = dec1Format(dimensions[t.name].top(1)[0].value.finalVal);
+				// }
+			// }
+		// });
+		// return keyvalue;
+	// };
+	// var keyvalue = fill_keyvalues();
+	
+	
 	
 	//Define the colors and thresholds for the selected indicator
 	mapchartColors_func = function() {
@@ -458,23 +460,23 @@ var generateCharts = function (d){
 		else if (width<=color_ranges[4].threshold) {return color_ranges[4].HEX;} 
 	};					
 				
-	var high_med_low = function(ind,ind_score) {
+	// var high_med_low = function(ind,ind_score) {
 		
-		if (dimensions_scores[ind]) {
-			var width = dimensions_scores[ind].top(1)[0].value.finalVal;
-			if (isNaN(width)) {return 'notavailable';}
-			else if (width < 3.5) { return 'good';} 
-			else if (width <= 4.5) {return 'medium-good';}
-			else if (width <= 5.5) {return 'medium';}
-			else if (width <= 6.5) {return 'medium-bad';}
-			else if (width > 6.5) { return 'bad';} 
-		}				
-	};	
+		// if (dimensions_scores[ind]) {
+			// var width = dimensions_scores[ind].top(1)[0].value.finalVal;
+			// if (isNaN(width)) {return 'notavailable';}
+			// else if (width < 3.5) { return 'good';} 
+			// else if (width <= 4.5) {return 'medium-good';}
+			// else if (width <= 5.5) {return 'medium';}
+			// else if (width <= 6.5) {return 'medium-bad';}
+			// else if (width > 6.5) { return 'bad';} 
+		// }				
+	// };	
 	
 
 	
 	
-	var createHTML = function(keyvalue) {
+	var createHTML = function() {
 		
 		var risk_score = document.getElementById('risk_score_main');
 		if (risk_score) {
@@ -583,9 +585,9 @@ var generateCharts = function (d){
 			} 
 		}
 	};
-	createHTML(keyvalue);
+	createHTML();
 	
-	var createHTML_level2 = function(keyvalue) {
+	var createHTML_level2 = function() {
 		
 		for (var i=0;i<tables.length;i++) {
 			var record = tables[i];
@@ -664,9 +666,9 @@ var generateCharts = function (d){
 			}
 		}
 	}
-	createHTML_level2(keyvalue);
+	createHTML_level2();
 	
-	var createHTML_level3 = function(keyvalue) {
+	var createHTML_level3 = function() {
 		
 		for (var i=0;i<tables.length;i++) {
 			var record = tables[i];
@@ -730,9 +732,35 @@ var generateCharts = function (d){
 			}
 		}
 	}
-	createHTML_level3(keyvalue);
+	createHTML_level3();
 	
-	var updateHTML = function(keyvalue) {
+	var keyvalues1 = function(filters) {
+		
+		var data_area = data_final.filter(function(obj) { return filters[0] == obj.pcode; });	
+		var keyvalue = [];
+		tables.forEach(function(t) {
+			var key = t.name;
+			//keyvalue[key] = dec1Format(data_area[0][key]);
+			keyvalue[key] = data_area[0][key];
+		});
+		return keyvalue;
+		
+	};
+	
+	var keyvalues2 = function(filters) {
+		
+		var data_area = data_final.filter(function(obj) { return filters[1] == obj.pcode; });	
+		var keyvalue2 = [];
+		tables.forEach(function(t) {
+			var key = t.name;
+			//keyvalue2[key] = dec1Format(data_area[0][key]);
+			keyvalue2[key] = data_area[0][key];
+		});
+		return keyvalue2;
+	};
+	
+	var updateHTML = function(keyvalue,keyvalue2) {
+		
 		
 		var risk_score = document.getElementById('risk_score_main');
 		var vulnerability_score = document.getElementById('vulnerability_score_main');
@@ -790,32 +818,27 @@ var generateCharts = function (d){
 		for (var i=0;i<tables.length;i++) {
 			var record = tables[i];
 			
-			if (record.group === 'general') {
+			if (record.level >= 1) { 
 				
-				var unit = record.unit;
-				var div2 = document.getElementById(record.name);
-				div2.innerHTML = keyvalue[record.name] + ' ' + unit;
-			
-			} else if (record.level >= 1) { //record.group) {
-				
-				var width = dimensions_scores[record.name].top(1)[0].value.finalVal*10;
-				var div1a = document.getElementById(record.name);
-				div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
 				if (mapfilters_length == 1) {
 					
-					// var div2 = document.getElementById('bar-'+record.name+'-2').parentNode;
-					// if (div2) {
-						// while (div2.firstChild) { div2.removeChild(div2.firstChild); };
-						// div2.remove();
-					// }
+					// var bar = document.getElementById('bar-'+record.name+'-2');
+					// if (bar) { var bar_par = bar.parentNode;}
+					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
+					// if (bar_par) {bar_par.remove();}
 					
-					div1a.innerHTML = keyvalue[record.name];
+					var width = keyvalue[record.name]*10; //dimensions_scores[record.name].top(1)[0].value.finalVal*10;
+					var div1a = document.getElementById(record.name);
+					div1a.setAttribute('class','component-score'); // ' + high_med_low(record.name,record.scorevar_name));
+					
+					div1a.innerHTML = dec1Format(keyvalue[record.name]);
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
 				
 				// } else if (mapfilters_length == 2) {
 					
+					// var width = keyvalue2[record.name]*10;
 					// var div2 = document.getElementById('bar-'+record.name).parentNode.parentNode;
 					
 					// var div2a = document.createElement('div');
@@ -830,10 +853,12 @@ var generateCharts = function (d){
 					
 				} else {
 					
-					// var div2 = document.getElementById('bar-'+record.name+'-2').parentNode;
-					// while (div2.firstChild) { div2.removeChild(div2.firstChild); };
-					// div2.remove();
+					// var bar = document.getElementById('bar-'+record.name+'-2');
+					// if (bar) { var bar_par = bar.parentNode;}
+					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
+					// if (bar_par) {bar_par.remove();}
 					
+					var div1a = document.getElementById(record.name);
 					div1a.innerHTML = null; //keyvalue[record.name];
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
@@ -870,6 +895,7 @@ var generateCharts = function (d){
 	
 			
 	//Set up the map itself with all its properties
+	//var map_filters = [];
 	mapChart
 		.width($('#map-chart').width())
 		.height(800)
@@ -904,15 +930,20 @@ var generateCharts = function (d){
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
 			filters = chart.filters();
+			map_filters = chart.filters();
 			var popup = document.getElementById('mapPopup');
 			popup.style.visibility = 'hidden';
 			//document.getElementById('zoomin_icon').style.visibility = 'hidden';
+			for (var i=0;i<$('.filter-count').length;i++){
+				if (filters.length == 0) {$('.filter-count')[i].innerHTML = data_final.length; }
+				else { $('.filter-count')[i].innerHTML = filters.length; }
+			};	
 			if (filters.length > mapfilters_length) {
 				//$apply(function() {
 					name_popup = lookup[filters[filters.length - 1]];
 					for (var i=0;i<$('.name_popup').length;i++){ $('.name_popup')[i].innerHTML = name_popup; };
-					for (var i=0;i<d.Rapportage.length;i++) {
-						var record = d.Rapportage[i];
+					for (var i=0;i<data_final.length;i++) {
+						var record = data_final[i];
 						if (record.pcode === filters[filters.length - 1]) {
 							value_popup = currentFormat(record[metric]); 
 							for (var i=0;i<$('.value_popup').length;i++){ $('.value_popup')[i].innerHTML = value_popup; };	
@@ -935,31 +966,39 @@ var generateCharts = function (d){
 			} 
 			mapfilters_length = filters.length;
 			//Recalculate all figures
-			var keyvalue = fill_keyvalues();
-			updateHTML(keyvalue);	
+			if (mapfilters_length == 1) {var keyvalue = keyvalues1(filters);}
+			if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(filters);}
+			updateHTML(keyvalue,keyvalue2);
 			//let reset-button (dis)appear
-			// var resetbutton = document.getElementsByClassName('reset-button')[0];	
-			// if (filters.length > 0) {
-				// resetbutton.style.visibility = 'visible';
-			// } else {
-				// resetbutton.style.visibility = 'hidden';
-			// }
+			var resetbutton = document.getElementsByClassName('reset-button')[0];	
+			if (filters.length > 0) {
+				resetbutton.style.visibility = 'visible';
+			} else {
+				resetbutton.style.visibility = 'hidden';
+			}
 			
 		})
 	;
+	
+
+	
+
+	
 	
 	/////////////////////
 	// ROW CHART SETUP //
 	/////////////////////
 	
+	var row_filters = [];
 	rowChart
 		.width($('#row-chart').width()-150)
 		.height((15 + 5) * 191 + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab_scores)
-		.data(function(group) {
-			return group.top(Infinity);
-		})
+		// .data(function(group) {
+			// return group.top(Infinity);
+		// })
+		.ordering(function(d) {return -d.value;})
 		.fixedBarHeight(15)
 		.colors(mapchartColors)
 		.colorCalculator(function(d){
@@ -979,8 +1018,14 @@ var generateCharts = function (d){
 		})
 		.on('filtered',function(chart,filters){
 			filters = chart.filters();
-			var keyvalue = fill_keyvalues();
-			updateHTML(keyvalue);	
+			row_filters = chart.filters();
+			for (var i=0;i<$('.filter-count').length;i++){
+				if (filters.length == 0) {$('.filter-count')[i].innerHTML = data_final.length; }
+				else { $('.filter-count')[i].innerHTML = filters.length; }
+			};	
+			if (filters.length == 1) {var keyvalue = keyvalues();}
+			if (filters.length == 2) {var keyvalue2 = keyvalues2();}
+			updateHTML(keyvalue,keyvalue2);	
 			var resetbutton = document.getElementsByClassName('reset-button')[0];	
 			if (filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
 		})
@@ -989,6 +1034,17 @@ var generateCharts = function (d){
 		.xAxis().scale(rowChart.x())
 		//.xAxis().ticks(10)
 		;
+	
+	sort = function(type) {
+		if (type === 'value') {
+			rowChart.ordering(function(d) {return -d.value;});
+			rowChart.redraw();
+		} else if (type == 'name') {
+			rowChart.ordering(function(d) {return d.key;});
+			rowChart.redraw();
+		}
+		
+	}
 
 	/////////////////////
 	// TABLE CHART SETUP //
@@ -1119,19 +1175,24 @@ var generateCharts = function (d){
 		;
 		rowChart
 			.group(whereGroupSum_tab_scores)
+			.colors(mapchartColors)
 			.colorCalculator(function(d){
-				if (d.value==0) {return '#cccccc';} 
-					//else if (d<3.5) {return '#1a9641';} else if (d<=4.5) {return '#a6d96a';} else if (d<=5.5) {return '#f1d121';} else if (d<=6.5) {return '#fd6161';} else if (d>6.5) {return '#d7191c';}
-					else if (d<=color_range[0].threshold) {return color_range[0].HEX;} 
-					else if (d<=color_range[1].threshold) {return color_range[1].HEX;} 
-					else if (d<=color_range[2].threshold) {return color_range[2].HEX;} 
-					else if (d<=color_range[3].threshold) {return color_range[3].HEX;} 
-					else if (d<=color_range[4].threshold) {return color_range[4].HEX;} 
+				if (!meta_scorevar[metric]){
+					return d ? mapChart.colors()(d) : '#cccccc';
+				} else {
+					if (d.value==0) {return '#cccccc';} 
+						else if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
+						else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
+						else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
+						else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
+						else if (d.value<=color_range[4].threshold) {return color_range[4].HEX;} 
+					}
 				})
 		;
 		dc.redrawAll();
 		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };	
 		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
+		document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
 		document.getElementById('mapPopup').style.visibility = 'hidden';
 		//document.getElementById('zoomin_icon').style.visibility = 'hidden';
 	};
@@ -1161,7 +1222,7 @@ var generateCharts = function (d){
 	
 	//Export to CSV function
 	export_csv = function() {
-		var content = d.Rapportage;
+		var content = data_final;
 		for (var i=0;i<content.length;i++){
 			content[i].name = lookup[content[i].pcode];
 		};
@@ -1256,8 +1317,14 @@ var generateCharts = function (d){
 	
 	//Render all dc-charts and -tables
 	dc.renderAll();
-	$('#row-chart').hide();
+	$('#row-chart-container').hide();
 	//$('#table-chart').hide();
+	
+	reset_function = function() {
+		dc.filterAll();
+		dc.redrawAll();
+		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = data_final.length; };	
+	}
 	
 	
 	map = mapChart.map();
@@ -1273,21 +1340,25 @@ var generateCharts = function (d){
 	
 	//Switch between MAP and TABULAR view
     mapShow = function() {
-		$('#row-chart').hide();   
+		$('#row-chart-container').hide();   
 		//$('#table-chart').hide();         
 		$('#map-chart').show();
-		zoomToGeom(d.Districts);
+		
+		//Zoom to selected countries in row-chart
+		var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+		districts_temp.features = [];
+		for (var i=0;i<d.Districts.features.length;i++){
+			if (row_filters.indexOf(d.Districts.features[i].id) > -1) {
+				districts_temp.features.push(d.Districts.features[i]);
+			}
+		}
+		zoomToGeom(districts_temp);
 	}
 	
 	tabularShow = function() {
-		//Export to GEOJSON
-		var myWindow = window.open('','','_blank');
-		myWindow.document.write(JSON.stringify(d.inform_data));
-		myWindow.focus();
-						
-		//$('#map-chart').hide();
-		//$('#mapPopup').hide();
-		//$('#row-chart').show();
+		$('#map-chart').hide();
+		$('#mapPopup').hide();
+		$('#row-chart-container').show();
 		//$('#table-chart').show();
 	}
 	

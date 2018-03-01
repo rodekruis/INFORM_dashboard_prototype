@@ -575,7 +575,7 @@ a.handle:hover {
 .reset-button,
 .reset-button:visited{
 	visibility:hidden;
-	background-color: #4C8293; /*#3780bb;*/
+	background-color: #951301;
 	text-decoration: none;
 	font-weight: bold;
 	color: white;
@@ -588,6 +588,7 @@ a.handle:hover {
 	background-color: #045a8d;
 	color: white;
 	text-decoration: none;
+	cursor:pointer;
 }
 
 /* Collapsible sidebar */

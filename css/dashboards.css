@@ -64,6 +64,7 @@ body {
   text-align: left;
 }
 .metric_label{
+  overflow: hidden;
   text-transform:uppercase;
 }
 .zoom-level .button-label {
@@ -264,10 +265,13 @@ body {
   color: #444444;
   font-size: 20px;
 }
-.filter-count {
-  color: #B0DED3; /*#3780bb;*/
-  font-size: 20px;
+#area_selection {
+  font-weight:bold;
+  text-transform:uppercase;
+  color: #951301;
+  font-size: 12px;
 }
+
 .total-count-pi{
   color: #4C8293; /*#3780bb;*/
   font-size: 14px;
@@ -714,13 +718,4 @@ body {
 
 
 
-#table-chart th span { /*Glyphicon style*/
-  float: right;
-  font-size: 1em;
-  color: #0080bf;
-  display: inline-block;
-}
-#table-chart th {
-  cursor: pointer;
-}
 

@@ -37,19 +37,19 @@
 			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
 				<div class="navbar-header">
-					<a class="navbar-brand" href="/#!/">
+					<a class="navbar-brand" href="www.inform-index.org">
 						<img src="img/inform_logo.png" class="logo">
-						INFORM Dashboard
+						Dashboard
 					</a>
 				</div>
 
 				<!-- start: export nav -->
-				<ul class="nav navbar-top-links navbar-right">
-						<li class="dropdown">
-							<a href="http://www.inform-index.org" target="_blank">INFORM Home</a>
-						</li>
-				</ul>
-				<ul class="nav navbar-top-links navbar-right">
+				<!-- <ul class="nav navbar-top-links navbar-right"> -->
+						<!-- <li class="dropdown"> -->
+							<!-- <a href="http://www.inform-index.org" target="_blank">INFORM Home</a> -->
+						<!-- </li> -->
+				<!-- </ul> -->
+				<!-- <ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 							How it works
@@ -65,38 +65,46 @@
 							</li>
 						</ul>
 					</li>
-				</ul>
+				</ul> -->
 				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 							<img class="export-icon" src="img/icon-download-options.svg" alt="download options">
-								  Export Options
+								  Data Access
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
 						<ul class="dropdown-menu export-items">
 							<li>
-								<a ng-href ="./data/{{data_input}}" target="_blank">Export (JSON)</a>
+								<a href ="http://www.inform-index.org/API-documentation" target="_blank">Data Access (API)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a id="download" ng-click="export_csv()">Export (CSV)</a>
+								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="download" onclick="link_data">Data Access (Excel)</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a target="_blank" id="download" onclick="export_csv()">CSV</a>
+							</li>
+							<li class="divider"></li>
+							<li>
+								<a onclick="export_json()">JSON</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
-				<ul class="nav navbar-top-links navbar-left">
+				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-								  COUNTRY
+								  Choose Model
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
-						<ul class="dropdown-menu submenu-items">
-							<li>
+						<ul class="dropdown-menu submenu-items" id="country-items">
+							<!-- <li>
 								<a class="submenu-item" onclick="load_dashboard('INFORM2017')" role="button">INFORM 2017</a>
 							</li>
 							<li>
 								<a class="submenu-item" onclick="load_dashboard('INFORM_LBN')" role="button">INFORM Lebanon</a>
-							</li>
+							</li> -->
 						</ul>
 					</li>
 				</ul>
@@ -113,17 +121,17 @@
 					<!-- start: zoom navigation -->
 					<div class="zoom-level-nav">
 						<div class="btn-group zoom-level" role="group">
-							<button style="width:49%; float:left" id="level2" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
+							<button style="width:49%; float:left" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
 								<span class="button-label">Map View</span>
 							</button>
-							<button style="width:49%; float:right;" id="level2" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
+							<button style="width:49%; float:right;" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
 								<span class="button-label">Tabular View</span>
 							</button>
 						</div>
 						<div class="btn-group zoom-level" role="group">
 							<button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary">
 								<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
-								<span class="button-label metric_label">INFORM RISK INDEX</span>
+								<div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div>
 							</button>
 							<!-- <button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
 								<i class="fa fa-globe" aria-hidden="true"></i>
@@ -136,7 +144,8 @@
 					<!-- start: community profiles -->
 					<div class="community-profiles-wrapper">
 						<div id="count-info" class="general-info">
-							<span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"><span class="subtype_selection">areas</span> selected</span>
+							<!-- <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"> selected<span id="area_selection"></span></span> -->
+							<span class="filter-count" id="area_selection">All </span><span style="font-size: 12px"> selected</span>
 							<a class="reset-button" onclick="reset_function()">Select all</a>
 						</div>
 						<div class="row"></div>
@@ -149,7 +158,7 @@
 					<!-- start: accordion with stats  -->
 					<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
 						<div class="card">
-							<div class="card-header accordion-header level0" role="tab" id="headingOne" style="background-color:#d9dcdc">
+							<div class="card-header accordion-header level1" role="tab" id="headingOne" style="background-color:#d9dcdc">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 									<span class="panel-header-icon">
 										<img src="img/INFORM.png">
@@ -167,7 +176,7 @@
 							</div> -->
 						</div>
 						<div class="card">
-							<div class="card-header accordion-header level0" role="tab" id="headingThree">
+							<div class="card-header accordion-header level1" role="tab" id="headingThree">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
 									<span class="panel-header-icon">
 										<img src="img/HA.png">
@@ -180,12 +189,12 @@
 									</span>
 								</a>
 							</div>
-							<div id="collapseThree" class="collapse level0" role="tabpanel" aria-labelledby="headingThree">
+							<div id="collapseThree" class="collapse level1" role="tabpanel" aria-labelledby="headingThree">
 								<div class="card-block" id="HA"></div>
 							</div>
 						</div>
 						<div class="card">
-							<div class="card-header accordion-header level0" role="tab" id="headingTwo">
+							<div class="card-header accordion-header level1" role="tab" id="headingTwo">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
 									<span class="panel-header-icon">
 										<img src="img/VU.png">
@@ -198,12 +207,12 @@
 									</span>
 								</a>
 							</div>
-							<div id="collapseTwo" class="collapse level0" role="tabpanel" aria-labelledby="headingTwo">
+							<div id="collapseTwo" class="collapse level1" role="tabpanel" aria-labelledby="headingTwo">
 								<div class="card-block" id="VU"></div>
 							</div>
 						</div>
 						<div class="card">
-							<div class="card-header accordion-header level0" role="tab" id="headingFour">
+							<div class="card-header accordion-header level1" role="tab" id="headingFour">
 								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
 									<span class="panel-header-icon">
 										<img src="img/CC.png">
@@ -216,7 +225,7 @@
 									</span>
 								</a>
 							</div>
-							<div id="collapseFour" class="collapse level0" role="tabpanel" aria-labelledby="headingFour">
+							<div id="collapseFour" class="collapse level1" role="tabpanel" aria-labelledby="headingFour">
 								<div class="card-block" id="CC"></div>
 							</div>
 						</div>
@@ -232,13 +241,13 @@
 				<div class="map-wrapper" style="position: relative">
 
 					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
-					<div id="row-chart-container" style="position:absolute; left: 24%; width:76%; height:100%;background-color:#fff">
+					<div id="row-chart-container" style="position:absolute; left: 24%; width:76%; height:100%;background-color:#fff; visibility:hidden">
 						<div class="zoom-level-nav">
 							<div class="btn-group zoom-level" role="group">
 								<ul style="left: 15px;" type="button" class="btn btn-secondary btn-active ">
 									<div class="dropdown">
 										<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-												  Sort by ..
+												  Sort by ...
 											<i class="fa fa-angle-down export-btn-arrow"></i>
 										</a>
 										<ul class="dropdown-menu submenu-items">

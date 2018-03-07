@@ -1141,7 +1141,8 @@ var generateCharts = function (d){
 	}
  	
 	var workflows = 'http://www.inform-index.org/API/InformAPI/Workflows/WorkflowGroups';
-	d3.json(workflows,function(data_workflows) {
+	//d3.json(workflows,function(data_workflows) {
+	d3.json('data/workflows.json', function(data_workflows) {
 		
 		active_workflow_groups = ['INFORM_GTM','INFORM2017'];
 		active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
@@ -1151,8 +1152,12 @@ var generateCharts = function (d){
 							
 		for (var i=0;i<data_workflows.length;i++) {
 			if (active_workflow_groups.indexOf(data_workflows[i]) > -1) {
+				
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
-				d3.json(workflow_info,function(workflow_info) {
+				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
+				d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+				//d3.json(workflow_info,function(workflow_info) {
+					//d.data_workflows = workflow_info;
 					for (var j=0;j<workflow_info.length;j++) {
 						if (workflow_info[j].Author == 'anonymous' && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
 							

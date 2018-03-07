@@ -8,6 +8,7 @@ var inform_model = 'INFORM2017';
 var workflow_id = 261;
 var inform_levels = 7;				
 var metric = 'INFORM';
+var chart_show = 'map';
 var metric_label = '';
 var metric_year = '';
 var metric_source = '';
@@ -194,9 +195,9 @@ var generateCharts = function (d){
 	
 	var meta_label = genLookup_meta(d,'Fullname');
 	var meta_level = genLookup_meta(d,'VisibilityLevel');
-	var meta_scorevar = genLookup_meta(d,'OutputIndicatorName');
-	var meta_format = genLookup_meta(d,'format');
-	var meta_unit = genLookup_meta(d,'unit');
+	//var meta_scorevar = genLookup_meta(d,'OutputIndicatorName');
+	//var meta_format = genLookup_meta(d,'format');
+	//var meta_unit = genLookup_meta(d,'unit');
 	var meta_icon = genLookup_meta(d,'icon_src');
 	//To fill
 	var meta_year = genLookup_meta(d,'year');
@@ -204,7 +205,6 @@ var generateCharts = function (d){
 	var meta_desc = genLookup_meta(d,'description');
 	
 	metric_label = meta_label[metric];
-	//for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };	
 	document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 	
 	var max_stepnr = Math.max.apply(Math,d.Metadata.map(function(o){return o.StepNumber;}));
@@ -304,8 +304,10 @@ var generateCharts = function (d){
 		
 	// Create the groups for these two dimensions (i.e. sum the metric)
 	var whereGroupSum = whereDimension.group().reduceSum(function(d) {return d[metric];});
-	var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) {if (d[metric]) {return d[metric];};});
-	var whereGroupSum_tab_scores = whereDimension_tab.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+	var whereGroupSum_tab2 = whereDimension.group().reduceSum(function(d) {return d[metric];});
+	var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {return d[metric];});
+	//var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) {if (d[metric]) {return d[metric];};});
+	//var whereGroupSum_tab_scores = whereDimension_tab.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
 	
 		
 	// group with all, needed for data-count
@@ -598,15 +600,15 @@ var generateCharts = function (d){
 		// });
 		// return keyvalue2;
 	// };
-	
+	var mapfilters_length = 0;
+	var rowfilters_length = 0;
 	var updateHTML = function(keyvalue) { //,keyvalue2) {
-		
 		
 		var risk_score = document.getElementById('risk_score_main');
 		var vulnerability_score = document.getElementById('vulnerability_score_main');
 		var hazard_score = document.getElementById('hazard_score_main');
 		var coping_score = document.getElementById('coping_capacity_score_main');
-		if (mapfilters_length == 1) {
+		if (mapfilters_length == 1 || rowfilters_length == 1) {
 			if (risk_score) {
 				risk_score.textContent = dec1Format(keyvalue.INFORM); //risk_score;
 				//risk_score.setAttribute('class','component-score ');// + high_med_low('INFORM','INFORM'));
@@ -657,7 +659,7 @@ var generateCharts = function (d){
 			
 			if (record.level >= 2) { 
 				
-				if (mapfilters_length == 1) {
+				if (mapfilters_length == 1 || rowfilters_length == 1) {
 					
 					// var bar = document.getElementById('bar-'+record.name+'-2');
 					// if (bar) { var bar_par = bar.parentNode;}
@@ -735,12 +737,12 @@ var generateCharts = function (d){
 	
 			
 	//Set up the map itself with all its properties
-	//var map_filters = [];
+	var map_filters = null;
 	mapChart
 		.width($('#map-chart').width())
 		.height(800)
 		.dimension(whereDimension)
-		.group(whereGroupSum_scores)
+		.group(whereGroupSum)
 		.center([0,0])
 		.zoom(0)
 		.geojson(d.Districts)				
@@ -768,19 +770,18 @@ var generateCharts = function (d){
 		.legend(dc.leafletLegend().position('topleft'))
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
-			filters = chart.filters();
 			map_filters = chart.filters();
 			var popup = document.getElementById('mapPopup');
-			popup.style.visibility = 'hidden';
+			//popup.style.visibility = 'hidden';
 			//document.getElementById('zoomin_icon').style.visibility = 'hidden';
-			for (var i=0;i<$('.filter-count').length;i++){
-				//if (filters.length == 0) {$('.filter-count')[i].innerHTML = data_final.length; }
-				//else { $('.filter-count')[i].innerHTML = filters.length; }
-				if (filters.length == 1) {$('.filter-count')[i].innerHTML = lookup[filters[0]];} 
-				else if (filters.length > 1) { $('.filter-count')[i].innerHTML = filters.length; }
-				else { $('.filter-count')[i].innerHTML = 'All '; }
-			};	
-			if (filters.length > mapfilters_length) {
+			if (chart_show == 'map') {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (map_filters.length == 1) {$('.filter-count')[i].innerHTML = lookup[map_filters[0]];} 
+					else if (map_filters.length > 1) { $('.filter-count')[i].innerHTML = map_filters.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};	
+			}
+			if (map_filters.length > mapfilters_length) {
 				//$apply(function() {
 					name_popup = lookup[filters[filters.length - 1]];
 					for (var i=0;i<$('.name_popup').length;i++){ $('.name_popup')[i].innerHTML = name_popup; };
@@ -807,14 +808,14 @@ var generateCharts = function (d){
 				popup.style.visibility = 'visible';
 				//document.getElementById('zoomin_icon').style.visibility = 'visible';
 			} 
-			mapfilters_length = filters.length;
+			mapfilters_length = map_filters.length;
 			//Recalculate all figures
-			if (mapfilters_length == 1) { var keyvalue = keyvalues1(filters); };
-			//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(filters);}
-			updateHTML(keyvalue); //,keyvalue2);
+			if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
+			//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
+			if (chart_show == 'map') { updateHTML(keyvalue);} //,keyvalue2);
 			//let reset-button (dis)appear
 			var resetbutton = document.getElementsByClassName('reset-button')[0];	
-			if (filters.length > 0) {
+			if (map_filters.length > 0) {
 				resetbutton.style.visibility = 'visible';
 			} else {
 				resetbutton.style.visibility = 'hidden';
@@ -831,17 +832,16 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
 	
-	var row_filters = [];
+	var row_filters = null;
 	rowChart
 		.width($('#row-chart').width()-150)
 		.height((15 + 5) * 191 + 50)
 		.dimension(whereDimension_tab)
-		.group(whereGroupSum_tab_scores)
+		.group(whereGroupSum_tab)
 		.ordering(function(d) {return -d.value;})
 		.fixedBarHeight(15)
 		.colors(mapchartColors)
 		.colorCalculator(function(d){
-			console.log(d);
 			if (meta_level[metric] > 3){
 				if (!d) {return '#cccccc';} else {return mapChart.colors()(d.value);}
 			} else {
@@ -861,23 +861,25 @@ var generateCharts = function (d){
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
-			filters = chart.filters();
 			row_filters = chart.filters();
-			for (var i=0;i<$('.filter-count').length;i++){
-				if (filters.length == 1) { $('.filter-count')[i].innerHTML = lookup[filters[0]]; } 
-				else if (filters.length > 1) { $('.filter-count')[i].innerHTML = 'Multiple '; }
-				else { $('.filter-count')[i].innerHTML = 'All '; }
-			};	
-			if (filters.length == 1) {var keyvalue = keyvalues1(filters);}
-			//if (filters.length == 2) {var keyvalue2 = keyvalues2(filters);}
-			updateHTML(keyvalue);//,keyvalue2);	
+			//mapChart.filter(row_filters);
+			if (chart_show == 'row') {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (row_filters.length == 1) { $('.filter-count')[i].innerHTML = lookup[row_filters[0]]; } 
+					else if (row_filters.length > 1) { $('.filter-count')[i].innerHTML = row_filters.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};	
+			}
+			rowfilters_length = row_filters.length;
+			if (rowfilters_length == 1) { var keyvalue = keyvalues1(row_filters); };
+			//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
+			if (chart_show == 'row') {updateHTML(keyvalue);} //,keyvalue2);
 			var resetbutton = document.getElementsByClassName('reset-button')[0];	
-			if (filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			if (row_filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
 		})
 		.elasticX(false)
 		.x(d3.scale.linear().range([0,(rowChart.width()-50)]).domain([0,11]))
 		.xAxis().scale(rowChart.x())
-		//.xAxis().ticks(10)
 		;
 	
 	sort = function(type) {
@@ -900,11 +902,12 @@ var generateCharts = function (d){
 		metric = id;
 		metric_label = meta_label[id];
 		mapchartColors = mapchartColors_func();
-		whereGroupSum_scores.dispose();
-		whereGroupSum_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
-		whereGroupSum_tab_scores = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+		whereGroupSum.dispose();
+		whereGroupSum = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+		whereGroupSum_tab.dispose();
+		whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
 		mapChart
-			.group(whereGroupSum_scores)
+			.group(whereGroupSum)
 			.colors(mapchartColors)
 			.colorCalculator(function(d){
 				if (meta_level[metric] > 3){
@@ -920,7 +923,7 @@ var generateCharts = function (d){
 			})
 		;
 		rowChart
-			.group(whereGroupSum_tab_scores)
+			.group(whereGroupSum_tab)
 			.colors(mapchartColors)
 			.colorCalculator(function(d){
 				if (meta_level[metric] > 3){
@@ -1049,8 +1052,7 @@ var generateCharts = function (d){
 	var acc = document.getElementsByClassName('accordion-header level1');
 	var panel = document.getElementsByClassName('collapse level1');
 	var active = panel[0];
-	
-	for (var i = 0; i < acc.length; i++) {
+	for (var i = 1; i < acc.length; i++) {
 		acc[i].onclick = function() {
 			var active_new = document.getElementById(this.id.replace('heading','collapse'));
 			if (active.id !== active_new.id) {
@@ -1063,7 +1065,6 @@ var generateCharts = function (d){
 	var acc2 = document.getElementsByClassName('accordion-header level2');
 	var panel2 = document.getElementsByClassName('collapse level2');
 	var active2 = panel2[0]; //document.getElementsByClassName('collapse in level2')[0];
-	
 	for (var i = 0; i < acc2.length; i++) {
 		acc2[i].onclick = function() {
 			var active_new2 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1077,7 +1078,6 @@ var generateCharts = function (d){
 	var acc3 = document.getElementsByClassName('accordion-header level3');
 	var panel3 = document.getElementsByClassName('collapse level3');
 	var active3 = panel3[0]; //document.getElementsByClassName('collapse in level3')[0];
-	
 	for (var i = 0; i < acc3.length; i++) {
 		acc3[i].onclick = function() {
 			var active_new3 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1091,7 +1091,6 @@ var generateCharts = function (d){
 	var acc4 = document.getElementsByClassName('accordion-header level4');
 	var panel4 = document.getElementsByClassName('collapse level4');
 	var active4 = panel4[0]; //document.getElementsByClassName('collapse in level4')[0];
-	
 	for (var i = 0; i < acc4.length; i++) {
 		acc4[i].onclick = function() {
 			var active_new4 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1105,7 +1104,6 @@ var generateCharts = function (d){
 	var acc5 = document.getElementsByClassName('accordion-header level5');
 	var panel5 = document.getElementsByClassName('collapse level5');
 	var active5 = panel5[0]; //document.getElementsByClassName('collapse in level5')[0];
-	
 	for (var i = 0; i < acc5.length; i++) {
 		acc5[i].onclick = function() {
 			var active_new5 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1119,7 +1117,6 @@ var generateCharts = function (d){
 	var acc6 = document.getElementsByClassName('accordion-header level6');
 	var panel6 = document.getElementsByClassName('collapse level6');
 	var active6 = panel6[0]; //document.getElementsByClassName('collapse in level6')[0];
-	
 	for (var i = 0; i < acc6.length; i++) {
 		acc6[i].onclick = function() {
 			var active_new6 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1133,7 +1130,6 @@ var generateCharts = function (d){
 	var acc7 = document.getElementsByClassName('accordion-header level7');
 	var panel7 = document.getElementsByClassName('collapse level7');
 	var active7 = panel7[0]; //document.getElementsByClassName('collapse in level7')[0];
-	
 	for (var i = 0; i < acc7.length; i++) {
 		acc7[i].onclick = function() {
 			var active_new7 = document.getElementById(this.id.replace('heading','collapse'));
@@ -1191,9 +1187,9 @@ var generateCharts = function (d){
 	
 	reset_function = function() {
 		dc.filterAll();
-		dc.redrawAll();
-		//for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = data_final.length; };	
+		dc.redrawAll();	
 		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };	
+		zoomToGeom(d.Districts);
 	}
 	
 	map = mapChart.map();
@@ -1209,8 +1205,14 @@ var generateCharts = function (d){
 	
 	//Switch between MAP and TABULAR view
     mapShow = function() {
-		$('#row-chart-container').hide();   
+		chart_show = 'map';
+		//Hide row-chart
+		$('#row-chart-container').hide();  
+		//Transfer row-chart filters to map (to make sure that selection is carried)
+		mapChart.filter([row_filters]); 
+		//Show map-chart
 		$('#map-chart').show();
+		
 		//Zoom to selected countries in row-chart
 		if (row_filters.length == 0) {
 			zoomToGeom(d.Districts);
@@ -1224,12 +1226,17 @@ var generateCharts = function (d){
 			}
 			zoomToGeom(districts_temp);
 		}
+		//Undo row-chart filters (which are transfered to the map already)
+		rowChart.filter(null);
 	}
 	
 	tabularShow = function() {
-		document.getElementById('row-chart-container').style.visibility = 'visible';
+		chart_show = 'row';
+		if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
+		mapChart.filter(null);
 		$('#map-chart').hide();
 		$('#mapPopup').hide();
+		document.getElementById('row-chart-container').style.visibility = 'visible';
 		$('#row-chart-container').show();
 		//$('#table-chart').show();
 	}

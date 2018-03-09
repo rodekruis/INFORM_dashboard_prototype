@@ -4,8 +4,8 @@
 //////////////////////
 		
 //var country_code = '';
-var inform_model = 'INFORM2017';
-var workflow_id = 261;
+var inform_model = 'INFORM2017'; //'INFORM_GTM','INFORM2017'
+var workflow_id = 261;	//359,261
 var inform_levels = 7;				
 var metric = 'INFORM';
 var chart_show = 'map';
@@ -74,6 +74,8 @@ load_dashboard = function(inform_model,workflow_id) {
 	  
 	spinner_start();  
 	
+	$('#map-chart').show();
+	chart_show = 'map';
 	metric = 'INFORM';
 	if (inform_model == 'INFORM2017') { country_code = ''; } else { country_code = inform_model.replace('INFORM',''); };
 		
@@ -183,6 +185,14 @@ var generateCharts = function (d){
 		});
 		return lookup_meta;
 	};
+	// fill the lookup table with the metadata-information per variable
+	var genLookup_data = function (d,field){
+		var lookup_data = {};
+		d.inform_data.forEach(function(e){
+			lookup_data[e.IndicatorId] = String(e[field]);
+		});
+		return lookup_data;
+	};
 	
 	
 	//////////////////////////
@@ -202,7 +212,7 @@ var generateCharts = function (d){
 	//To fill
 	var meta_year = genLookup_meta(d,'year');
 	var meta_source = genLookup_meta(d,'source_link');
-	var meta_desc = genLookup_meta(d,'description');
+	var meta_desc = genLookup_data(d,'Short');
 	
 	metric_label = meta_label[metric];
 	document.getElementById('metric_label').firstChild.innerHTML = metric_label;
@@ -229,6 +239,7 @@ var generateCharts = function (d){
 			record.format = 'decimal1';
 			//record.unit = '';
 			record.level = record_temp.VisibilityLevel;
+			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
 			//record.level_new = max_stepnr - record_temp.StepNumber;
 			record.group = record_temp.Parent == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
 			record.propertyPath = 'value.finalVal';
@@ -737,7 +748,7 @@ var generateCharts = function (d){
 	
 			
 	//Set up the map itself with all its properties
-	var map_filters = null;
+	var map_filters = [];
 	mapChart
 		.width($('#map-chart').width())
 		.height(800)
@@ -780,7 +791,7 @@ var generateCharts = function (d){
 					else if (map_filters.length > 1) { $('.filter-count')[i].innerHTML = map_filters.length; }
 					else { $('.filter-count')[i].innerHTML = 'All '; }
 				};	
-			}
+			} /*
 			if (map_filters.length > mapfilters_length) {
 				//$apply(function() {
 					name_popup = lookup[filters[filters.length - 1]];
@@ -807,18 +818,15 @@ var generateCharts = function (d){
 				}
 				popup.style.visibility = 'visible';
 				//document.getElementById('zoomin_icon').style.visibility = 'visible';
-			} 
-			mapfilters_length = map_filters.length;
-			//Recalculate all figures
-			if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
-			//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
-			if (chart_show == 'map') { updateHTML(keyvalue);} //,keyvalue2);
-			//let reset-button (dis)appear
-			var resetbutton = document.getElementsByClassName('reset-button')[0];	
-			if (map_filters.length > 0) {
-				resetbutton.style.visibility = 'visible';
-			} else {
-				resetbutton.style.visibility = 'hidden';
+			} */
+			if (chart_show == 'map') {
+				mapfilters_length = map_filters.length;
+				if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
+				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
+				updateHTML(keyvalue); //,keyvalue2);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];	
+				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible'; 
+				} else { resetbutton.style.visibility = 'hidden'; }
 			}			
 		})
 	;
@@ -832,10 +840,10 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
 	
-	var row_filters = null;
+	var row_filters = [];
 	rowChart
-		.width($('#row-chart').width()-150)
-		.height((15 + 5) * 191 + 50)
+		.width($('#row-chart-container').width()-150)
+		.height((15 + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
 		.ordering(function(d) {return -d.value;})
@@ -870,16 +878,18 @@ var generateCharts = function (d){
 					else { $('.filter-count')[i].innerHTML = 'All '; }
 				};	
 			}
-			rowfilters_length = row_filters.length;
-			if (rowfilters_length == 1) { var keyvalue = keyvalues1(row_filters); };
-			//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
-			if (chart_show == 'row') {updateHTML(keyvalue);} //,keyvalue2);
-			var resetbutton = document.getElementsByClassName('reset-button')[0];	
-			if (row_filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			if (chart_show == 'row') {
+				rowfilters_length = row_filters.length;
+				if (rowfilters_length == 1) { var keyvalue = keyvalues1(row_filters); };
+				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
+				updateHTML(keyvalue); //,keyvalue2);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];	
+				if (row_filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			}
 		})
 		.elasticX(false)
 		.x(d3.scale.linear().range([0,(rowChart.width()-50)]).domain([0,11]))
-		.xAxis().scale(rowChart.x())
+		.xAxis().scale(rowChart.x()).tickValues([])
 		;
 	
 	sort = function(type) {
@@ -1210,18 +1220,18 @@ var generateCharts = function (d){
 	
 	//Switch between MAP and TABULAR view
     mapShow = function() {
-		chart_show = 'map';
-		//Hide row-chart
-		$('#row-chart-container').hide();  
-		//Transfer row-chart filters to map (to make sure that selection is carried)
-		mapChart.filter([row_filters]); 
-		//Show map-chart
-		$('#map-chart').show();
 		
 		//Zoom to selected countries in row-chart
 		if (row_filters.length == 0) {
 			zoomToGeom(d.Districts);
 		} else {
+			chart_show = 'map';
+			//Hide row-chart
+			$('#row-chart-container').hide();  
+			//Transfer row-chart filters to map (to make sure that selection is carried)
+			mapChart.filter([row_filters]); 
+			//Show map-chart
+			$('#map-chart').show();
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){
@@ -1230,9 +1240,9 @@ var generateCharts = function (d){
 				}
 			}
 			zoomToGeom(districts_temp);
+			//Undo row-chart filters (which are transfered to the map already)
+			rowChart.filter(null);
 		}
-		//Undo row-chart filters (which are transfered to the map already)
-		rowChart.filter(null);
 	}
 	
 	tabularShow = function() {

@@ -615,6 +615,7 @@ var generateCharts = function (d){
 	var rowfilters_length = 0;
 	var updateHTML = function(keyvalue) { //,keyvalue2) {
 		
+		//console.log(keyvalue);
 		var risk_score = document.getElementById('risk_score_main');
 		var vulnerability_score = document.getElementById('vulnerability_score_main');
 		var hazard_score = document.getElementById('hazard_score_main');
@@ -782,6 +783,7 @@ var generateCharts = function (d){
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
 			map_filters = chart.filters();
+			mapfilters_length = map_filters.length;
 			var popup = document.getElementById('mapPopup');
 			//popup.style.visibility = 'hidden';
 			//document.getElementById('zoomin_icon').style.visibility = 'hidden';
@@ -820,7 +822,6 @@ var generateCharts = function (d){
 				//document.getElementById('zoomin_icon').style.visibility = 'visible';
 			} */
 			if (chart_show == 'map') {
-				mapfilters_length = map_filters.length;
 				if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
 				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
 				updateHTML(keyvalue); //,keyvalue2);
@@ -870,6 +871,7 @@ var generateCharts = function (d){
 		})
 		.on('filtered',function(chart,filters){
 			row_filters = chart.filters();
+			rowfilters_length = row_filters.length;
 			//mapChart.filter(row_filters);
 			if (chart_show == 'row') {
 				for (var i=0;i<$('.filter-count').length;i++){
@@ -879,7 +881,6 @@ var generateCharts = function (d){
 				};	
 			}
 			if (chart_show == 'row') {
-				rowfilters_length = row_filters.length;
 				if (rowfilters_length == 1) { var keyvalue = keyvalues1(row_filters); };
 				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
 				updateHTML(keyvalue); //,keyvalue2);
@@ -1221,17 +1222,18 @@ var generateCharts = function (d){
 	//Switch between MAP and TABULAR view
     mapShow = function() {
 		
+		chart_show = 'map';
+		//Hide row-chart
+		$('#row-chart-container').hide();  
+		//Transfer row-chart filters to map (to make sure that selection is carried)
+		mapChart.filter([row_filters]); 
+		//Show map-chart
+		$('#map-chart').show();
+		
 		//Zoom to selected countries in row-chart
 		if (row_filters.length == 0) {
 			zoomToGeom(d.Districts);
 		} else {
-			chart_show = 'map';
-			//Hide row-chart
-			$('#row-chart-container').hide();  
-			//Transfer row-chart filters to map (to make sure that selection is carried)
-			mapChart.filter([row_filters]); 
-			//Show map-chart
-			$('#map-chart').show();
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){

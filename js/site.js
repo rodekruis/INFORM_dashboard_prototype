@@ -1413,8 +1413,8 @@ var generateCharts = function (d){
 				//var _this = this;
 				(function (_i) {
 					
-					//d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
-					d3.json(workflow_info,function(workflow_info) {
+					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+					//d3.json(workflow_info,function(workflow_info) {
 						//d.data_workflows = workflow_info;
 						for (var j=0;j<workflow_info.length;j++) {
 							//console.log(workflow_info[j]);

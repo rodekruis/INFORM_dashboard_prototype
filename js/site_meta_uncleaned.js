@@ -4,16 +4,51 @@
 //////////////////////
 		
 //var country_code = '';
-//var active_workflow_groups = ["INFORM_EAST_AFRICA", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAHEL", "INFORM2015", "INFORM2015Mid", "INFORM2016", "INFORM2017", "INFORM2017Mid"]
-var active_workflow_groups = ['INFORM_GTM','INFORM2017','INFORM_EAST_AFRICA','INFORM_SAHEL'];
-var inform_model = 'INFORM2017'; 
+var inform_model = 'INFORM2017'; //'INFORM_GTM','INFORM2017'
 var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
-var inform_levels = 7;				
+var inform_levels = 10;				
 var metric = 'INFORM';
-var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];
-var color_systems = ['INFORM','INFORM_EAST_AFRICA','INFORM_SAHEL'];
 var chart_show = 'map';
+var metric_label = '';
+var metric_year = '';
+var metric_source = '';
+var metric_desc = '';
+var metric_icon = '';
+var admlevel_text = '';
+var name_selection = '';
+var name_selection_prev = '';
+var name_popup = '';
+var value_popup = 0;
+var country_selection = '';
+var level2_selection = undefined;
+var level3_selection = undefined;
+var level2_code = '';
+var level3_code = '';
+var type_selection = '';
+var subtype_selection = ''; 
+window.parent_code = '';
+var data_input = '';
+window.filters = [];
+var tables = [];
+var x = 500;
+var y = 200;
+var mapfilters_length = 0;
+var d_prev = '';
 var map;
+var config =  {
+	whereFieldName:'pcode',
+	joinAttribute:'pcode',
+	nameAttribute:'name',
+	color:'#0080ff'
+};	
+var colorDomain = {
+	INFORM: ['#FFC8BF','#FE9181','#FE5A3C','#951301','#620D01'],
+	HA: ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'],
+	VU: ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026'],
+	CC: ['#ffffb2','#fecc5c','#fd8d3c','#f03b20','#bd0026']
+};
+
+
 
 ///////////////////////////////////
 // DEFINE SOME INITIAL FUNCTIONS //
@@ -41,16 +76,7 @@ load_dashboard = function(inform_model,workflow_id) {
 	
 	$('#map-chart').show();
 	chart_show = 'map';
-	
-	//RESET (after switching models)
 	metric = 'INFORM';
-	document.getElementById('metric_label').firstChild.innerHTML = 'INFORM Risk Index';
-	document.getElementById('indicator-button').style.backgroundColor = '#951301';
-	document.getElementById('area_selection').style.color = '#951301';
-	document.getElementsByClassName('reset-button')[0].style.backgroundColor = '#951301';
-	document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden'; 
-	for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
-	
 	if (inform_model == 'INFORM2017') { country_code = ''; } else { country_code = inform_model.replace('INFORM',''); };
 		
 	//Load data
@@ -58,8 +84,7 @@ load_dashboard = function(inform_model,workflow_id) {
 	
 	//Empty data-object
 	d = {};
-	//d3.json(source_api,function(source_data) {
-	d3.json('data/sourcedata.json',function(source_data) {
+	d3.json(source_api,function(source_data) {
 		//console.log(source_data);
 		d.source_data = source_data;
 		
@@ -67,13 +92,17 @@ load_dashboard = function(inform_model,workflow_id) {
 		var url_meta = 'http://www.inform-index.org/API/InformAPI/Processes/GetByWorkflowId/' + workflow_id;
 		
 		// Load INFORM metadata
-		//d3.json(url_meta, function(meta_data) {
-		d3.json('data/metadata' + country_code + '.json', function(meta_data) {
+		//var ignore_string = ['SS1','SS3'];
+		d3.json(url_meta, function(meta_data) {
+		//d3.json('data/metadata' + country_code + '.json', function(meta_data) {
 			//console.log(meta_data);
 			d.Metadata_full = meta_data;
 			d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
 																		&& e.VisibilityLevel <= inform_levels 
 																		//&& e.StepNumber > 0
+																		//&& e.Parent !== 'HA.NAT.TC.SS-REL'
+																		//&& e.Parent !== 'HA.NAT.TC.SS-ABS'
+																		//&& e.Parent !== 'VU.VGR.UP.POC-POP'
 																		});
 			inform_indicators = [];
 			for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
@@ -93,14 +122,11 @@ load_dashboard = function(inform_model,workflow_id) {
 				d3.json('data/' + geo_data_url + '.json', function (geo_data) {
 					//console.log(geo_data);
 					d.Districts = topojson.feature(geo_data,geo_data.objects[geo_data_url]);
-					d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.properties.id) <= -1 ;});
+					d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.id) <= -1 ;});
 					
 					//Load color-data (TO DO: to be replaced by API-call)
-					d.Colors = null;
-					if (color_systems.indexOf(inform_model) <= -1) { color_model = 'INFORM'; } else {color_model = inform_model;};
 					d3.dsv(';')("data/colors.csv", function(color_data){
-						d.Colors = $.grep(color_data, function(e){ return e.System == color_model });
-						
+						d.Colors = color_data;
 						
 						//Print data to screen
 						console.log(d);
@@ -145,7 +171,7 @@ var generateCharts = function (d){
 	var genLookup = function (field){
 		var lookup = {};
 		d.Districts.features.forEach(function(e){
-			lookup[e.properties.id] = String(e.properties[field]);
+			lookup[e.id] = String(e.properties[field]);
 		});
 		return lookup;
 	};
@@ -165,14 +191,6 @@ var generateCharts = function (d){
 		});
 		return lookup_data;
 	};
-	//fill the lookup table with the metadata-information per variable
-	var genLookup_metafull = function (field){
-		var test = {};
-		d.Metadata_full.forEach(function(e){
-			test[e.OutputIndicatorName] = String(e[field]);
-		});
-		return test;
-	};
 	
 	
 	//////////////////////////
@@ -181,9 +199,15 @@ var generateCharts = function (d){
 
 
 	// get the lookup tables
-	var lookup = genLookup('name');
+	var lookup = genLookup(config.nameAttribute);
+	
 	var meta_label = genLookup_meta(d,'Fullname');
 	var meta_level = genLookup_meta(d,'VisibilityLevel');
+	//var meta_scorevar = genLookup_meta(d,'OutputIndicatorName');
+	//var meta_format = genLookup_meta(d,'format');
+	//var meta_unit = genLookup_meta(d,'unit');
+	var meta_icon = genLookup_meta(d,'icon_src');
+	
 	metric_label = meta_label[metric];
 	document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 	
@@ -196,29 +220,31 @@ var generateCharts = function (d){
 	
 	var currentFormat = function(value) {
 		return dec1Format(value);
+		// if (meta_format[metric] === 'decimal0') { return dec0Format(value);}
+		// else if (meta_format[metric] === 'decimal2') { return dec2Format(value);}
+		// else if (meta_format[metric] === 'percentage') { return percFormat(value);}
 	};
 	
 	
-	////////////////////
-	// METADATA SETUP //
-	////////////////////
-	
-	var lookup_metafull_id = genLookup_metafull('IndicatorId');
-	//var lookup_children = genLookup_children('children');
+	///////////////////////
+	// CROSSFILTER SETUP //
+	///////////////////////
 	
 	var children = [];
 	for (var i=0; i < d.Metadata_full.length; i++) {
 		
 		var record = {};
-		if (d.Metadata_full[i].OutputIndicatorName !== 'POP' && d.Metadata_full[i].OutputIndicatorName !== 'POP_DEN') {// && d.Metadata_full[i].StepNumber == 0) {
-			record.stepnr = d.Metadata_full[i].StepNumber;
-			record.name = d.Metadata_full[i].OutputIndicatorName;
-			record.parent1 = d.Metadata_full[i].Parent;
-			children.push(record);
-		}
+		record.name = d.Metadata_full[i].OutputIndicatorName;
+		record.id = d.Metadata_full[i].IndicatorId;
+		//record.children = d.Metadata_full[i].Children.split(',');
+		record.children = d.Metadata_full[i].AggregationElementList;
+		if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
+		
+		if (record.children.indexOf('POP_DEN') > -1) { record.children.splice(record.children.indexOf('POP_DEN'), 1); };
+		if (record.children.indexOf('POP') > -1) { record.children.splice(record.children.indexOf('POP'), 1); };
+		children.push(record);
+		
 	};
-	//console.log(children);
-	
 	//fill the lookup table with the metadata-information per variable
 	var genLookup_children = function (field){
 		var test = {};
@@ -227,36 +253,135 @@ var generateCharts = function (d){
 		});
 		return test;
 	};
-	var lookup_children_parent = genLookup_children('parent1');
+	var lookup_children_id = genLookup_children('id');
+	var lookup_children = genLookup_children('children');
 	
-	for (var i=0;i<children.length;i++) {
-		children[i].parent2 = lookup_children_parent[children[i].parent1] == 'null' ? undefined : lookup_children_parent[children[i].parent1];
-		children[i].parent3 = lookup_children_parent[children[i].parent2] == 'null' ? undefined : lookup_children_parent[children[i].parent2];
-		children[i].parent4 = lookup_children_parent[children[i].parent3] == 'null' ? undefined : lookup_children_parent[children[i].parent3];
-		children[i].parent5 = lookup_children_parent[children[i].parent4] == 'null' ? undefined : lookup_children_parent[children[i].parent4];
-		children[i].parent6 = lookup_children_parent[children[i].parent5] == 'null' ? undefined : lookup_children_parent[children[i].parent5];
-		children[i].parent7 = lookup_children_parent[children[i].parent6] == 'null' ? undefined : lookup_children_parent[children[i].parent6];
-		children[i].parent8 = lookup_children_parent[children[i].parent7] == 'null' ? undefined : lookup_children_parent[children[i].parent7];
-		children[i].parent9 = lookup_children_parent[children[i].parent8] == 'null' ? undefined : lookup_children_parent[children[i].parent8];
-		children[i].parent10 = lookup_children_parent[children[i].parent9] == 'null' ? undefined : lookup_children_parent[children[i].parent9];
+	var children2 = [];
+	for (var i=0; i < d.Metadata_full.length; i++) {
+		
+		var record = {};
+		if (d.Metadata_full[i].OutputIndicatorName !== 'POP' && d.Metadata_full[i].OutputIndicatorName !== 'POP_DEN') {// && d.Metadata_full[i].StepNumber == 0) {
+			record.stepnr = d.Metadata_full[i].StepNumber;
+			record.name = d.Metadata_full[i].OutputIndicatorName;
+			record.parent1 = d.Metadata_full[i].Parent;
+			children2.push(record);
+		}
+	};
+	//console.log(children2);
+	
+	//fill the lookup table with the metadata-information per variable
+	var genLookup_children2 = function (field){
+		var test = {};
+		children2.forEach(function(e){
+			test[e.name] = String(e[field]);
+		});
+		return test;
+	};
+	var lookup_children2_parent = genLookup_children2('parent1');
+	
+	for (var i=0;i<children2.length;i++) {
+		//parent1 = children2[i].parent1 == 'null' ? undefined : children2[i].parent1;
+		children2[i].parent2 = lookup_children2_parent[children2[i].parent1] == 'null' ? undefined : lookup_children2_parent[children2[i].parent1];
+		children2[i].parent3 = lookup_children2_parent[children2[i].parent2] == 'null' ? undefined : lookup_children2_parent[children2[i].parent2];
+		children2[i].parent4 = lookup_children2_parent[children2[i].parent3] == 'null' ? undefined : lookup_children2_parent[children2[i].parent3];
+		children2[i].parent5 = lookup_children2_parent[children2[i].parent4] == 'null' ? undefined : lookup_children2_parent[children2[i].parent4];
+		children2[i].parent6 = lookup_children2_parent[children2[i].parent5] == 'null' ? undefined : lookup_children2_parent[children2[i].parent5];
+		children2[i].parent7 = lookup_children2_parent[children2[i].parent6] == 'null' ? undefined : lookup_children2_parent[children2[i].parent6];
+		children2[i].parent8 = lookup_children2_parent[children2[i].parent7] == 'null' ? undefined : lookup_children2_parent[children2[i].parent7];
+		children2[i].parent9 = lookup_children2_parent[children2[i].parent8] == 'null' ? undefined : lookup_children2_parent[children2[i].parent8];
+		children2[i].parent10 = lookup_children2_parent[children2[i].parent9] == 'null' ? undefined : lookup_children2_parent[children2[i].parent9];
 
-		children[i].parents = children[i].name + ',' + (children[i].parent1 ? children[i].parent1 + ',' : '') + (children[i].parent2 ? children[i].parent2 + ',' : '') + (children[i].parent3 ? children[i].parent3 + ',' : '') + (children[i].parent4 ? children[i].parent4 + ',' : '') + (children[i].parent5 ? children[i].parent5 + ',' : '')
-									 + (children[i].parent6 ? children[i].parent6 + ',' : '') + (children[i].parent7 ? children[i].parent7 + ',' : '') + (children[i].parent8 ? children[i].parent8 + ',' : '') + (children[i].parent9 ? children[i].parent9 + ',' : '') + (children[i].parent10 ? children[i].parent10 + ',' : '');
-		children[i].parents = children[i].parents.split(',');
-		if (children[i].parents.indexOf('') > -1) { children[i].parents.splice(children[i].parents.indexOf(''), 1); };
-		children[i].levels = children[i].parents.length;
+		children2[i].parents = children2[i].name + ',' + (children2[i].parent1 ? children2[i].parent1 + ',' : '') + (children2[i].parent2 ? children2[i].parent2 + ',' : '') + (children2[i].parent3 ? children2[i].parent3 + ',' : '') + (children2[i].parent4 ? children2[i].parent4 + ',' : '') + (children2[i].parent5 ? children2[i].parent5 + ',' : '')
+									 + (children2[i].parent6 ? children2[i].parent6 + ',' : '') + (children2[i].parent7 ? children2[i].parent7 + ',' : '') + (children2[i].parent8 ? children2[i].parent8 + ',' : '') + (children2[i].parent9 ? children2[i].parent9 + ',' : '') + (children2[i].parent10 ? children2[i].parent10 + ',' : '');
+		children2[i].parents = children2[i].parents.split(',');
+		if (children2[i].parents.indexOf('') > -1) { children2[i].parents.splice(children2[i].parents.indexOf(''), 1); };
+		children2[i].levels = children2[i].parents.length;
 		for (k=0;k<d.source_data.length;k++) {
-			if (children[i].name == d.source_data[k].IndicatorId || lookup_metafull_id[children[i].name] == d.source_data[k].IndicatorId) {
-				children[i].indicator = d.source_data[k].IndicatorId;
-				children[i].indicator_label = d.source_data[k].IndicatorDescription;
-				children[i].provider = d.source_data[k].Provider;
-				children[i].link = d.source_data[k].Link;
-				children[i].description = d.source_data[k].IndicatorNote;
+			if (children2[i].name == d.source_data[k].IndicatorId || lookup_children_id[children2[i].name] == d.source_data[k].IndicatorId) {
+				children2[i].indicator = d.source_data[k].IndicatorId;
+				children2[i].indicator_label = d.source_data[k].IndicatorDescription;
+				children2[i].provider = d.source_data[k].Provider;
+				children2[i].link = d.source_data[k].Link;
+				children2[i].description = d.source_data[k].IndicatorNote;
 			}
 		}
 		
 	}
-	//console.log(children);
+
+	console.log(children2);
+	
+	/* var children2 = [];
+	for (var i=0; i < d.Metadata_full.length; i++) {
+		
+		var record = {};
+		
+		for (var step=0;step<11;step++) {
+			if (step == d.Metadata_full[i].StepNumber) {
+				record.stepnr = d.Metadata_full[i].StepNumber;
+				record.name = d.Metadata_full[i].OutputIndicatorName;
+				//record.id = d.Metadata_full[i].IndicatorId;
+				//record.parent1 = d.Metadata_full[i].Parent;
+				record.children = d.Metadata_full[i].Children.split(',');
+				children2.push(record);
+			}
+		}
+	};
+	//console.log(children2);
+	//fill the lookup table with the metadata-information per variable
+	var genLookup_children2 = function (field){
+		var test = {};
+		children2.forEach(function(e){
+			test[e.name] = String(e[field]);
+		});
+		return test;
+	};
+	var lookup_children2 = genLookup_children2('children');
+	
+	for (var i=0;i<children2.length;i++) {
+		var record = children2[i].children;
+		for (var j=0;j<record.length;j++) {
+			//console.log(record[j]);
+			record_new = {};
+			record_new.name = record[j];
+			record_new.children = lookup_children2[record[j]];
+			if (record_new.children) {record_new.children = record_new.children.split(',');}
+			//console.log(record_new);
+			if (j==0) {children2[i].children = [];};
+			children2[i].children.push(record_new);
+			
+			if (record_new.children) {
+				var record2 = record_new.children;
+				for (var k=0;k<record2.length;k++) {
+					
+					console.log(record2[k]);
+					record_new = {};
+					record_new.name = record2[k];
+					record_new.children = lookup_children2[record2[k]];
+					if (record_new.children) {record_new.children = record_new.children.split(',');}
+					console.log(record_new);
+					if (k==0) {children2[i].children[j].children = [];};
+					children2[i].children[j].children.push(record_new);
+				}
+			}
+		}
+	}
+	
+	console.log(children2); */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	
 	
 	var max_stepnr = Math.max.apply(Math,d.Metadata.map(function(o){return o.StepNumber;}));
 	tables = [];
@@ -273,7 +398,6 @@ var generateCharts = function (d){
 		if (ind_max <=10 							//Obvious
 			&& (ind_min >= 0 || ind_min == -99) 	// > 0 is obvious. ==-99 is a code that is possible
 			&& ind_max > 1.1						//This is to rule out 0-1 indicators (such as HDI or percentages)
-			&& (record_temp.Parent || record_temp.OutputIndicatorName == 'INFORM')
 			) {
 			//record.id = 'data-table' + [i+1];
 			record.name = record_temp.OutputIndicatorName;
@@ -283,7 +407,7 @@ var generateCharts = function (d){
 			//record.unit = '';
 			record.level = record_temp.VisibilityLevel;
 			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
-			record.children = record_temp.Children ? record_temp.Children.split(',') : [];
+			record.children = record_temp.Children.split(',');
 			if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
 			record.group = record_temp.Parent == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
 			record.propertyPath = 'value.finalVal';
@@ -292,7 +416,7 @@ var generateCharts = function (d){
 			record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
 			tables.push(record);
 		} else { //Use this  for inspection of possibly weird variables
-			//console.log(record_temp.OutputIndicatorName);
+			// console.log(record_temp.OutputIndicatorName);
 			// console.log(ind_max);
 			// console.log(ind_min);
 		}
@@ -317,34 +441,83 @@ var generateCharts = function (d){
 				t.lowest_level = 1;
 				//console.log(t.children[i]);
 				
-				//var match2 = 0;
-				//console.log(t.children[i]);
-				t.indicator = [];
-				t.indicator_label = [];
-				t.provider = [];
-				t.link = [];
-				t.description = [];
-				for (m=0;m<children.length;m++){
-					if (children[m].parents.indexOf(t.children[i]) > -1 && children[m].provider) {
-						//console.log(children[m]);
-						if (t.indicator.indexOf(children[m].indicator) <= -1) {
-							t.indicator.push(children[m].indicator);
-							t.indicator_label.push(children[m].indicator_label);
-							t.provider.push(children[m].provider);
-							t.link.push(children[m].link);
-							t.description.push(children[m].description);
-						}
-						//match2 = 1;
+				var match2 = 0;
+				// .. Now check if you can find a match for the child-indicator in the source-metadata (either through OutputIndicatorName or through IndicatorId)
+				/*
+				for (k=0;k<d.source_data.length;k++) {
+					if (t.children[i] == d.source_data[k].IndicatorId || lookup_children_id[t.children[i]] == d.source_data[k].IndicatorId){ 
+						// .. If so, connect the source metadata to the Tables-object for the lowest-level indicator
+						//console.log(d.source_data[k].Note);
+						t.provider = d.source_data[k].Provider;
+						t.link = d.source_data[k].Link;
+						t.description = d.source_data[k].IndicatorNote;
+						match2 = 1;
 					}
 				}
+				if (match2 == 0) {
+					// .. If no match, we go one level deeper and look up the children of the child, and again check if there's a match.
+					for (l=0;l<children.length;l++) {
+						if (t.children[i] == children[l].name) {
+							//console.log(children[l].children);
+							for (k=0;k<d.source_data.length;k++) {
+								if (children[l].children[0] == d.source_data[k].IndicatorId || lookup_children_id[children[l].children[0]] == d.source_data[k].IndicatorId){
+									//console.log(d.source_data[k]);
+									t.provider = d.source_data[k].Provider;
+									t.link = d.source_data[k].Link;
+									t.description = d.source_data[k].IndicatorNote;
+									match2 = 1;
+								}
+							}
+						}
+					}
+					if (match2 == 0) {
+						for (k=0;k<d.source_data.length;k++) {
+							if (t.name == d.source_data[k].IndicatorId || lookup_children_id[t.name] == d.source_data[k].IndicatorId){
+								//console.log(d.source_data[k]);
+								t.provider = d.source_data[k].Provider;
+								t.link = d.source_data[k].Link;
+								t.description = d.source_data[k].IndicatorNote;
+								match2 = 1;
+							}
+						}
+					}*/
+					console.log(t.children[i]);
+					t.indicator = [];
+					t.indicator_label = [];
+					t.provider = [];
+					t.link = [];
+					t.description = [];
+					for (m=0;m<children2.length;m++){
+						if (children2[m].parents.indexOf(t.children[i]) > -1 && children2[m].provider) {
+							console.log(children2[m]);
+							if (t.indicator.indexOf(children2[m].indicator) <= -1) {
+								t.indicator.push(children2[m].indicator);
+								t.indicator_label.push(children2[m].indicator_label);
+								t.provider.push(children2[m].provider);
+								t.link.push(children2[m].link);
+								t.description.push(children2[m].description);
+							}
+							console.log(t.indicator);
+							//if (t.indicator.indexOf(children2[m].IndicatorId) <= -1) {t.provider.push(children2[m].provider);}
+							//if (t.indicator.indexOf(children2[m].IndicatorId) <= -1) {t.link.push(children2[m].link);}
+							//if (t.indicator.indexOf(children2[m].IndicatorId) <= -1) {t.description.push(children2[m].description);}
+							// if (!t.provider) {t.provider = children2[m].provider;} else {t.provider += ',' + children2[m].provider;}
+							// if (!t.link) {t.link = children2[m].link;} else {t.link += ',' + children2[m].link;}
+							// if (!t.description) {t.description = children2[m].description;} else {t.description += ',' + children2[m].description;}
+							match2 = 1;
+						}
+					}
+						
+				//}
+				//}
 			};
 		};
 	});
-	//console.log(tables);
+	console.log(tables);
 	
 	tables.forEach(function(t) {
 		if (t.lowest_level == 1 && t.provider =="") {
-			//console.log(t);
+			console.log(t);
 		}
 	});
 	
@@ -363,9 +536,7 @@ var generateCharts = function (d){
 	var lookup_description = genLookup_tables('description');
 	
 
-	////////////////
-	// DATA SETUP //
-	////////////////
+
 		
 	//First PIVOT the INFORM data from row*indicator level to row level (with indicators als columns)
 	var grouped = [];
@@ -376,25 +547,16 @@ var generateCharts = function (d){
 		}
 		this[a.Iso3].values.push({ IndicatorId: a.IndicatorId, IndicatorScore: a.IndicatorScore });
 	}, Object.create(null)); // Object.create creates an empty object without prototypes
-	//console.log(grouped);
 	
 	var data_final = [];
 	for (var i=0; i < grouped.length; i++) {
 		var record = {};
 		var record_temp = grouped[i];
 		record.pcode = record_temp.pcode;
-		record.name = lookup[record_temp.pcode] ? lookup[record_temp.pcode] : ''; 
-		for (var j=0; j < tables.length; j++) {
-			count=0;
-			for (var k=0;k<record_temp.values.length;k++) {
-				var record_temp2 = record_temp.values[k];
-				if (tables[j].name == record_temp2.IndicatorId) {
-					record[tables[j].name] = record_temp2.IndicatorScore == 0 ? '0.01' : String(record_temp2.IndicatorScore);
-					count=1;
-				}
-			}
-			if (count==0) {record[tables[j].name] = '';}
-			
+		record.pcode_parent = '';
+		for (var j=0; j < record_temp.values.length; j++) {
+			var record_temp2 = record_temp.values[j];
+			record[record_temp2.IndicatorId] = record_temp2.IndicatorScore == 0 ? '0.01' : String(record_temp2.IndicatorScore);
 		}
 		data_final[i] = record;
 	}
@@ -431,13 +593,9 @@ var generateCharts = function (d){
 	///////////////////////////////
 	
 	
-	
 	//Define the colors and thresholds for the selected indicator
 	mapchartColors_func = function() {
 		var color_group = metric.split('.')[0].concat((metric.split('.')[1]) ? '.'.concat(metric.split('.')[1]) : '');
-		if (groups.indexOf(color_group) <= -1) {
-			color_group = color_group.split('.')[0];
-		}
 		color_range = [];
 		colors = [];
 		for (j=0;j<d.Colors.length;j++) {
@@ -465,10 +623,7 @@ var generateCharts = function (d){
 		
 		var width = keyvalue[ind];
 		var color_group = ind.split('.')[0].concat((ind.split('.')[1]) ? '.'.concat(ind.split('.')[1]) : '');
-		if (groups.indexOf(color_group) <= -1) {
-			color_group = color_group.split('.')[0];
-		}
-		//if (color_group == 'HDI-Est') {color_group = 'VU.SEV';}
+		if (color_group == 'HDI-Est') {color_group = 'VU.SEV';}
 		color_ranges = [];
 		for (j=0;j<d.Colors.length;j++) {
 			if (d.Colors[j].Indicator_code == color_group && d.Colors[j].ValueTo !== 'NULL') {
@@ -530,11 +685,8 @@ var generateCharts = function (d){
 		for (var i=0;i<tables.length;i++) {
 			var record = tables[i];
 			
-			if (groups.indexOf(record.name.substring(0,6)) > -1) {
-				icon = 'img/' + record.name.substring(0,6) + '.png';
-			} else {
-				icon = 'img/' + record.name.substring(0,2) + '.png';
-			}
+			if (!meta_icon[record.name]) {var icon = 'img/undefined.png';}
+			else {icon = 'img/' + record.name.substring(0,6) + '.png';};
 			
 			if (record.level == 2) {
 				
@@ -621,7 +773,6 @@ var generateCharts = function (d){
 				var div_heading = document.createElement('div');
 				div_heading.setAttribute('id','heading'+record.name.split('.').join('-'));
 				div_heading.setAttribute('class','accordion-header level' + input_level);
-				//console.log(record);
 				var parent = document.getElementById('collapse'+record.group.split('.').join('-'))
 				if (parent) {
 					parent.appendChild(div_heading);
@@ -657,7 +808,7 @@ var generateCharts = function (d){
 					div2.setAttribute('class','col-md-5 bar-container');
 					div.appendChild(div2);
 					var div1a = document.createElement('div');
-					div1a.setAttribute('class','component-score-small');
+					div1a.setAttribute('class','component-score');
 					div1a.setAttribute('id',record.name);
 					div2.appendChild(div1a);
 					var div2a = document.createElement('div');
@@ -709,7 +860,6 @@ var generateCharts = function (d){
 		
 	};
 	
-	//COMPARISON VIEW
 	// var keyvalue2 = [];
 	// var keyvalues2 = function(filters) {
 		
@@ -721,7 +871,6 @@ var generateCharts = function (d){
 		// });
 		// return keyvalue2;
 	// };
-	
 	var mapfilters_length = 0;
 	var rowfilters_length = 0;
 	var updateHTML = function(keyvalue) { //,keyvalue2) {
@@ -734,43 +883,47 @@ var generateCharts = function (d){
 		if (mapfilters_length == 1 || rowfilters_length == 1) {
 			if (risk_score) {
 				risk_score.textContent = dec1Format(keyvalue.INFORM); //risk_score;
-				risk_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');		
+				//risk_score.setAttribute('class','component-score ');// + high_med_low('INFORM','INFORM'));
+				risk_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));							
 			}
 			if (vulnerability_score) {
 				vulnerability_score.textContent = dec1Format(keyvalue.VU);
-				vulnerability_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');			
+				//vulnerability_score.setAttribute('class','component-score ');// + high_med_low('VU','VU'));		
+				//vulnerability_score.setAttribute('style','color: ' + color_cat('VU'));									
 			}
 			if (hazard_score) {
 				hazard_score.textContent = dec1Format(keyvalue.HA);
-				hazard_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');									
+				//hazard_score.setAttribute('class','component-score ');// + high_med_low('HA','HA'));
+				//hazard_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
 			if (coping_score) {
 				coping_score.textContent = dec1Format(keyvalue.CC);
-				coping_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');									
+				//coping_score.setAttribute('class','component-score ');// + high_med_low('CC','CC'));
+				//coping_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
-			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = '#e2e7ee'; };
-			
-		//COMPARISON VIEW
 		//} else if (mapfilters_length == 2) {
 			
 		} else {
 			if (risk_score) {
 				risk_score.textContent = ''; //keyvalue.INFORM; //risk_score;
-				risk_score.setAttribute('style','border:none');									
+				//risk_score.setAttribute('class','component-score ' + high_med_low('INFORM','INFORM'));	
+				//risk_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));											
 			}
 			if (vulnerability_score) {
 				vulnerability_score.textContent = null; //keyvalue.VU;
-				vulnerability_score.setAttribute('style','border:none');									
+				//vulnerability_score.setAttribute('class','component-score' + high_med_low('VU','VU'));	
+				//vulnerability_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));										
 			}
 			if (hazard_score) {
 				hazard_score.textContent = null; //keyvalue.HA;
-				hazard_score.setAttribute('style','border:none');									
+				//hazard_score.setAttribute('class','component-score' + high_med_low('HA','HA'));	
+				//hazard_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));										
 			}
 			if (coping_score) {
 				coping_score.textContent = null; //keyvalue.CC;
-				coping_score.setAttribute('style','border:none');									
+				//coping_score.setAttribute('class','component-score' + high_med_low('CC','CC'));	
+				//coping_score.setAttribute('style','color:#951301 ');// + color_cat('INFORM'));										
 			}
-			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = 'transparent'; };
 		};
 		
 		for (var i=0;i<tables.length;i++) {
@@ -780,7 +933,6 @@ var generateCharts = function (d){
 				
 				if (mapfilters_length == 1 || rowfilters_length == 1) {
 					
-					//COMPARISON VIEW
 					// var bar = document.getElementById('bar-'+record.name+'-2');
 					// if (bar) { var bar_par = bar.parentNode;}
 					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
@@ -791,13 +943,12 @@ var generateCharts = function (d){
 					div1a.setAttribute('class','component-score-small'); // ' + high_med_low(record.name,record.scorevar_name));
 					div1a.setAttribute('style','border:solid; border-width:1px; border-color:black');
 					
-					div1a.innerHTML = isNaN(keyvalue[record.name]) ? '-' : (keyvalue[record.name] == 10 ? '10' : dec1Format(keyvalue[record.name]));
+					div1a.innerHTML = isNaN(keyvalue[record.name]) ? '-' : dec1Format(keyvalue[record.name]);
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
 					//div2a1.innerHTML = dec1Format(keyvalue[record.name]);
 				
-				//COMPARISON VIEW
 				// } else if (mapfilters_length == 2) {
 					
 					// var width = keyvalue2[record.name]*10;
@@ -815,7 +966,6 @@ var generateCharts = function (d){
 					
 				} else {
 					
-					//COMPARISON VIEW
 					// var bar = document.getElementById('bar-'+record.name+'-2');
 					// if (bar) { var bar_par = bar.parentNode;}
 					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
@@ -882,7 +1032,7 @@ var generateCharts = function (d){
 			}
 		})
 		.featureKeyAccessor(function(feature){
-			return feature.properties.id; //feature.properties.pcode;
+			return feature.id; //feature.properties.pcode;
 		})
 		.popup(function(d){
 			return lookup[d.key].concat(' - ',meta_label[metric],': ',isNaN(d.value) ? 'No Data' : currentFormat(d.value));
@@ -893,7 +1043,6 @@ var generateCharts = function (d){
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
 			map_filters = chart.filters();
-			//console.log(map_filters);
 			mapfilters_length = map_filters.length;
 			var popup = document.getElementById('mapPopup');
 			//popup.style.visibility = 'hidden';
@@ -981,7 +1130,6 @@ var generateCharts = function (d){
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
-			//console.log(row_filters);
 			row_filters = chart.filters();
 			rowfilters_length = row_filters.length;
 			//mapChart.filter(row_filters);
@@ -1061,18 +1209,9 @@ var generateCharts = function (d){
 				}
 			})
 		;
-		//dc.redrawAll();
-		console.log(row_filters);
-		if (chart_show == 'row' && row_filters.length >= 2) {
-			mapChart.filter([row_filters]);
-			rowChart.filter([row_filters]);
-			rowChart.redraw();
-		} else {
-			dc.redrawAll();
-		}
-		
+		dc.redrawAll();
+		//for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };	
 		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
-		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
 		
 		//console.log($('#metric_label div').width());
 		//console.log($('#metric_label').width());
@@ -1082,6 +1221,7 @@ var generateCharts = function (d){
 			//$('#metric_label div').css('font-size', (parseInt($('#metric_label div').css('font-size')) - 1) + "px" );
 		//}
 	
+		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
 		document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
 		document.getElementById('area_selection').style.color = color_range[3].HEX;
 		document.getElementById('mapPopup').style.visibility = 'hidden';
@@ -1100,12 +1240,7 @@ var generateCharts = function (d){
 		//console.log(id);
 		metric = id;
 		metric_label = meta_label[metric];
-		//metric_icon = 'img/' + metric.substring(0,6) + '.png';
-		if (groups.indexOf(metric.substring(0,6)) > -1) {
-			metric_icon = 'img/' + metric.substring(0,6) + '.png';
-		} else {
-			metric_icon = 'img/' + metric.substring(0,2) + '.png';
-		}
+		metric_icon = 'img/' + metric.substring(0,6) + '.png';
 		document.getElementsByClassName('metric_icon')[0].setAttribute('src',metric_icon);
 		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };
 		for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = ''; };
@@ -1163,8 +1298,10 @@ var generateCharts = function (d){
 	
 	//Export to CSV function
 	export_csv = function() {
-		
-		var content = data_final;
+		var content = d.source_data;
+		// for (var i=0;i<content.length;i++){
+			// content[i].name = lookup[content[i].pcode];
+		// };
 		var finalVal = '';
 		
 		for (var i = 0; i < content.length; i++) {
@@ -1177,7 +1314,7 @@ var generateCharts = function (d){
 						result = innerValue.replace(/"/g, '');
 						if (result.search(/("|,|\n)/g) >= 0)
 							result = '' + result + '';
-						if (key !== 'pcode') finalVal += ',';
+						if (key !== 'pcode') finalVal += ';';
 						finalVal += result;
 					}
 				}
@@ -1186,11 +1323,11 @@ var generateCharts = function (d){
 
 			for (key in value) { 
 				if (value.hasOwnProperty(key)) {
-					innerValue = JSON.stringify(value[key] == 0.01 ? 0 : value[key]);
+					innerValue =  JSON.stringify(value[key]);
 					result = innerValue.replace(/"/g, '');
 					if (result.search(/("|,|\n)/g) >= 0)
 						result = '' + result + '';
-					if (key !== 'pcode') finalVal += ',';
+					if (key !== 'pcode') finalVal += ';';
 					finalVal += result;
 				}
 			}
@@ -1214,18 +1351,16 @@ var generateCharts = function (d){
 	//Export to GEOJSON
 	link_data = function() {
 		
-		//console.log(country_code);
-		if (country_code.indexOf('_') > -1) {
-			var url = 'http://www.inform-index.org/Subnational/';
+		if (inform_model == 'INFORM_LBN') {
+			var url = 'http://www.inform-index.org/Subnational/Lebanon';
 		} else {
-			//var url = 'http://www.inform-index.org/INFORM-2017-Results-and-data';
-			var url = 'http://www.inform-index.org/Results/Global';
+			var url = 'http://www.inform-index.org/INFORM-2017-Results-and-data';
 		}
 		var download = document.getElementById('download');
 		download.setAttribute('href', url);
 		download.click();
 	}
-	//http://www.inform-index.org/LinkClick.aspx?fileticket=K9lWe0MOKGQ%3d&tabid=147&portalid=0&mid=583
+	
 
 	// ACCORDION AUTOMATIC CLOSING
 	// Make sure that when opening another accordion-panel, the current one collapses	
@@ -1325,82 +1460,41 @@ var generateCharts = function (d){
 	//d3.json(workflows,function(data_workflows) {
 	d3.json('data/workflows.json', function(data_workflows) {
 		
-		//active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
+		active_workflow_groups = ['INFORM_GTM','INFORM2017'];
+		active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
 		
-		var ul = document.getElementById('model-items');
+		var ul = document.getElementById('country-items');
 		while (ul.firstChild) { ul.removeChild(ul.firstChild);};
 							
 		for (var i=0;i<data_workflows.length;i++) {
-			
 			if (active_workflow_groups.indexOf(data_workflows[i]) > -1) {
-				//console.log(data_workflows[i]);
-				
-				var li = document.createElement('li');
-				li.setAttribute('class','dropdown-submenu');
-				ul.appendChild(li);
-				var a = document.createElement('a');
-				a.setAttribute('class','dropdown-toggle export-button models submenu-item');
-				a.setAttribute('data-toggle','dropdown');
-				a.setAttribute('href','#');
-				//a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
-				//a.setAttribute('role','button');
-				a.innerHTML = data_workflows[i];
-				li.appendChild(a);
-				var fa = document.createElement('i');
-				fa.setAttribute('class','fa fa-angle-right export-btn-arrow');
-				fa.setAttribute('style','float:right');
-				a.appendChild(fa);
-				eval("var ul" + i +" = document.createElement('ul');");
-				eval("ul" + i + ".setAttribute('class','dropdown-menu');");
-				eval("li.appendChild(ul" + i + ");");
-				// var ul2 = document.createElement('ul');
-				// ul2.setAttribute('class','dropdown-menu');
-				// ul2.setAttribute('id','submodel-items-'+data_workflows[i]);
-				// li.appendChild(ul2);
 				
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
 				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
-				
-				//var _this = this;
-				(function (_i) {
-					
-					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
-					//d3.json(workflow_info,function(workflow_info) {
-						//d.data_workflows = workflow_info;
-						for (var j=0;j<workflow_info.length;j++) {
+				d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+				//d3.json(workflow_info,function(workflow_info) {
+					//d.data_workflows = workflow_info;
+					for (var j=0;j<workflow_info.length;j++) {
+						if (workflow_info[j].Author == 'anonymous' && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
+							
 							//console.log(workflow_info[j]);
-							if (workflow_info[j].Author == 'anonymous') { // && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
-								
-								//var parent = document.getElementById('submodel-items-'+data_workflows[i]);
-								var li = document.createElement('li');
-								//ul2.appendChild(li);
-								eval("ul" + _i + ".appendChild(li);");
-								var a = document.createElement('a');
-								a.setAttribute('class','submenu-item');
-								a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
-								a.setAttribute('role','button');
-								a.innerHTML = workflow_info[j].Name;
-								li.appendChild(a);
-								
-							}
+							
+							var li = document.createElement('li');
+							ul.appendChild(li);
+							var a = document.createElement('a');
+							a.setAttribute('class','submenu-item');
+							a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
+							a.setAttribute('role','button');
+							a.innerHTML = workflow_info[j].Name;
+							li.appendChild(a);
+							
 						}
-					});
-				})(i);
+					}
+				});
 			};
 		};
-		$(document).ready(function(){
-		  $('.dropdown-submenu a.models').on("click", function(e){
-			$(this).next('ul').toggle();
-			e.stopPropagation();
-			e.preventDefault();
-		  });
-		});
-	});		
-
-
-
-
-
+	});
+		
 
 	
 	/////////////////////////
@@ -1448,7 +1542,7 @@ var generateCharts = function (d){
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){
-				if (row_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+				if (row_filters.indexOf(d.Districts.features[i].id) > -1) {
 					districts_temp.features.push(d.Districts.features[i]);
 				}
 			}
@@ -1462,7 +1556,6 @@ var generateCharts = function (d){
 		chart_show = 'row';
 		if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
 		mapChart.filter(null);
-		//row_filters = map_filters;
 		$('#map-chart').hide();
 		$('#mapPopup').hide();
 		document.getElementById('row-chart-container').style.visibility = 'visible';

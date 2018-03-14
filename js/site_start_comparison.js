@@ -4,14 +4,10 @@
 //////////////////////
 		
 //var country_code = '';
-//var active_workflow_groups = ["INFORM_EAST_AFRICA", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAHEL", "INFORM2015", "INFORM2015Mid", "INFORM2016", "INFORM2017", "INFORM2017Mid"]
-var active_workflow_groups = ['INFORM_GTM','INFORM2017','INFORM_EAST_AFRICA','INFORM_SAHEL'];
-var inform_model = 'INFORM2017'; 
+var inform_model = 'INFORM2017'; //'INFORM_GTM','INFORM2017'
 var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
 var inform_levels = 7;				
 var metric = 'INFORM';
-var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];
-var color_systems = ['INFORM','INFORM_EAST_AFRICA','INFORM_SAHEL'];
 var chart_show = 'map';
 var map;
 
@@ -93,14 +89,11 @@ load_dashboard = function(inform_model,workflow_id) {
 				d3.json('data/' + geo_data_url + '.json', function (geo_data) {
 					//console.log(geo_data);
 					d.Districts = topojson.feature(geo_data,geo_data.objects[geo_data_url]);
-					d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.properties.id) <= -1 ;});
+					d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.id) <= -1 ;});
 					
 					//Load color-data (TO DO: to be replaced by API-call)
-					d.Colors = null;
-					if (color_systems.indexOf(inform_model) <= -1) { color_model = 'INFORM'; } else {color_model = inform_model;};
 					d3.dsv(';')("data/colors.csv", function(color_data){
-						d.Colors = $.grep(color_data, function(e){ return e.System == color_model });
-						
+						d.Colors = color_data;
 						
 						//Print data to screen
 						console.log(d);
@@ -145,7 +138,7 @@ var generateCharts = function (d){
 	var genLookup = function (field){
 		var lookup = {};
 		d.Districts.features.forEach(function(e){
-			lookup[e.properties.id] = String(e.properties[field]);
+			lookup[e.id] = String(e.properties[field]);
 		});
 		return lookup;
 	};
@@ -273,7 +266,6 @@ var generateCharts = function (d){
 		if (ind_max <=10 							//Obvious
 			&& (ind_min >= 0 || ind_min == -99) 	// > 0 is obvious. ==-99 is a code that is possible
 			&& ind_max > 1.1						//This is to rule out 0-1 indicators (such as HDI or percentages)
-			&& (record_temp.Parent || record_temp.OutputIndicatorName == 'INFORM')
 			) {
 			//record.id = 'data-table' + [i+1];
 			record.name = record_temp.OutputIndicatorName;
@@ -283,7 +275,7 @@ var generateCharts = function (d){
 			//record.unit = '';
 			record.level = record_temp.VisibilityLevel;
 			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
-			record.children = record_temp.Children ? record_temp.Children.split(',') : [];
+			record.children = record_temp.Children.split(',');
 			if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
 			record.group = record_temp.Parent == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
 			record.propertyPath = 'value.finalVal';
@@ -292,7 +284,7 @@ var generateCharts = function (d){
 			record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
 			tables.push(record);
 		} else { //Use this  for inspection of possibly weird variables
-			//console.log(record_temp.OutputIndicatorName);
+			// console.log(record_temp.OutputIndicatorName);
 			// console.log(ind_max);
 			// console.log(ind_min);
 		}
@@ -431,13 +423,9 @@ var generateCharts = function (d){
 	///////////////////////////////
 	
 	
-	
 	//Define the colors and thresholds for the selected indicator
 	mapchartColors_func = function() {
 		var color_group = metric.split('.')[0].concat((metric.split('.')[1]) ? '.'.concat(metric.split('.')[1]) : '');
-		if (groups.indexOf(color_group) <= -1) {
-			color_group = color_group.split('.')[0];
-		}
 		color_range = [];
 		colors = [];
 		for (j=0;j<d.Colors.length;j++) {
@@ -465,10 +453,7 @@ var generateCharts = function (d){
 		
 		var width = keyvalue[ind];
 		var color_group = ind.split('.')[0].concat((ind.split('.')[1]) ? '.'.concat(ind.split('.')[1]) : '');
-		if (groups.indexOf(color_group) <= -1) {
-			color_group = color_group.split('.')[0];
-		}
-		//if (color_group == 'HDI-Est') {color_group = 'VU.SEV';}
+		if (color_group == 'HDI-Est') {color_group = 'VU.SEV';}
 		color_ranges = [];
 		for (j=0;j<d.Colors.length;j++) {
 			if (d.Colors[j].Indicator_code == color_group && d.Colors[j].ValueTo !== 'NULL') {
@@ -530,11 +515,7 @@ var generateCharts = function (d){
 		for (var i=0;i<tables.length;i++) {
 			var record = tables[i];
 			
-			if (groups.indexOf(record.name.substring(0,6)) > -1) {
-				icon = 'img/' + record.name.substring(0,6) + '.png';
-			} else {
-				icon = 'img/' + record.name.substring(0,2) + '.png';
-			}
+			icon = 'img/' + record.name.substring(0,6) + '.png';
 			
 			if (record.level == 2) {
 				
@@ -621,7 +602,6 @@ var generateCharts = function (d){
 				var div_heading = document.createElement('div');
 				div_heading.setAttribute('id','heading'+record.name.split('.').join('-'));
 				div_heading.setAttribute('class','accordion-header level' + input_level);
-				//console.log(record);
 				var parent = document.getElementById('collapse'+record.group.split('.').join('-'))
 				if (parent) {
 					parent.appendChild(div_heading);
@@ -882,7 +862,7 @@ var generateCharts = function (d){
 			}
 		})
 		.featureKeyAccessor(function(feature){
-			return feature.properties.id; //feature.properties.pcode;
+			return feature.id; //feature.properties.pcode;
 		})
 		.popup(function(d){
 			return lookup[d.key].concat(' - ',meta_label[metric],': ',isNaN(d.value) ? 'No Data' : currentFormat(d.value));
@@ -893,7 +873,6 @@ var generateCharts = function (d){
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
 			map_filters = chart.filters();
-			//console.log(map_filters);
 			mapfilters_length = map_filters.length;
 			var popup = document.getElementById('mapPopup');
 			//popup.style.visibility = 'hidden';
@@ -981,7 +960,6 @@ var generateCharts = function (d){
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
-			//console.log(row_filters);
 			row_filters = chart.filters();
 			rowfilters_length = row_filters.length;
 			//mapChart.filter(row_filters);
@@ -1061,16 +1039,7 @@ var generateCharts = function (d){
 				}
 			})
 		;
-		//dc.redrawAll();
-		console.log(row_filters);
-		if (chart_show == 'row' && row_filters.length >= 2) {
-			mapChart.filter([row_filters]);
-			rowChart.filter([row_filters]);
-			rowChart.redraw();
-		} else {
-			dc.redrawAll();
-		}
-		
+		dc.redrawAll();
 		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
 		
@@ -1100,12 +1069,7 @@ var generateCharts = function (d){
 		//console.log(id);
 		metric = id;
 		metric_label = meta_label[metric];
-		//metric_icon = 'img/' + metric.substring(0,6) + '.png';
-		if (groups.indexOf(metric.substring(0,6)) > -1) {
-			metric_icon = 'img/' + metric.substring(0,6) + '.png';
-		} else {
-			metric_icon = 'img/' + metric.substring(0,2) + '.png';
-		}
+		metric_icon = 'img/' + metric.substring(0,6) + '.png';
 		document.getElementsByClassName('metric_icon')[0].setAttribute('src',metric_icon);
 		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };
 		for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = ''; };
@@ -1325,82 +1289,41 @@ var generateCharts = function (d){
 	//d3.json(workflows,function(data_workflows) {
 	d3.json('data/workflows.json', function(data_workflows) {
 		
-		//active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
+		active_workflow_groups = ['INFORM_GTM','INFORM2017'];
+		active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
 		
-		var ul = document.getElementById('model-items');
+		var ul = document.getElementById('country-items');
 		while (ul.firstChild) { ul.removeChild(ul.firstChild);};
 							
 		for (var i=0;i<data_workflows.length;i++) {
-			
 			if (active_workflow_groups.indexOf(data_workflows[i]) > -1) {
-				//console.log(data_workflows[i]);
-				
-				var li = document.createElement('li');
-				li.setAttribute('class','dropdown-submenu');
-				ul.appendChild(li);
-				var a = document.createElement('a');
-				a.setAttribute('class','dropdown-toggle export-button models submenu-item');
-				a.setAttribute('data-toggle','dropdown');
-				a.setAttribute('href','#');
-				//a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
-				//a.setAttribute('role','button');
-				a.innerHTML = data_workflows[i];
-				li.appendChild(a);
-				var fa = document.createElement('i');
-				fa.setAttribute('class','fa fa-angle-right export-btn-arrow');
-				fa.setAttribute('style','float:right');
-				a.appendChild(fa);
-				eval("var ul" + i +" = document.createElement('ul');");
-				eval("ul" + i + ".setAttribute('class','dropdown-menu');");
-				eval("li.appendChild(ul" + i + ");");
-				// var ul2 = document.createElement('ul');
-				// ul2.setAttribute('class','dropdown-menu');
-				// ul2.setAttribute('id','submodel-items-'+data_workflows[i]);
-				// li.appendChild(ul2);
 				
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
 				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
-				
-				//var _this = this;
-				(function (_i) {
-					
-					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
-					//d3.json(workflow_info,function(workflow_info) {
-						//d.data_workflows = workflow_info;
-						for (var j=0;j<workflow_info.length;j++) {
+				d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+				//d3.json(workflow_info,function(workflow_info) {
+					//d.data_workflows = workflow_info;
+					for (var j=0;j<workflow_info.length;j++) {
+						if (workflow_info[j].Author == 'anonymous' && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
+							
 							//console.log(workflow_info[j]);
-							if (workflow_info[j].Author == 'anonymous') { // && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
-								
-								//var parent = document.getElementById('submodel-items-'+data_workflows[i]);
-								var li = document.createElement('li');
-								//ul2.appendChild(li);
-								eval("ul" + _i + ".appendChild(li);");
-								var a = document.createElement('a');
-								a.setAttribute('class','submenu-item');
-								a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
-								a.setAttribute('role','button');
-								a.innerHTML = workflow_info[j].Name;
-								li.appendChild(a);
-								
-							}
+							
+							var li = document.createElement('li');
+							ul.appendChild(li);
+							var a = document.createElement('a');
+							a.setAttribute('class','submenu-item');
+							a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
+							a.setAttribute('role','button');
+							a.innerHTML = workflow_info[j].Name;
+							li.appendChild(a);
+							
 						}
-					});
-				})(i);
+					}
+				});
 			};
 		};
-		$(document).ready(function(){
-		  $('.dropdown-submenu a.models').on("click", function(e){
-			$(this).next('ul').toggle();
-			e.stopPropagation();
-			e.preventDefault();
-		  });
-		});
-	});		
-
-
-
-
-
+	});
+		
 
 	
 	/////////////////////////
@@ -1448,7 +1371,7 @@ var generateCharts = function (d){
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){
-				if (row_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+				if (row_filters.indexOf(d.Districts.features[i].id) > -1) {
 					districts_temp.features.push(d.Districts.features[i]);
 				}
 			}
@@ -1462,7 +1385,6 @@ var generateCharts = function (d){
 		chart_show = 'row';
 		if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
 		mapChart.filter(null);
-		//row_filters = map_filters;
 		$('#map-chart').hide();
 		$('#mapPopup').hide();
 		document.getElementById('row-chart-container').style.visibility = 'visible';

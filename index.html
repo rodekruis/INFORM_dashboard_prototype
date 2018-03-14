@@ -34,7 +34,7 @@
 	<section class="content">
 		<section class="container-fluid">
 				
-			<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+			<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
 				<div class="navbar-header">
 					<a class="navbar-brand" href="www.inform-index.org">
@@ -42,30 +42,6 @@
 						Dashboard
 					</a>
 				</div>
-
-				<!-- start: export nav -->
-				<!-- <ul class="nav navbar-top-links navbar-right"> -->
-						<!-- <li class="dropdown"> -->
-							<!-- <a href="http://www.inform-index.org" target="_blank">INFORM Home</a> -->
-						<!-- </li> -->
-				<!-- </ul> -->
-				<!-- <ul class="nav navbar-top-links navbar-right">
-					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							How it works
-							<i class="fa fa-angle-down export-btn-arrow"></i>
-						</a>
-						<ul class="dropdown-menu export-items">
-							<li>
-								<a class="dropdown-toggle export-button" ng-href ="#!/#walkthrough_{{view_code}}" target="_blank">Tutorial</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a class="dropdown-toggle export-button"  ng-href="https://github.com/rodekruis/communityprofiles" target="_blank">Github</a>
-							</li>
-						</ul>
-					</li>
-				</ul> -->
 				<ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
@@ -75,41 +51,61 @@
 						</a>
 						<ul class="dropdown-menu export-items">
 							<li>
-								<a href ="http://www.inform-index.org/API-documentation" target="_blank">Data Access (API)</a>
+								<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (including raw data)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="download" onclick="link_data">Data Access (Excel)</a>
+								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="download" onclick="link_data()">Excel (including raw data)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a target="_blank" id="download" onclick="export_csv()">CSV</a>
+								<a target="_blank" id="download" onclick="export_csv()">CSV (current data)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a onclick="export_json()">JSON</a>
+								<a onclick="export_json()">JSON (for dev. only)</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
-				<ul class="nav navbar-top-links navbar-right">
+				<!-- <ul class="nav navbar-top-links navbar-right">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-								  Choose Model
+							Choose Model
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
 						<ul class="dropdown-menu submenu-items" id="country-items">
+						</ul>
+					</li>
+				</ul> -->
+				<ul class="nav navbar-top-links navbar-left">
+					<li class="dropdown">
+						<a class="dropdown-toggle export-button models" data-toggle="dropdown" href="#">
+							Choose Model
+							<i class="fa fa-angle-down export-btn-arrow"></i>
+						</a>
+						<ul class="dropdown-menu" id="model-items">
 							<!-- <li>
-								<a class="submenu-item" onclick="load_dashboard('INFORM2017')" role="button">INFORM 2017</a>
+								<a class="export-button" href="#">Test 1</a>
 							</li>
-							<li>
-								<a class="submenu-item" onclick="load_dashboard('INFORM_LBN')" role="button">INFORM Lebanon</a>
+							<li class="dropdown-submenu">
+								<a class="dropdown-toggle export-button test" data-toggle="dropdown" href="#">
+									Test 2
+									<i class="fa fa-angle-down export-btn-arrow"></i>
+								</a>
+								<ul class="dropdown-menu" id="submodel-items">
+									<li>
+										<a class="export-button" href="#">Test 2a</a>
+									</li>
+									<li>
+										<a class="export-button" href="#">Test 2b</a>
+									</li>
+								</ul>
 							</li> -->
 						</ul>
 					</li>
 				</ul>
 			</nav>
-			<!-- end: navbar-header -->
 		
 			<div class="content-wrapper">
 		
@@ -319,12 +315,13 @@
 							<span class="panel-header-icon">
 								<img class="metric_icon">
 							</span>
-							<h3 class="modal-title"><span class="metric_label">{{metric_label}}</span></h3>
+							<h3 class="modal-title"><span class="metric_label"></span></h3>
 						</div>
 						<div class="modal-body">
-							<h5><b>Year source:</b> <span class="metric_year">{{metric_year}}</span></h5><br>
-							<h5><b>Source link:</b> <a href={{metric_source}} target="_blank"><span class="metric_source">{{metric_source}}</a></h5><br>
-							<h5><b>Description:</b> <span class="metric_desc">{{metric_desc}}</span></h5><br>
+							<h5><b>Source Indicator:</b> <span class="metric_indicator"></span></h5><br>
+							<h5><b>Provider:</b> <span class="metric_provider"></span></h5><br>
+							<h5><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h5><br>
+							<h5><b>Description:</b> <span class="metric_desc"></span></h5><br>
 						</div>
 					</div>
 				</div>

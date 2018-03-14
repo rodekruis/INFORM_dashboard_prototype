@@ -5,7 +5,20 @@
 		
 //var country_code = '';
 //var active_workflow_groups = ["INFORM_EAST_AFRICA", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAHEL", "INFORM2015", "INFORM2015Mid", "INFORM2016", "INFORM2017", "INFORM2017Mid"]
-var active_workflow_groups = ['INFORM_GTM','INFORM2017','INFORM_EAST_AFRICA','INFORM_SAHEL'];
+var active_workflow_groups = [
+	"INFORM2017"
+	, "INFORM_EAST_AFRICA"
+	, "INFORM_GTM"
+	//, "INFORM_LAC"
+	//, "INFORM_LBN"
+	, "INFORM_SAHEL"
+	, "INFORM2015"
+	, "INFORM2015Mid"
+	, "INFORM2016"
+	, "INFORM2017Mid"
+	//, "INFORM_CCA"		//NOT in API yet
+	//, "INFORM_COL"		//NOT in API yet
+	]; 
 var inform_model = 'INFORM2017'; 
 var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
 var inform_levels = 7;				
@@ -51,77 +64,90 @@ load_dashboard = function(inform_model,workflow_id) {
 	document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden'; 
 	for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
 	
-	if (inform_model == 'INFORM2017') { country_code = ''; } else { country_code = inform_model.replace('INFORM',''); };
 		
 	//Load data
-	var source_api = 'http://www.inform-index.org/API/InformAPI/Indicators/Index/';
-	
 	//Empty data-object
 	d = {};
-	//d3.json(source_api,function(source_data) {
-	d3.json('data/sourcedata.json',function(source_data) {
-		//console.log(source_data);
-		d.source_data = source_data;
+	
+	var workflow_api = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + inform_model;
+	//TEMPORARY
+	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
+	d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+	//d3.json(workflow_api,function(workflow_info) {
+		var system = workflow_info[0].System;
+		if (system.toUpperCase() == 'INFORM') { country_code = ''; } else { country_code = inform_model.replace('INFORM',''); };
 		
-		//Get links for data and metadata
-		var url_meta = 'http://www.inform-index.org/API/InformAPI/Processes/GetByWorkflowId/' + workflow_id;
-		
-		// Load INFORM metadata
-		//d3.json(url_meta, function(meta_data) {
-		d3.json('data/metadata' + country_code + '.json', function(meta_data) {
-			//console.log(meta_data);
-			d.Metadata_full = meta_data;
-			d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
-																		&& e.VisibilityLevel <= inform_levels 
-																		//&& e.StepNumber > 0
-																		});
-			inform_indicators = [];
-			for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
-			//inform_indicators = d.Metadata.map(a => a.OutputIndicatorName);
+		var source_api = 'http://www.inform-index.org/API/InformAPI/Indicators/Index/';
+		//d3.json(source_api,function(source_data) {
+		d3.json('data/sourcedata.json',function(source_data) {
+			//console.log(source_data);
+			d.source_data = source_data;
 			
-			//API-link with all needed indicators
-			var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();
+			//Get links for data and metadata
+			var url_meta = 'http://www.inform-index.org/API/InformAPI/Processes/GetByWorkflowId/' + workflow_id;
 			
-			//Load INFORM data
-			//d3.json(url_data, function(inform_data){
-			d3.json('data/inform_data' + country_code + '.json', function(inform_data) {
-				d.inform_data = inform_data; //$.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});// e.IndicatorId.split('.').length <= inform_levels; });
+			// Load INFORM metadata
+			//d3.json(url_meta, function(meta_data) {
+			d3.json('data/metadata' + country_code + '.json', function(meta_data) {
+				//console.log(meta_data);
+				d.Metadata_full = meta_data;
+				d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
+																			&& e.VisibilityLevel <= inform_levels 
+																			//&& e.StepNumber > 0
+																			});
+				inform_indicators = [];
+				for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
+				//inform_indicators = d.Metadata.map(a => a.OutputIndicatorName);
 				
-				//Load Geodata
-				geo_data_url = 'countries' + country_code;
-				//if (inform_model == 'INFORM_LBN') { geo_data_url = 'countries_LBN'; } else { geo_data_url = 'countries'};
-				d3.json('data/' + geo_data_url + '.json', function (geo_data) {
-					//console.log(geo_data);
-					d.Districts = topojson.feature(geo_data,geo_data.objects[geo_data_url]);
-					d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.properties.id) <= -1 ;});
+				//API-link with all needed indicators
+				var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();
+				
+				//Load INFORM data
+				//d3.json(url_data, function(inform_data){
+				d3.json('data/inform_data' + country_code + '.json', function(inform_data) {
+					d.inform_data = inform_data; //$.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});// e.IndicatorId.split('.').length <= inform_levels; });
 					
-					//Load color-data (TO DO: to be replaced by API-call)
-					d.Colors = null;
-					if (color_systems.indexOf(inform_model) <= -1) { color_model = 'INFORM'; } else {color_model = inform_model;};
-					d3.dsv(';')("data/colors.csv", function(color_data){
-						d.Colors = $.grep(color_data, function(e){ return e.System == color_model });
+					//Load Geodata
+					geo_data_url = 'countries' + country_code;
+					//if (inform_model == 'INFORM_LBN') { geo_data_url = 'countries_LBN'; } else { geo_data_url = 'countries'};
+					d3.json('data/' + geo_data_url + '.json', function (geo_data) {
+						//console.log(geo_data);
+						d.Districts = topojson.feature(geo_data,geo_data.objects[geo_data_url]);
+						d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.properties.id) <= -1 ;});
 						
+						//Load color-data (TO DO: to be replaced by API-call)
+						d.Colors = null;
+						if (color_systems.indexOf(inform_model) <= -1) { color_model = 'INFORM'; } else {color_model = inform_model;};
+						d3.dsv(';')("data/colors.csv", function(color_data){
+							d.Colors = $.grep(color_data, function(e){ return e.System == color_model });
+							
+							
+							//Print data to screen
+							console.log(d);
+							
+							// generate the actual content of the dashboard
+							generateCharts(d);
+							  
+							spinner_stop();
+							
+							//Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
+							if (typeof L_PREFER_CANVAS !== 'undefined') {
+								$('#IEmodal').modal('show');
+							}
 						
-						//Print data to screen
-						console.log(d);
-						
-						// generate the actual content of the dashboard
-						generateCharts(d);
-						  
-						spinner_stop();
-						
-						//Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)	
-						if (typeof L_PREFER_CANVAS !== 'undefined') {
-							$('#IEmodal').modal('show');
-						}
-					
+						});
 					});
-				});
-			});		
+				});		
+			});
+		
+		
 		});
-	
-	
+		
+		
 	});
+	
+	
+	
 	
 	
 	
@@ -256,7 +282,7 @@ var generateCharts = function (d){
 		}
 		
 	}
-	//console.log(children);
+	console.log(children);
 	
 	var max_stepnr = Math.max.apply(Math,d.Metadata.map(function(o){return o.StepNumber;}));
 	tables = [];
@@ -285,11 +311,11 @@ var generateCharts = function (d){
 			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
 			record.children = record_temp.Children ? record_temp.Children.split(',') : [];
 			if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
-			record.group = record_temp.Parent == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
-			record.propertyPath = 'value.finalVal';
-			record.dimension = undefined;
-			record.weight_var = 'population'; //record_temp.weight_var;
-			record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
+			record.group = !record_temp.Parent ? null : record_temp.Parent.replace('-TEMP',''); // == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
+			//record.propertyPath = 'value.finalVal';
+			//record.dimension = undefined;
+			//record.weight_var = 'population'; //record_temp.weight_var;
+			//record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
 			tables.push(record);
 		} else { //Use this  for inspection of possibly weird variables
 			//console.log(record_temp.OutputIndicatorName);
@@ -298,13 +324,21 @@ var generateCharts = function (d){
 		}
 		
 	}
-	//console.log(tables);
+	console.log(tables);
 		
 	// For each selected indicator ..
 	tables.forEach(function(t) {
+		t.indicator = [];
+		t.indicator_label = [];
+		t.provider = [];
+		t.link = [];
+		t.description = [];
+		// if no children: this is a lowest-level indicator
+		if (t.children.length == 0) {t.lowest_level = 1;};
 		// .. and for each child of that indicator
+		var match = 0;
+		var match2 = 0;
 		for (i=0;i<t.children.length;i++) {
-			var match = 0;
 			for (j=0;j<tables.length;j++) {
 				// .. look up if the child is also in Tables-object (if so: it is not a lowest-level indicator)
 				if (t.children[i] == tables[j].name) {
@@ -315,17 +349,10 @@ var generateCharts = function (d){
 			// .. if no match, this is a lowest-level indicator
 			if (match == 0) {
 				t.lowest_level = 1;
-				//console.log(t.children[i]);
 				
-				//var match2 = 0;
-				//console.log(t.children[i]);
-				t.indicator = [];
-				t.indicator_label = [];
-				t.provider = [];
-				t.link = [];
-				t.description = [];
+				//Now search in the previously-made children array for the child-indicator, if found take the metadat-info from it
 				for (m=0;m<children.length;m++){
-					if (children[m].parents.indexOf(t.children[i]) > -1 && children[m].provider) {
+					if (children[m].parents.indexOf(t.children[i]) > -1 && children[m].indicator) {
 						//console.log(children[m]);
 						if (t.indicator.indexOf(children[m].indicator) <= -1) {
 							t.indicator.push(children[m].indicator);
@@ -334,16 +361,30 @@ var generateCharts = function (d){
 							t.link.push(children[m].link);
 							t.description.push(children[m].description);
 						}
-						//match2 = 1;
+						match2 = 1;
 					}
 				}
 			};
 		};
+		if (match2 == 0) {
+			for (m=0;m<children.length;m++){
+				if (children[m].parents.indexOf(t.name) > -1 && children[m].indicator) {
+					//console.log(children[m]);
+					if (t.indicator.indexOf(children[m].indicator) <= -1) {
+						t.indicator.push(children[m].indicator);
+						t.indicator_label.push(children[m].indicator_label);
+						t.provider.push(children[m].provider);
+						t.link.push(children[m].link);
+						t.description.push(children[m].description);
+					}
+				}
+			}
+		}
 	});
 	//console.log(tables);
 	
 	tables.forEach(function(t) {
-		if (t.lowest_level == 1 && t.provider =="") {
+		if (t.lowest_level == 1 && t.indicator.length == 0) {
 			//console.log(t);
 		}
 	});
@@ -856,8 +897,17 @@ var generateCharts = function (d){
 	// MAP CHART SETUP //
 	/////////////////////
 	
+	$(document).keydown(function(event){
+		if(event.which=="17")
+			cntrlIsPressed = true;
+	});
+	$(document).keyup(function(){
+		cntrlIsPressed = false;
+	});
+	var cntrlIsPressed = false;		
+
 	
-			
+	
 	//Set up the map itself with all its properties
 	var map_filters = [];
 	mapChart
@@ -892,59 +942,32 @@ var generateCharts = function (d){
 		.legend(dc.leafletLegend().position('topleft'))
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
-			map_filters = chart.filters();
+			if(!cntrlIsPressed) {
+				while (chart.filters().length > 1) {chart.filters().shift();} 
+			} 	
+			//map_filters = chart.filters();
+			map_filters = $.extend( [], chart.filters() );
 			//console.log(map_filters);
 			mapfilters_length = map_filters.length;
-			var popup = document.getElementById('mapPopup');
-			//popup.style.visibility = 'hidden';
-			//document.getElementById('zoomin_icon').style.visibility = 'hidden';
+			//keyvalue_filters = mapfilters_length == 0 ? [] : [map_filters[mapfilters_length-1]];
 			if (chart_show == 'map') {
 				for (var i=0;i<$('.filter-count').length;i++){
 					if (map_filters.length == 1) {$('.filter-count')[i].innerHTML = lookup[map_filters[0]];} 
 					else if (map_filters.length > 1) { $('.filter-count')[i].innerHTML = map_filters.length; }
 					else { $('.filter-count')[i].innerHTML = 'All '; }
 				};	
-			} /*
-			if (map_filters.length > mapfilters_length) {
-				//$apply(function() {
-					name_popup = lookup[filters[filters.length - 1]];
-					for (var i=0;i<$('.name_popup').length;i++){ $('.name_popup')[i].innerHTML = name_popup; };
-					for (var i=0;i<data_final.length;i++) {
-						var record = data_final[i];
-						if (record.pcode === filters[filters.length - 1]) {
-							value_popup = currentFormat(record[metric]); 
-							for (var i=0;i<$('.value_popup').length;i++){ $('.value_popup')[i].innerHTML = value_popup; };	
-							break;
-						};
-					}
-					metric_label = meta_label[metric];
-					//for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };	
-					document.getElementById('metric_label').firstChild.innerHTML = metric_label;
-				//})
-				//In Firefox, EVENT is not a global variable >> Not figured out how to fix this, so gave the popup a fixed position in FF only
-				if (typeof event !== 'undefined') {
-					popup.style.left = event.pageX + 'px';	
-					popup.style.top = event.pageY + 'px';
-				} else {
-					popup.style.left = '400px';	
-					popup.style.top = '100px';
-				}
-				popup.style.visibility = 'visible';
-				//document.getElementById('zoomin_icon').style.visibility = 'visible';
-			} */
+			}
 			if (chart_show == 'map') {
 				if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
+				//if (mapfilters_length >= 1) { var keyvalue = keyvalues1(keyvalue_filters); };
 				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
 				updateHTML(keyvalue); //,keyvalue2);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];	
 				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible'; 
 				} else { resetbutton.style.visibility = 'hidden'; }
-			}			
+			}	
 		})
 	;
-	
-
-	
 
 	
 	
@@ -952,13 +975,16 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
 	
+	console.log($('#row-chart-container').width());
 	var row_filters = [];
+	var row_filters_old = [];
 	rowChart
-		.width($('#row-chart-container').width()-150)
+		.width($('#row-chart-container').width()-50)
 		.height((15 + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
 		.ordering(function(d) {return -d.value;})
+		//.fixedBarHeight(15 + row_filters_old.length*5)
 		.fixedBarHeight(15)
 		.colors(mapchartColors)
 		.colorCalculator(function(d){
@@ -974,43 +1000,61 @@ var generateCharts = function (d){
 			}
 		})
 		.label(function(d) {
-			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+			if (d.value == 0) {return '';} else {
+				return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+			}
 		})
-		.labelOffsetX(function(d) {return (rowChart.width()-50) * (d.value / 11) + 10;})
+		.labelOffsetX(function(d) {return (rowChart.width()-150) * (d.value / 11) + 10;})
+		//.labelOffsetX(-10)
 		.title(function(d) {
 			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
-			//console.log(row_filters);
-			row_filters = chart.filters();
+			if(!cntrlIsPressed) {
+				while (chart.filters().length > 1) {chart.filters().shift();} 
+			} 
+			//row_filters = chart.filters();
+			row_filters = $.extend( [], chart.filters() );
 			rowfilters_length = row_filters.length;
-			//mapChart.filter(row_filters);
+			//keyvalue_filters = rowfilters_length == 0 ? [] : [row_filters[rowfilters_length-1]];
 			if (chart_show == 'row') {
 				for (var i=0;i<$('.filter-count').length;i++){
-					if (row_filters.length == 1) { $('.filter-count')[i].innerHTML = lookup[row_filters[0]]; } 
-					else if (row_filters.length > 1) { $('.filter-count')[i].innerHTML = row_filters.length; }
+					if (row_filters.length == 1  || row_filters_old.length == 1) { $('.filter-count')[i].innerHTML = rowfilters_length == 0 ? lookup[row_filters_old[0]] : lookup[row_filters[0]]; } 
+					else if (row_filters.length > 1 || row_filters_old.length > 1) { $('.filter-count')[i].innerHTML = Math.max(row_filters.length,row_filters_old.length); }
+					//if (row_filters.length == 1) { $('.filter-count')[i].innerHTML = lookup[row_filters[0]]; } 
+					//else if (row_filters.length > 1) { $('.filter-count')[i].innerHTML = row_filters.length; }
 					else { $('.filter-count')[i].innerHTML = 'All '; }
 				};	
 			}
 			if (chart_show == 'row') {
-				if (rowfilters_length == 1) { var keyvalue = keyvalues1(row_filters); };
+				if (rowfilters_length == 1 || row_filters_old.length == 1) { var keyvalue = rowfilters_length == 0 ? keyvalues1(row_filters_old) : keyvalues1(row_filters); };
+				//if (rowfilters_length >= 1) { var keyvalue = keyvalues1(keyvalue_filters); };
 				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
 				updateHTML(keyvalue); //,keyvalue2);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];	
-				if (row_filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+				if (row_filters.length > 0 || row_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
 			}
+			/* if (cntrlIsPressed && chart_show == 'row' && row_filters.length >= 1) {
+				//cntrlIsPressed = true;
+				mapChart.filter([row_filters]);
+				//rowChart.filter([row_filters]);
+				//cntrlIsPressed = false;
+				rowChart.redraw();
+			} */
 		})
 		.elasticX(false)
-		.x(d3.scale.linear().range([0,(rowChart.width()-50)]).domain([0,11]))
+		.x(d3.scale.linear().range([0,(rowChart.width()-150)]).domain([0,11]))
 		.xAxis().scale(rowChart.x()).tickValues([])
 		;
+	//rowChart.margins().left = 200;
 	
 	sort = function(type) {
 		if (type === 'value') {
 			rowChart.ordering(function(d) {return -d.value;});
 			rowChart.redraw();
 		} else if (type == 'name') {
-			rowChart.ordering(function(d) {return d.key;});
+			//mapChart.filter([row_filters]);
+			rowChart.ordering(function(d) {if (d.value == 0) {return 'zzz';} else {return d.key;};});
 			rowChart.redraw();
 		}
 		
@@ -1062,10 +1106,12 @@ var generateCharts = function (d){
 			})
 		;
 		//dc.redrawAll();
-		console.log(row_filters);
-		if (chart_show == 'row' && row_filters.length >= 2) {
+		if (chart_show == 'row' && row_filters.length >= 1) {
+			row_filters_old = row_filters;
+			cntrlIsPressed = true;
 			mapChart.filter([row_filters]);
 			rowChart.filter([row_filters]);
+			cntrlIsPressed = false;
 			rowChart.redraw();
 		} else {
 			dc.redrawAll();
@@ -1084,7 +1130,7 @@ var generateCharts = function (d){
 	
 		document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
 		document.getElementById('area_selection').style.color = color_range[3].HEX;
-		document.getElementById('mapPopup').style.visibility = 'hidden';
+		//document.getElementById('mapPopup').style.visibility = 'hidden';
 		//document.getElementById('zoomin_icon').style.visibility = 'hidden';
 	};
 	
@@ -1107,7 +1153,7 @@ var generateCharts = function (d){
 			metric_icon = 'img/' + metric.substring(0,2) + '.png';
 		}
 		document.getElementsByClassName('metric_icon')[0].setAttribute('src',metric_icon);
-		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].innerHTML = metric_label; };
+		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].firstChild.innerHTML = metric_label; };
 		for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = ''; };
 		for (var i=0;i<$('.metric_provider').length;i++){ $('.metric_provider')[i].innerHTML = ''; };
 		for (var i=0;i<$('.metric_source').length;i++){ 
@@ -1115,7 +1161,10 @@ var generateCharts = function (d){
 			$('.metric_source')[i].href = ''; 
 		};
 		for (var i=0;i<$('.metric_desc').length;i++){ $('.metric_desc')[i].innerHTML = ''; };
-		if (lookup_indicator[metric].length == 1) {
+		if (lookup_indicator[metric].length == 0) {
+			for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = 'No metadata found for this indicator'; };
+		}
+		else if (lookup_indicator[metric].length == 1) {
 			metric_indicator = lookup_indicator_label[metric][0]; //meta_source[metric];
 			metric_provider = lookup_provider[metric][0]; //meta_source[metric];
 			metric_source = lookup_link[metric][0]; //meta_source[metric];
@@ -1364,8 +1413,8 @@ var generateCharts = function (d){
 				//var _this = this;
 				(function (_i) {
 					
-					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
-					//d3.json(workflow_info,function(workflow_info) {
+					//d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+					d3.json(workflow_info,function(workflow_info) {
 						//d.data_workflows = workflow_info;
 						for (var j=0;j<workflow_info.length;j++) {
 							//console.log(workflow_info[j]);
@@ -1437,6 +1486,7 @@ var generateCharts = function (d){
 		//Hide row-chart
 		$('#row-chart-container').hide();  
 		//Transfer row-chart filters to map (to make sure that selection is carried)
+		cntrlIsPressed = true;
 		mapChart.filter([row_filters]); 
 		//Show map-chart
 		$('#map-chart').show();
@@ -1456,12 +1506,16 @@ var generateCharts = function (d){
 			//Undo row-chart filters (which are transfered to the map already)
 			rowChart.filter(null);
 		}
+		cntrlIsPressed = false;
 	}
 	
 	tabularShow = function() {
 		chart_show = 'row';
-		if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
+		//if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
+		cntrlIsPressed = true;
+		rowChart.filter([map_filters]);
 		mapChart.filter(null);
+		cntrlIsPressed = false;
 		//row_filters = map_filters;
 		$('#map-chart').hide();
 		$('#mapPopup').hide();
@@ -1469,6 +1523,7 @@ var generateCharts = function (d){
 		$('#row-chart-container').show();
 		//$('#table-chart').show();
 	}
+	
 	
 	
 };

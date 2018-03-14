@@ -618,9 +618,9 @@ a.handle:hover {
 .leaflet-control-zoom {
 	/* top: 90%; */
 }
-.legend {
+/* .legend {
 	 left:380px;
-}
+} */
 
 #loading-bar-spinner {
   display: block;

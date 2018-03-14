@@ -234,10 +234,10 @@
 				<!-- end: sidebar -->
 
 				<!-- start: map -->
-				<div class="map-wrapper" style="position: relative">
+				<div class="map-wrapper" style="margin-left: 380px; width:calc(100% - 380px); height:95%">
 
 					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
-					<div id="row-chart-container" style="position:absolute; left: 24%; width:76%; height:100%;background-color:#fff; visibility:hidden">
+					<div id="row-chart-container" style="position:absolute; width:100%; height:100%;background-color:#fff; visibility:hidden">
 						<div class="zoom-level-nav">
 							<div class="btn-group zoom-level" role="group">
 								<ul style="left: 15px;" type="button" class="btn btn-secondary btn-active ">
@@ -284,18 +284,15 @@
 					
 
 					<!-- the above div and inline styles are only for placement -->
-					<div id="mapPopup" class="map-popup" style="position:absolute;">
+					<!-- <div id="mapPopup" class="map-popup" style="position:absolute;">
 						<div class="popup-header">
-							<!-- <button id="zoomin_icon" type="button" class="btn-modal" data-toggle="modal" ng-click="zoom_in()">
-								<i class="fa fa-search-plus pull-right big-icon"></i>
-							</button> -->
 							<span class="name_popup">{{name_popup}}</span>
 						</div>
 						<div class="popup-score">
 						  <div class="score-label"><span class="metric_label">{{metric_label}}</span></div>
 						  <span class="value_popup">{{value_popup}}</span>
 						</div>
-					  </div>
+					  </div> -->
 
 
 				</div>
@@ -315,7 +312,7 @@
 							<span class="panel-header-icon">
 								<img class="metric_icon">
 							</span>
-							<h3 class="modal-title"><span class="metric_label"></span></h3>
+							<h3 class="modal-title"><span class="metric_label"><div></div></span></h3>
 						</div>
 						<div class="modal-body">
 							<h5><b>Source Indicator:</b> <span class="metric_indicator"></span></h5><br>

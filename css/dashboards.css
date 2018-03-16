@@ -41,7 +41,7 @@ body {
 }
 .sidebar {
   /* bottom: 0; */
-  height: 100%; /*95%;*/
+  height: 95%;
   overflow: auto;
   padding: 20px;
   position: fixed;
@@ -763,7 +763,9 @@ body {
   display: block;
 }
 
-
+#model-items,#global-model-items{
+	min-width: 220px;
+}
 
 .dropdown-submenu {
     position: relative;

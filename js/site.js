@@ -9,18 +9,20 @@ var active_workflow_groups = [
 	"INFORM2017"
 	, "INFORM_EAST_AFRICA"
 	, "INFORM_GTM"
-	//, "INFORM_LAC"
-	//, "INFORM_LBN"
+	, "INFORM_LAC"
+	, "INFORM_LBN"
 	, "INFORM_SAHEL"
 	, "INFORM2015"
 	, "INFORM2015Mid"
 	, "INFORM2016"
 	, "INFORM2017Mid"
+	, "INFORM2018"			//Added manually
 	//, "INFORM_CCA"		//NOT in API yet
 	//, "INFORM_COL"		//NOT in API yet
 	]; 
 var inform_model = 'INFORM2017'; 
-var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
+var workflow_id = 261;
+//var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
 var inform_levels = 7;				
 var metric = 'INFORM';
 var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];
@@ -63,19 +65,38 @@ load_dashboard = function(inform_model,workflow_id) {
 	document.getElementsByClassName('reset-button')[0].style.backgroundColor = '#951301';
 	document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden'; 
 	for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
+	$('.dropdown-submenu a.models1').next('ul').css('display','none');
+	$('.dropdown-submenu a.models2').next('ul').css('display','none');
 	
+	//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
+	var url = location.href;
+	if (url.indexOf('?') > -1) {
+		url = url.split('?')[1];
+		directURLload = true;
+		inform_model = url.split('&')[0].split('=')[1];
+		workflow_id = url.split('&')[1].split('=')[1];
+		metric = url.split('&')[2].split('=')[1];
+		window.history.pushState({}, document.title, 'https://rodekruis.github.io/INFORM_dashboard_prototype/'); //http://localhost:8082 / https://rodekruis.github.io/INFORM_dashboard_prototype/'
+	} else {
+		directURLload = false;
+	}
 		
 	//Load data
 	//Empty data-object
 	d = {};
+	d.inform_model = inform_model;
+	d.workflow_id = workflow_id;
 	
 	var workflow_api = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + inform_model;
+	
 	//TEMPORARY
 	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
-	d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+	console.log(workflow_string);
 	//d3.json(workflow_api,function(workflow_info) {
-		var system = workflow_info[0].System;
-		if (system.toUpperCase() == 'INFORM') { country_code = ''; } else { country_code = inform_model.replace('INFORM',''); };
+	d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+		d.system = workflow_info[0].System.toUpperCase();
+		if (d.system == 'INFORM') { country_code = 'INFORM'; } else { country_code = inform_model.replace('INFORM_',''); };
+		console.log(country_code);
 		
 		var source_api = 'http://www.inform-index.org/API/InformAPI/Indicators/Index/';
 		//d3.json(source_api,function(source_data) {
@@ -88,8 +109,7 @@ load_dashboard = function(inform_model,workflow_id) {
 			
 			// Load INFORM metadata
 			//d3.json(url_meta, function(meta_data) {
-			d3.json('data/metadata' + country_code + '.json', function(meta_data) {
-				//console.log(meta_data);
+			d3.json('data/metadata_' + country_code + '.json', function(meta_data) {
 				d.Metadata_full = meta_data;
 				d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
 																			&& e.VisibilityLevel <= inform_levels 
@@ -97,27 +117,30 @@ load_dashboard = function(inform_model,workflow_id) {
 																			});
 				inform_indicators = [];
 				for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
-				//inform_indicators = d.Metadata.map(a => a.OutputIndicatorName);
+				
 				
 				//API-link with all needed indicators
-				var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();
+				//var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();
+				var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id;
 				
 				//Load INFORM data
 				//d3.json(url_data, function(inform_data){
-				d3.json('data/inform_data' + country_code + '.json', function(inform_data) {
+				d3.json('data/inform_data_' + country_code + '.json', function(inform_data) {
 					d.inform_data = inform_data; //$.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});// e.IndicatorId.split('.').length <= inform_levels; });
+					d.inform_data = $.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});
 					
 					//Load Geodata
-					geo_data_url = 'countries' + country_code;
-					//if (inform_model == 'INFORM_LBN') { geo_data_url = 'countries_LBN'; } else { geo_data_url = 'countries'};
+					var url_geo = 'http://www.inform-index.org/API/InformAPI/Countries/GeometryLocation/?modelName=' + d.system;
+					geo_data_url = 'countries_' + country_code;
+					if (workflow_id == 355) {geo_data_url = 'countries_SAHEL_02';};
+					//d3.json(url_geo, function (url) { d3.json(url,function(geo_data) {
 					d3.json('data/' + geo_data_url + '.json', function (geo_data) {
 						//console.log(geo_data);
 						d.Districts = topojson.feature(geo_data,geo_data.objects[geo_data_url]);
 						d.Districts.features = $.grep(d.Districts.features,function(e){ return ['ATA','GRL'].indexOf(e.properties.id) <= -1 ;});
 						
 						//Load color-data (TO DO: to be replaced by API-call)
-						d.Colors = null;
-						if (color_systems.indexOf(inform_model) <= -1) { color_model = 'INFORM'; } else {color_model = inform_model;};
+						if (color_systems.indexOf(d.system) <= -1) { color_model = 'INFORM'; } else {color_model = d.system;};
 						d3.dsv(';')("data/colors.csv", function(color_data){
 							d.Colors = $.grep(color_data, function(e){ return e.System == color_model });
 							
@@ -137,6 +160,7 @@ load_dashboard = function(inform_model,workflow_id) {
 						
 						});
 					});
+					//});
 				});		
 			});
 		
@@ -282,7 +306,7 @@ var generateCharts = function (d){
 		}
 		
 	}
-	console.log(children);
+	//console.log(children);
 	
 	var max_stepnr = Math.max.apply(Math,d.Metadata.map(function(o){return o.StepNumber;}));
 	tables = [];
@@ -301,30 +325,23 @@ var generateCharts = function (d){
 			&& ind_max > 1.1						//This is to rule out 0-1 indicators (such as HDI or percentages)
 			&& (record_temp.Parent || record_temp.OutputIndicatorName == 'INFORM')
 			) {
-			//record.id = 'data-table' + [i+1];
 			record.name = record_temp.OutputIndicatorName;
 			record.lowest_level = 0;
-			//record.provider = '';
 			record.format = 'decimal1';
-			//record.unit = '';
 			record.level = record_temp.VisibilityLevel;
 			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
 			record.children = record_temp.Children ? record_temp.Children.split(',') : [];
 			if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
-			record.group = !record_temp.Parent ? null : record_temp.Parent.replace('-TEMP',''); // == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
-			//record.propertyPath = 'value.finalVal';
-			//record.dimension = undefined;
-			//record.weight_var = 'population'; //record_temp.weight_var;
-			//record.scorevar_name = record_temp.OutputIndicatorName; //record_temp.scorevar_name;
+			record.group = !record_temp.Parent ? null : record_temp.Parent.replace('-TEMP','').replace('_AVG',''); // == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
 			tables.push(record);
-		} else { //Use this  for inspection of possibly weird variables
+		} else { // USE THIS FOR inspection of possibly weird variables
 			//console.log(record_temp.OutputIndicatorName);
 			// console.log(ind_max);
 			// console.log(ind_min);
 		}
 		
 	}
-	console.log(tables);
+	//console.log(tables);
 		
 	// For each selected indicator ..
 	tables.forEach(function(t) {
@@ -474,7 +491,7 @@ var generateCharts = function (d){
 	
 	
 	//Define the colors and thresholds for the selected indicator
-	mapchartColors_func = function() {
+	mapchartColors_func = function(metric) {
 		var color_group = metric.split('.')[0].concat((metric.split('.')[1]) ? '.'.concat(metric.split('.')[1]) : '');
 		if (groups.indexOf(color_group) <= -1) {
 			color_group = color_group.split('.')[0];
@@ -500,7 +517,10 @@ var generateCharts = function (d){
 				.domain(quantile_range)
 				.range(colors);
 	};
-	mapchartColors = mapchartColors_func();
+	mapchartColors = mapchartColors_func(metric);
+	document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
+	document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
+	document.getElementById('area_selection').style.color = color_range[3].HEX;
 	
 	color_cat = function(ind) {
 		
@@ -826,13 +846,12 @@ var generateCharts = function (d){
 					// if (bar) { var bar_par = bar.parentNode;}
 					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
 					// if (bar_par) {bar_par.remove();}
-					
 					var width = keyvalue[record.name]*10; //dimensions_scores[record.name].top(1)[0].value.finalVal*10;
 					var div1a = document.getElementById(record.name);
 					div1a.setAttribute('class','component-score-small'); // ' + high_med_low(record.name,record.scorevar_name));
 					div1a.setAttribute('style','border:solid; border-width:1px; border-color:black');
 					
-					div1a.innerHTML = isNaN(keyvalue[record.name]) ? '-' : (keyvalue[record.name] == 10 ? '10' : dec1Format(keyvalue[record.name]));
+					div1a.innerHTML = !keyvalue[record.name] ? '-' : (keyvalue[record.name] == 10 ? '10' : dec1Format(keyvalue[record.name]));
 					var div2a1 = document.getElementById('bar-'+record.name);
 					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
 					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
@@ -906,8 +925,6 @@ var generateCharts = function (d){
 	});
 	var cntrlIsPressed = false;		
 
-	
-	
 	//Set up the map itself with all its properties
 	var map_filters = [];
 	mapChart
@@ -919,16 +936,16 @@ var generateCharts = function (d){
 		.zoom(0)
 		.geojson(d.Districts)				
 		.colors(mapchartColors)
-		.colorCalculator(function(d){
-			if (meta_level[metric] > 3){
-				if (!d) {return '#cccccc';} else {return mapChart.colors()(d);}
+		.colorCalculator(function(e){
+			if (meta_level[metric] > 3 || color_systems.indexOf(d.system) <= -1){
+				if (!e) {return '#cccccc';} else {return mapChart.colors()(e);}
 			} else {
-				if (!d) {return '#cccccc';} 
-				else if (d<=color_range[0].threshold) {return color_range[0].HEX;} 
-				else if (d<=color_range[1].threshold) {return color_range[1].HEX;} 
-				else if (d<=color_range[2].threshold) {return color_range[2].HEX;} 
-				else if (d<=color_range[3].threshold) {return color_range[3].HEX;} 
-				else if (d<=color_range[4].threshold) {return color_range[4].HEX;} 
+				if (!e) {return '#cccccc';} 
+				else if (e<=color_range[0].threshold) {return color_range[0].HEX;} 
+				else if (e<=color_range[1].threshold) {return color_range[1].HEX;} 
+				else if (e<=color_range[2].threshold) {return color_range[2].HEX;} 
+				else if (e<=color_range[3].threshold) {return color_range[3].HEX;} 
+				else if (e<=color_range[4].threshold) {return color_range[4].HEX;} 
 			}
 		})
 		.featureKeyAccessor(function(feature){
@@ -975,39 +992,41 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
 	
-	console.log($('#row-chart-container').width());
+	barheight = 20;
 	var row_filters = [];
 	var row_filters_old = [];
 	rowChart
 		.width($('#row-chart-container').width()-50)
-		.height((15 + 5) * data_final.length + 50)
+		.height((barheight + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
 		.ordering(function(d) {return -d.value;})
 		//.fixedBarHeight(15 + row_filters_old.length*5)
-		.fixedBarHeight(15)
+		.fixedBarHeight(barheight)
 		.colors(mapchartColors)
-		.colorCalculator(function(d){
-			if (meta_level[metric] > 3){
-				if (!d) {return '#cccccc';} else {return mapChart.colors()(d.value);}
+		.colorCalculator(function(e){
+			if (meta_level[metric] > 3 || color_systems.indexOf(d.system) <= -1){
+				if (!e) {return '#cccccc';} else {return mapChart.colors()(e.value);}
 			} else {
-				if (!d) {return '#cccccc';} 
-				else if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
-				else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
-				else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
-				else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
-				else if (d.value<=color_range[4].threshold) {return color_range[4].HEX;} 
+				if (!e) {return '#cccccc';} 
+				else if (e.value<=color_range[0].threshold) {return color_range[0].HEX;} 
+				else if (e.value<=color_range[1].threshold) {return color_range[1].HEX;} 
+				else if (e.value<=color_range[2].threshold) {return color_range[2].HEX;} 
+				else if (e.value<=color_range[3].threshold) {return color_range[3].HEX;} 
+				else if (e.value<=color_range[4].threshold) {return color_range[4].HEX;} 
 			}
 		})
 		.label(function(d) {
 			if (d.value == 0) {return '';} else {
-				return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+				//return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+				return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
 			}
 		})
 		.labelOffsetX(function(d) {return (rowChart.width()-150) * (d.value / 11) + 10;})
 		//.labelOffsetX(-10)
 		.title(function(d) {
-			return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+			//return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+			return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
 			if(!cntrlIsPressed) {
@@ -1059,16 +1078,16 @@ var generateCharts = function (d){
 		}
 		
 	}
-
-	///////////////////////////
-	// MAP RELATED FUNCTIONS //
-	///////////////////////////
-
+	
+	///////////////////////////////
+	// SIDEBAR: INDICATOR CHANGE //
+	///////////////////////////////
+	
 	map_coloring = function(id) {
 		
 		metric = id;
 		metric_label = meta_label[id];
-		mapchartColors = mapchartColors_func();
+		mapchartColors = mapchartColors_func(metric);
 		whereGroupSum.dispose();
 		whereGroupSum = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
 		whereGroupSum_tab.dispose();
@@ -1076,32 +1095,32 @@ var generateCharts = function (d){
 		mapChart
 			.group(whereGroupSum)
 			.colors(mapchartColors)
-			.colorCalculator(function(d){
-				if (meta_level[metric] > 3){
-					if (!d) {return '#cccccc';} else {return mapChart.colors()(d);}
+			.colorCalculator(function(e){
+				if (meta_level[metric] > 3 || color_systems.indexOf(d.system) <= -1){
+					if (!e) {return '#cccccc';} else {return mapChart.colors()(e);}
 				} else {
-					if (!d) {return '#cccccc';} 
-					else if (d<=color_range[0].threshold) {return color_range[0].HEX;} 
-					else if (d<=color_range[1].threshold) {return color_range[1].HEX;} 
-					else if (d<=color_range[2].threshold) {return color_range[2].HEX;} 
-					else if (d<=color_range[3].threshold) {return color_range[3].HEX;} 
-					else if (d<=color_range[4].threshold) {return color_range[4].HEX;} 
+					if (!e) {return '#cccccc';} 
+					else if (e<=color_range[0].threshold) {return color_range[0].HEX;} 
+					else if (e<=color_range[1].threshold) {return color_range[1].HEX;} 
+					else if (e<=color_range[2].threshold) {return color_range[2].HEX;} 
+					else if (e<=color_range[3].threshold) {return color_range[3].HEX;} 
+					else if (e<=color_range[4].threshold) {return color_range[4].HEX;} 
 				}
 			})
 		;
 		rowChart
 			.group(whereGroupSum_tab)
 			.colors(mapchartColors)
-			.colorCalculator(function(d){
-				if (meta_level[metric] > 3){
-					if (!d) {return '#cccccc';} else {return mapChart.colors()(d.value);}
+			.colorCalculator(function(e){
+				if (meta_level[metric] > 3 || color_systems.indexOf(d.system) <= -1){
+					if (!e) {return '#cccccc';} else {return mapChart.colors()(e.value);}
 				} else {
-					if (!d) {return '#cccccc';} 
-					else if (d.value<=color_range[0].threshold) {return color_range[0].HEX;} 
-					else if (d.value<=color_range[1].threshold) {return color_range[1].HEX;} 
-					else if (d.value<=color_range[2].threshold) {return color_range[2].HEX;} 
-					else if (d.value<=color_range[3].threshold) {return color_range[3].HEX;} 
-					else if (d.value<=color_range[4].threshold) {return color_range[4].HEX;} 
+					if (!e) {return '#cccccc';} 
+					else if (e.value<=color_range[0].threshold) {return color_range[0].HEX;} 
+					else if (e.value<=color_range[1].threshold) {return color_range[1].HEX;} 
+					else if (e.value<=color_range[2].threshold) {return color_range[2].HEX;} 
+					else if (e.value<=color_range[3].threshold) {return color_range[3].HEX;} 
+					else if (e.value<=color_range[4].threshold) {return color_range[4].HEX;} 
 				}
 			})
 		;
@@ -1120,13 +1139,17 @@ var generateCharts = function (d){
 		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
 		
-		//console.log($('#metric_label div').width());
-		//console.log($('#metric_label').width());
-		//if ( $('#metric_label div').width() > $('#metric_label').width() ) {
+		/* console.log(metric_label.length);
 		//while( $('#metric_label div').width() > $('#metric_label').width() ) {
-			//$('#metric_label div').css('font-size', (parseInt($('#metric_label div').css('font-size')) - 2) + "px" );
-			//$('#metric_label div').css('font-size', (parseInt($('#metric_label div').css('font-size')) - 1) + "px" );
-		//}
+		//if ( $('#metric_label div').width() > $('#metric_label').width() ) {
+		$('#metric_label div').css('font-size', '12px');	
+		if (metric_label.length > 70) {	
+			//$('#metric_label div').css('font-size', (parseInt(12 - (metric_label.length - 42) / 4) + "px" ));
+			$('#metric_label div').css('font-size', (parseInt(7) + "px" ));
+		} else if (metric_label.length > 42) {	
+			//$('#metric_label div').css('font-size', (parseInt(12 - (metric_label.length - 42) / 4) + "px" ));
+			$('#metric_label div').css('font-size', (parseInt(10) + "px" ));
+		}s */
 	
 		document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
 		document.getElementById('area_selection').style.color = color_range[3].HEX;
@@ -1137,9 +1160,9 @@ var generateCharts = function (d){
 	
 	
 	
-	/////////////////////
-	// OTHER FUNCTIONS //
-	/////////////////////		
+	/////////////////////////////
+	// SIDEBAR: METADATA POPUP //
+	/////////////////////////////		
 	
 	//Function to open the modal with information on indicator
 	info = function(id) {
@@ -1210,72 +1233,11 @@ var generateCharts = function (d){
 		$('#infoModal').modal('show');
 	};
 	
-	//Export to CSV function
-	export_csv = function() {
-		
-		var content = data_final;
-		var finalVal = '';
-		
-		for (var i = 0; i < content.length; i++) {
-			var value = content[i];
-			var key,innerValue,result;
-			if (i === 0) {
-				for (key in value) {
-					if (value.hasOwnProperty(key)) {
-						innerValue = key;
-						result = innerValue.replace(/"/g, '');
-						if (result.search(/("|,|\n)/g) >= 0)
-							result = '' + result + '';
-						if (key !== 'pcode') finalVal += ',';
-						finalVal += result;
-					}
-				}
-			finalVal += '\n';	
-			}
-
-			for (key in value) { 
-				if (value.hasOwnProperty(key)) {
-					innerValue = JSON.stringify(value[key] == 0.01 ? 0 : value[key]);
-					result = innerValue.replace(/"/g, '');
-					if (result.search(/("|,|\n)/g) >= 0)
-						result = '' + result + '';
-					if (key !== 'pcode') finalVal += ',';
-					finalVal += result;
-				}
-			}
-
-			finalVal += '\n';
-		}
-		
-		var download = document.getElementById('download');
-		download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
-		download.setAttribute('download', 'export.csv');
-		download.click();
-	};
 	
-	//Export to JSON
-	export_json = function() {
-		var myWindow = window.open('','','_blank');
-		myWindow.document.write(JSON.stringify(d.inform_data))
-		myWindow.focus();
-	}
+	/////////////////////////////////
+	// SIDEBARA: ACCORDION CLOSING //
+	/////////////////////////////////
 	
-	//Export to GEOJSON
-	link_data = function() {
-		
-		//console.log(country_code);
-		if (country_code.indexOf('_') > -1) {
-			var url = 'http://www.inform-index.org/Subnational/';
-		} else {
-			//var url = 'http://www.inform-index.org/INFORM-2017-Results-and-data';
-			var url = 'http://www.inform-index.org/Results/Global';
-		}
-		var download = document.getElementById('download');
-		download.setAttribute('href', url);
-		download.click();
-	}
-	//http://www.inform-index.org/LinkClick.aspx?fileticket=K9lWe0MOKGQ%3d&tabid=147&portalid=0&mid=583
-
 	// ACCORDION AUTOMATIC CLOSING
 	// Make sure that when opening another accordion-panel, the current one collapses	
 	// LEVEL 1
@@ -1370,14 +1332,111 @@ var generateCharts = function (d){
 		}
 	}
  	
+	
+	//////////////////////////////
+	// HEADER FUNCTIONS: EXPORT //
+	//////////////////////////////
+	
+	//Export to CSV function
+	export_csv = function() {
+		
+		var content = data_final;
+		var finalVal = '';
+		
+		for (var i = 0; i < content.length; i++) {
+			var value = content[i];
+			var key,innerValue,result;
+			if (i === 0) {
+				for (key in value) {
+					if (value.hasOwnProperty(key)) {
+						innerValue = key;
+						result = innerValue.replace(/"/g, '');
+						if (result.search(/("|,|\n)/g) >= 0)
+							result = '' + result + '';
+						if (key !== 'pcode') finalVal += ',';
+						finalVal += result;
+					}
+				}
+			finalVal += '\n';	
+			}
+
+			for (key in value) { 
+				if (value.hasOwnProperty(key)) {
+					innerValue = JSON.stringify(value[key] == 0.01 ? 0 : value[key]);
+					result = innerValue.replace(/"/g, '');
+					if (result.search(/("|,|\n)/g) >= 0)
+						result = '' + result + '';
+					if (key !== 'pcode') finalVal += ',';
+					finalVal += result;
+				}
+			}
+
+			finalVal += '\n';
+		}
+		
+		var download = document.getElementById('download');
+		download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+		download.setAttribute('download', 'export.csv');
+		download.click();
+	};
+	
+	//Export to JSON
+	export_json = function() {
+		var myWindow = window.open('','','_blank');
+		myWindow.document.write(JSON.stringify(d.inform_data))
+		myWindow.focus();
+	}
+	
+	//Create parameter-specific URL and show it in popup to copy
+	function addParameterToURL(inform_model,workflow_id,metric){
+		var _url = location.href;
+		_url = _url.split('?')[0];
+		_url += (_url.split('?')[1] ? '&':'?') + 'workflowgroup='+inform_model+'&workflow_id='+workflow_id+'&metric='+metric;
+		console.log(_url);
+		document.getElementById('shareable_URL').innerHTML = _url;
+		return _url;
+	}
+	
+	share_URL = function() {
+		shareable_URL = addParameterToURL(d.inform_model,d.workflow_id,metric);
+		$('#URLModal').modal('show');
+	}
+	
+	//Export to GEOJSON
+	link_data = function() {
+		
+		//console.log(country_code);
+		if (country_code == '_INFORM'){
+			//var url = 'http://www.inform-index.org/INFORM-2017-Results-and-data';
+			var url = 'http://www.inform-index.org/Results/Global';
+		} else {
+			var url = 'http://www.inform-index.org/Subnational/';
+		}
+		var download = document.getElementById('download');
+		download.setAttribute('href', url);
+		download.click();
+	}
+	//http://www.inform-index.org/LinkClick.aspx?fileticket=K9lWe0MOKGQ%3d&tabid=147&portalid=0&mid=583
+	
+	
+	
+	
+	
+	//////////////////////////////////
+	// HEADER FUNCTIONS: MODEL MENU //
+	//////////////////////////////////
+	
 	var workflows = 'http://www.inform-index.org/API/InformAPI/Workflows/WorkflowGroups';
 	//d3.json(workflows,function(data_workflows) {
 	d3.json('data/workflows.json', function(data_workflows) {
 		
-		//active_workflow_names = ['INFORM GUATEMALA 2017','INFORM 2017 v0.3.1'];
+		//data_workflows.push('INFORM2018');
 		
 		var ul = document.getElementById('model-items');
-		while (ul.firstChild) { ul.removeChild(ul.firstChild);};
+		var ul_global = document.getElementById('global-model-items');
+		//$('#model-items').not(':first').remove();
+		while (ul_global.childElementCount > 0) { ul_global.removeChild(ul_global.firstChild);};
+		while (ul.childElementCount > 1) { ul.removeChild(ul.lastChild);};
 							
 		for (var i=0;i<data_workflows.length;i++) {
 			
@@ -1386,13 +1445,17 @@ var generateCharts = function (d){
 				
 				var li = document.createElement('li');
 				li.setAttribute('class','dropdown-submenu');
-				ul.appendChild(li);
-				var a = document.createElement('a');
-				a.setAttribute('class','dropdown-toggle export-button models submenu-item');
+				if (data_workflows[i].indexOf('_') > -1) {
+					ul.appendChild(li);
+					var a = document.createElement('a');
+					a.setAttribute('class','dropdown-toggle export-button submenu-item models1');
+				} else {
+					ul_global.appendChild(li);
+					var a = document.createElement('a');
+					a.setAttribute('class','dropdown-toggle export-button submenu-item models2');
+				}
 				a.setAttribute('data-toggle','dropdown');
 				a.setAttribute('href','#');
-				//a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
-				//a.setAttribute('role','button');
 				a.innerHTML = data_workflows[i];
 				li.appendChild(a);
 				var fa = document.createElement('i');
@@ -1402,10 +1465,6 @@ var generateCharts = function (d){
 				eval("var ul" + i +" = document.createElement('ul');");
 				eval("ul" + i + ".setAttribute('class','dropdown-menu');");
 				eval("li.appendChild(ul" + i + ");");
-				// var ul2 = document.createElement('ul');
-				// ul2.setAttribute('class','dropdown-menu');
-				// ul2.setAttribute('id','submodel-items-'+data_workflows[i]);
-				// li.appendChild(ul2);
 				
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
 				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
@@ -1413,21 +1472,27 @@ var generateCharts = function (d){
 				//var _this = this;
 				(function (_i) {
 					
-					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
 					//d3.json(workflow_info,function(workflow_info) {
-						//d.data_workflows = workflow_info;
+					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+						if (data_workflows[_i] == 'INFORM_SAHEL') {
+							object = {};
+							object.Author='anonymous';
+							object.WorkflowGroupName = 'INFORM_SAHEL';
+							object.WorkflowId = 355;
+							object.Name = 'INFORM SAHEL Jun 2017 Results';
+							workflow_info.push(object);
+						}
+						
 						for (var j=0;j<workflow_info.length;j++) {
-							//console.log(workflow_info[j]);
 							if (workflow_info[j].Author == 'anonymous') { // && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
 								
-								//var parent = document.getElementById('submodel-items-'+data_workflows[i]);
 								var li = document.createElement('li');
-								//ul2.appendChild(li);
 								eval("ul" + _i + ".appendChild(li);");
 								var a = document.createElement('a');
 								a.setAttribute('class','submenu-item');
 								a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
 								a.setAttribute('role','button');
+								//a.innerHTML = workflow_info[j].Name.split(' ').slice(0,2).join(' ');
 								a.innerHTML = workflow_info[j].Name;
 								li.appendChild(a);
 								
@@ -1438,8 +1503,15 @@ var generateCharts = function (d){
 			};
 		};
 		$(document).ready(function(){
-		  $('.dropdown-submenu a.models').on("click", function(e){
-			$(this).next('ul').toggle();
+		  $('.dropdown-submenu a.models1').on("click", function(e){
+			$('.dropdown-submenu a.models1').next('ul').css('display','none');
+			$(this).next('ul').toggle(); 
+			e.stopPropagation();
+			e.preventDefault();
+		  });
+		  $('.dropdown-submenu a.models2').on("click", function(e){
+			$('.dropdown-submenu a.models2').next('ul').css('display','none');
+			$(this).next('ul').toggle(); 
 			e.stopPropagation();
 			e.preventDefault();
 		  });

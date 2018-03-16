@@ -25,7 +25,7 @@
 	<link rel="stylesheet" href="bower_components/build/custom/dc-addons/dist/leaflet-map/dc-leaflet-legend.css">
 	<link rel="stylesheet" href="css/dashboards.css">
 	<link rel="stylesheet" href="css/header.css">
-	<link rel="stylesheet" href="css/core.css">
+	<!-- <link rel="stylesheet" href="css/core.css"> -->
 
 </head>
 
@@ -65,6 +65,10 @@
 							<li>
 								<a onclick="export_json()">JSON (for dev. only)</a>
 							</li>
+							<li class="divider"></li>
+							<li>
+								<a onclick="share_URL()">Share current settings through URL</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -80,28 +84,18 @@
 				</ul> -->
 				<ul class="nav navbar-top-links navbar-left">
 					<li class="dropdown">
-						<a class="dropdown-toggle export-button models" data-toggle="dropdown" href="#">
+						<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
 							Choose Model
 							<i class="fa fa-angle-down export-btn-arrow"></i>
 						</a>
 						<ul class="dropdown-menu" id="model-items">
-							<!-- <li>
-								<a class="export-button" href="#">Test 1</a>
-							</li>
 							<li class="dropdown-submenu">
-								<a class="dropdown-toggle export-button test" data-toggle="dropdown" href="#">
-									Test 2
-									<i class="fa fa-angle-down export-btn-arrow"></i>
+								<a class="dropdown-toggle export-button submenu-item models1" data-toggle="dropdown" href="#">
+									INFORM Global
+									<i class="fa fa-angle-right export-btn-arrow" style="float:right"></i>
 								</a>
-								<ul class="dropdown-menu" id="submodel-items">
-									<li>
-										<a class="export-button" href="#">Test 2a</a>
-									</li>
-									<li>
-										<a class="export-button" href="#">Test 2b</a>
-									</li>
-								</ul>
-							</li> -->
+								<ul class="dropdown-menu" id="global-model-items"></ul>
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -270,7 +264,7 @@
 								</button>
 							</div>
 						</div> -->
-						<div id="row-chart" style="position:absolute; left: 0%; width:100%; height:100%;overflow:auto;background-color:#fff">
+						<div id="row-chart" style="position:absolute; left: 0%; width:100%; height:95%;overflow:auto;background-color:#fff">
 					</div>
 					<!-- <table class='table table-hover table-striped table-bordered' id='table-chart' style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff">
 					  <thead>
@@ -324,6 +318,25 @@
 				</div>
 			</div>
 			<!-- end: risk score modal -->
+			
+			<!-- start: URL modal -->
+			<div id="URLModal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
+						</div>
+						<div class="modal-body" style="word-break:break-all">
+							<h5><b>URL:</b> <span id="shareable_URL"></span></h5><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: URL modal -->
 			
 			<!-- start: phone device message -->
 			<div class="mobile-message">

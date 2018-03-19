@@ -1484,9 +1484,9 @@ var generateCharts = function (d){
 		} else {
 			var url = 'http://www.inform-index.org/Subnational/';
 		}
-		var download = document.getElementById('download');
-		download.setAttribute('href', url);
-		download.click();
+		var excel = document.getElementById('excel');
+		excel.setAttribute('href', url);
+		excel.click();
 	}
 	//http://www.inform-index.org/LinkClick.aspx?fileticket=K9lWe0MOKGQ%3d&tabid=147&portalid=0&mid=583
 	

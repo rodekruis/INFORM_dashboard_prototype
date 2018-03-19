@@ -51,20 +51,20 @@
 						</a>
 						<ul class="dropdown-menu export-items">
 							<li>
-								<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (including raw data)</a>
+								<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (incl. source data)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="download" onclick="link_data()">Excel (including raw data)</a>
+								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="download" onclick="link_data()">Excel (incl. source data)</a>
 							</li>
 							<li class="divider"></li>
 							<li>
-								<a target="_blank" id="download" onclick="export_csv()">CSV (current data)</a>
+								<a target="_blank" id="download" onclick="export_csv()">CSV (dashboard data)</a>
 							</li>
-							<li class="divider"></li>
+							<!-- <li class="divider"></li>
 							<li>
 								<a onclick="export_json()">JSON (for dev. only)</a>
-							</li>
+							</li> -->
 							<li class="divider"></li>
 							<li>
 								<a onclick="share_URL()">Share current settings through URL</a>
@@ -72,16 +72,6 @@
 						</ul>
 					</li>
 				</ul>
-				<!-- <ul class="nav navbar-top-links navbar-right">
-					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							Choose Model
-							<i class="fa fa-angle-down export-btn-arrow"></i>
-						</a>
-						<ul class="dropdown-menu submenu-items" id="country-items">
-						</ul>
-					</li>
-				</ul> -->
 				<ul class="nav navbar-top-links navbar-left">
 					<li class="dropdown">
 						<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
@@ -120,13 +110,8 @@
 						</div>
 						<div class="btn-group zoom-level" role="group">
 							<button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary">
-								<!-- <i class="fa fa-tachometer" aria-hidden="true"></i> -->
 								<div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div>
 							</button>
-							<!-- <button style="width:120px;" id="level2" type="button" class="btn btn-secondary btn-active " ng-click="zoom_out(2)">
-								<i class="fa fa-globe" aria-hidden="true"></i>
-								<span class="button-label country_selection">{{country_selection}}</span>
-							</button> -->
 						</div>
 					</div>
 					<!-- end: zoom navigation -->
@@ -229,9 +214,14 @@
 
 				<!-- start: map -->
 				<div class="map-wrapper" style="margin-left: 380px; width:calc(100% - 380px); height:95%">
-
+					<!-- <div class="btn-group zoom-level" role="group"> -->
+							<!-- <button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary"> -->
+								<!-- <div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div> -->
+							<!-- </button> -->
+					<!-- </div> -->
 					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
 					<div id="row-chart-container" style="position:absolute; width:100%; height:100%;background-color:#fff; visibility:hidden">
+						
 						<div class="zoom-level-nav">
 							<div class="btn-group zoom-level" role="group">
 								<ul style="left: 15px;" type="button" class="btn btn-secondary btn-active ">
@@ -328,10 +318,10 @@
 							<button type="button" class="close" data-dismiss="modal">
 								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 							</button>
-							<h3 class="modal-title">Share current parameter-settings directly through URL</h3>
+							<h3 class="modal-title">Share current settings directly through URL<h5>Copy URL and paste in browser</h5></h3>
 						</div>
 						<div class="modal-body" style="word-break:break-all">
-							<h5><b>URL:</b> <span id="shareable_URL"></span></h5><br>
+							<h5><span id="shareable_URL"></span></h5><br>
 						</div>
 					</div>
 				</div>

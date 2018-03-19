@@ -2,7 +2,8 @@
 //////////////////////
 // DEFINE VARIABLES //
 //////////////////////
-		
+
+var setting = 'prototype'; //'prototype','api'		
 //var country_code = '';
 //var active_workflow_groups = ["INFORM_EAST_AFRICA", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAHEL", "INFORM2015", "INFORM2015Mid", "INFORM2016", "INFORM2017", "INFORM2017Mid"]
 var active_workflow_groups = [
@@ -28,6 +29,8 @@ var metric = 'INFORM';
 var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];
 var color_systems = ['INFORM','INFORM_EAST_AFRICA','INFORM_SAHEL'];
 var chart_show = 'map';
+var map_filters = [];
+var row_filters = [];
 var map;
 
 ///////////////////////////////////
@@ -76,7 +79,10 @@ load_dashboard = function(inform_model,workflow_id) {
 		inform_model = url.split('&')[0].split('=')[1];
 		workflow_id = url.split('&')[1].split('=')[1];
 		metric = url.split('&')[2].split('=')[1];
-		window.history.pushState({}, document.title, 'https://rodekruis.github.io/INFORM_dashboard_prototype/'); //http://localhost:8082 / https://rodekruis.github.io/INFORM_dashboard_prototype/'
+		chart_show = url.split('&')[3].split('=')[1];
+		//map_filters = url.split('&')[4].split('=')[1].split(',');
+		console.log(map_filters);
+		window.history.pushState({}, document.title, setting == 'api' ? 'http://localhost:8082' : 'https://rodekruis.github.io/INFORM_dashboard_prototype/' ); 
 	} else {
 		directURLload = false;
 	}
@@ -91,16 +97,13 @@ load_dashboard = function(inform_model,workflow_id) {
 	
 	//TEMPORARY
 	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
-	console.log(workflow_string);
-	//d3.json(workflow_api,function(workflow_info) {
-	d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+	d3.json(setting == 'api' ? workflow_api : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
 		d.system = workflow_info[0].System.toUpperCase();
 		if (d.system == 'INFORM') { country_code = 'INFORM'; } else { country_code = inform_model.replace('INFORM_',''); };
-		console.log(country_code);
 		
 		var source_api = 'http://www.inform-index.org/API/InformAPI/Indicators/Index/';
-		//d3.json(source_api,function(source_data) {
-		d3.json('data/sourcedata.json',function(source_data) {
+		d3.json(setting == 'api' ? source_api : 'data/sourcedata.json',function(source_data) {
+			
 			//console.log(source_data);
 			d.source_data = source_data;
 			
@@ -108,8 +111,7 @@ load_dashboard = function(inform_model,workflow_id) {
 			var url_meta = 'http://www.inform-index.org/API/InformAPI/Processes/GetByWorkflowId/' + workflow_id;
 			
 			// Load INFORM metadata
-			//d3.json(url_meta, function(meta_data) {
-			d3.json('data/metadata_' + country_code + '.json', function(meta_data) {
+			d3.json(setting == 'api' ? url_meta : 'data/metadata_' + country_code + '.json', function(meta_data) {
 				d.Metadata_full = meta_data;
 				d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
 																			&& e.VisibilityLevel <= inform_levels 
@@ -124,9 +126,7 @@ load_dashboard = function(inform_model,workflow_id) {
 				var url_data = 'http://www.inform-index.org/API/InformAPI/countries/Scores/?WorkflowId=' + workflow_id;
 				
 				//Load INFORM data
-				//d3.json(url_data, function(inform_data){
-				d3.json('data/inform_data_' + country_code + '.json', function(inform_data) {
-					d.inform_data = inform_data; //$.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});// e.IndicatorId.split('.').length <= inform_levels; });
+				d3.json(setting == 'api' ? url_data : 'data/inform_data_' + country_code + '.json', function(inform_data){
 					d.inform_data = $.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});
 					
 					//Load Geodata
@@ -926,7 +926,6 @@ var generateCharts = function (d){
 	var cntrlIsPressed = false;		
 
 	//Set up the map itself with all its properties
-	var map_filters = [];
 	mapChart
 		.width($('#map-chart').width())
 		.height(800)
@@ -993,7 +992,6 @@ var generateCharts = function (d){
 	/////////////////////
 	
 	barheight = 20;
-	var row_filters = [];
 	var row_filters_old = [];
 	rowChart
 		.width($('#row-chart-container').width()-50)
@@ -1018,15 +1016,15 @@ var generateCharts = function (d){
 		})
 		.label(function(d) {
 			if (d.value == 0) {return '';} else {
-				//return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
-				return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
+				return lookup[d.key] ? lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+				//return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
 			}
 		})
 		.labelOffsetX(function(d) {return (rowChart.width()-150) * (d.value / 11) + 10;})
 		//.labelOffsetX(-10)
 		.title(function(d) {
-			//return lookup[d.key] ? lookup[d.key].concat(' - ',currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
-			return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
+			return lookup[d.key] ? lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
+			//return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
 		})
 		.on('filtered',function(chart,filters){
 			if(!cntrlIsPressed) {
@@ -1125,7 +1123,9 @@ var generateCharts = function (d){
 			})
 		;
 		//dc.redrawAll();
-		if (chart_show == 'row' && row_filters.length >= 1) {
+		//console.log(row_filters);
+		//console.log(map_filters_old);
+		if (chart_show == 'row' && row_filters.length >= 1 && map_filters_old.length >= 1) {
 			row_filters_old = row_filters;
 			cntrlIsPressed = true;
 			mapChart.filter([row_filters]);
@@ -1234,9 +1234,9 @@ var generateCharts = function (d){
 	};
 	
 	
-	/////////////////////////////////
-	// SIDEBARA: ACCORDION CLOSING //
-	/////////////////////////////////
+	////////////////////////////////
+	// SIDEBAR: ACCORDION CLOSING //
+	////////////////////////////////
 	
 	// ACCORDION AUTOMATIC CLOSING
 	// Make sure that when opening another accordion-panel, the current one collapses	
@@ -1333,6 +1333,77 @@ var generateCharts = function (d){
 	}
  	
 	
+	///////////////////////////////////
+	// SIDEBAR: MAP & TABULAR SWITCH //
+	///////////////////////////////////
+	
+	
+	//Switch between MAP and TABULAR view
+    mapShow = function() {
+		
+		chart_show = 'map';
+		//Hide row-chart
+		$('#row-chart-container').hide();  
+		//Transfer row-chart filters to map (to make sure that selection is carried)
+		cntrlIsPressed = true;
+		//if (row_filters.length == 0) {row_filters = $.extend( [], map_filters );};
+		mapChart.filter([row_filters]); 
+		//Show map-chart
+		$('#map-chart').show();
+		
+		//Zoom to selected countries in row-chart
+		if (row_filters.length == 0) {
+			zoomToGeom(d.Districts);
+		} else {
+			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			districts_temp.features = [];
+			for (var i=0;i<d.Districts.features.length;i++){
+				if (row_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+					districts_temp.features.push(d.Districts.features[i]);
+				}
+			}
+			zoomToGeom(districts_temp);
+			//Undo row-chart filters (which are transfered to the map already)
+			rowChart.filter(null);
+		}
+		cntrlIsPressed = false;
+	}
+	
+	map_filters_old = [];
+	tabularShow = function() {
+		chart_show = 'row';
+		//if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
+		cntrlIsPressed = true;
+		map_filters_old = map_filters;
+		rowChart.filter([map_filters]);
+		mapChart.filter(null);
+		cntrlIsPressed = false;
+		//row_filters = map_filters;
+		$('#map-chart').hide();
+		//$('#mapPopup').hide();
+		document.getElementById('row-chart-container').style.visibility = 'visible';
+		$('#row-chart-container').show();
+		//$('#table-chart').show();
+	}
+	
+	///////////////////////////
+	// SIDEBAR: RESET BUTTON //
+	///////////////////////////
+
+	reset_function = function() {
+		dc.filterAll();
+		dc.redrawAll();	
+		map_filters_old = [];
+		row_filters_old = [];
+		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };	
+		zoomToGeom(d.Districts);
+	}
+	
+
+
+
+
+
 	//////////////////////////////
 	// HEADER FUNCTIONS: EXPORT //
 	//////////////////////////////
@@ -1388,17 +1459,18 @@ var generateCharts = function (d){
 	}
 	
 	//Create parameter-specific URL and show it in popup to copy
-	function addParameterToURL(inform_model,workflow_id,metric){
+	function addParameterToURL(inform_model,workflow_id,metric,chart_show){//,map_filters,row_filters){
 		var _url = location.href;
 		_url = _url.split('?')[0];
-		_url += (_url.split('?')[1] ? '&':'?') + 'workflowgroup='+inform_model+'&workflow_id='+workflow_id+'&metric='+metric;
+		//_url += (_url.split('?')[1] ? '&':'?') + 'workflowgroup='+inform_model+'&workflow_id='+workflow_id+'&metric='+metric+'&view='+chart_show+'&map_filters='+map_filters+'&row_filters='+row_filters;
+		_url += (_url.split('?')[1] ? '&':'?') + 'workflowgroup='+inform_model+'&workflow_id='+workflow_id+'&metric='+metric+'&view='+chart_show;
 		console.log(_url);
 		document.getElementById('shareable_URL').innerHTML = _url;
 		return _url;
 	}
 	
 	share_URL = function() {
-		shareable_URL = addParameterToURL(d.inform_model,d.workflow_id,metric);
+		shareable_URL = addParameterToURL(d.inform_model,d.workflow_id,metric,chart_show);//,map_filters,row_filters);
 		$('#URLModal').modal('show');
 	}
 	
@@ -1427,10 +1499,15 @@ var generateCharts = function (d){
 	//////////////////////////////////
 	
 	var workflows = 'http://www.inform-index.org/API/InformAPI/Workflows/WorkflowGroups';
-	//d3.json(workflows,function(data_workflows) {
-	d3.json('data/workflows.json', function(data_workflows) {
+	d3.json(setting == 'api' ? workflows : 'data/workflows.json',function(data_workflows) {
 		
 		//data_workflows.push('INFORM2018');
+		
+		data_workflows.sort(function(a, b){
+			if(a < b) return 1;
+			if(a > b) return -1;
+			return 0;
+		});
 		
 		var ul = document.getElementById('model-items');
 		var ul_global = document.getElementById('global-model-items');
@@ -1472,8 +1549,8 @@ var generateCharts = function (d){
 				//var _this = this;
 				(function (_i) {
 					
-					//d3.json(workflow_info,function(workflow_info) {
-					d3.json('data/workflow' + workflow_string + '.json', function(workflow_info) {
+					d3.json(setting == 'api' ? workflow_info : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
+						
 						if (data_workflows[_i] == 'INFORM_SAHEL') {
 							object = {};
 							object.Author='anonymous';
@@ -1483,6 +1560,12 @@ var generateCharts = function (d){
 							workflow_info.push(object);
 						}
 						
+						// workflow_info.sort(function(a, b){
+							// if(a.Name < b.Name) return -1;
+							// if(a.Name > b.Name) return 1;
+							// return 0;
+						// });
+
 						for (var j=0;j<workflow_info.length;j++) {
 							if (workflow_info[j].Author == 'anonymous') { // && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
 								
@@ -1530,71 +1613,50 @@ var generateCharts = function (d){
 	
 	//Render all dc-charts and -tables
 	dc.renderAll();
-	$('#row-chart-container').hide();
-	//$('#table-chart').hide();
-	
-	reset_function = function() {
-		dc.filterAll();
-		dc.redrawAll();	
-		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };	
-		zoomToGeom(d.Districts);
-	}
-	
+	var zoom_child = $('.leaflet-control-zoom')[0];
+	var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
+	zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
+		
+	// cntrlIsPressed = true;
+	// map_filters_old = map_filters;
+	// mapChart.filter([map_filters]);
+	// rowChart.filter([map_filters]);
+	// cntrlIsPressed = false;
+
 	map = mapChart.map();
+	//mapChart.redraw();
 	function zoomToGeom(geom){
 		var bounds = d3.geo.bounds(geom);
 		map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 	}
 	zoomToGeom(d.Districts);
-	
-	var zoom_child = $('.leaflet-control-zoom')[0];
-	var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
-	zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
-	
-	//Switch between MAP and TABULAR view
-    mapShow = function() {
-		
-		chart_show = 'map';
-		//Hide row-chart
-		$('#row-chart-container').hide();  
-		//Transfer row-chart filters to map (to make sure that selection is carried)
-		cntrlIsPressed = true;
-		mapChart.filter([row_filters]); 
-		//Show map-chart
-		$('#map-chart').show();
-		
-		//Zoom to selected countries in row-chart
-		if (row_filters.length == 0) {
-			zoomToGeom(d.Districts);
-		} else {
-			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
-			districts_temp.features = [];
-			for (var i=0;i<d.Districts.features.length;i++){
-				if (row_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
-					districts_temp.features.push(d.Districts.features[i]);
-				}
-			}
-			zoomToGeom(districts_temp);
-			//Undo row-chart filters (which are transfered to the map already)
-			rowChart.filter(null);
-		}
-		cntrlIsPressed = false;
+
+	if (chart_show == 'map') {
+		$('#row-chart-container').hide();
+		// if (map_filters.length == 0) {
+			// zoomToGeom(d.Districts);
+		// } else {
+			// var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			// districts_temp.features = [];
+			// for (var i=0;i<d.Districts.features.length;i++){
+				// if (map_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+					// districts_temp.features.push(d.Districts.features[i]);
+				// }
+			// }
+			// zoomToGeom(districts_temp);
+		// }
+		//mapShow();
+	} else if (chart_show == 'row') {
+		tabularShow();
 	}
 	
-	tabularShow = function() {
-		chart_show = 'row';
-		//if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
-		cntrlIsPressed = true;
-		rowChart.filter([map_filters]);
-		mapChart.filter(null);
-		cntrlIsPressed = false;
-		//row_filters = map_filters;
-		$('#map-chart').hide();
-		$('#mapPopup').hide();
-		document.getElementById('row-chart-container').style.visibility = 'visible';
-		$('#row-chart-container').show();
-		//$('#table-chart').show();
-	}
+
+	
+	
+	
+	
+	
+
 	
 	
 	

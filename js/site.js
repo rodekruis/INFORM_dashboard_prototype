@@ -4,8 +4,6 @@
 //////////////////////
 
 var setting = 'prototype'; //'prototype','api'		
-//var country_code = '';
-//var active_workflow_groups = ["INFORM_EAST_AFRICA", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAHEL", "INFORM2015", "INFORM2015Mid", "INFORM2016", "INFORM2017", "INFORM2017Mid"]
 var active_workflow_groups = [
 	"INFORM2017"
 	, "INFORM_EAST_AFRICA"
@@ -23,7 +21,6 @@ var active_workflow_groups = [
 	]; 
 var inform_model = 'INFORM2017'; 
 var workflow_id = 261;
-//var workflow_id = inform_model == 'INFORM_GTM' ? 359 : 261;	//359,261
 var inform_levels = 7;				
 var metric = 'INFORM';
 var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];
@@ -113,10 +110,8 @@ load_dashboard = function(inform_model,workflow_id) {
 			// Load INFORM metadata
 			d3.json(setting == 'api' ? url_meta : 'data/metadata_' + country_code + '.json', function(meta_data) {
 				d.Metadata_full = meta_data;
-				d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 
-																			&& e.VisibilityLevel <= inform_levels 
-																			//&& e.StepNumber > 0
-																			});
+				d.Metadata = meta_data;
+//				d.Metadata = $.grep(meta_data, function(e){ return e.VisibilityLevel <= 99 && e.VisibilityLevel <= inform_levels });
 				inform_indicators = [];
 				for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
 				
@@ -127,6 +122,7 @@ load_dashboard = function(inform_model,workflow_id) {
 				
 				//Load INFORM data
 				d3.json(setting == 'api' ? url_data : 'data/inform_data_' + country_code + '.json', function(inform_data){
+					//d.inform_data = inform_data;
 					d.inform_data = $.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});
 					
 					//Load Geodata
@@ -238,15 +234,10 @@ var generateCharts = function (d){
 	document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 	
 	//Define number formats for absolute numbers and for percentage metrics
-	var intFormat = d3.format(',');
-	var dec0Format = d3.format(',.0f');
 	var dec1Format = d3.format(',.1f');
-	var dec2Format = d3.format('.2f');
-	var percFormat = d3.format(',.2%');
-	
-	var currentFormat = function(value) {
-		return dec1Format(value);
-	};
+	// var currentFormat = function(value) {
+		// return dec1Format(value);
+	// };
 	
 	
 	////////////////////
@@ -254,7 +245,6 @@ var generateCharts = function (d){
 	////////////////////
 	
 	var lookup_metafull_id = genLookup_metafull('IndicatorId');
-	//var lookup_children = genLookup_children('children');
 	
 	var children = [];
 	for (var i=0; i < d.Metadata_full.length; i++) {
@@ -262,12 +252,12 @@ var generateCharts = function (d){
 		var record = {};
 		if (d.Metadata_full[i].OutputIndicatorName !== 'POP' && d.Metadata_full[i].OutputIndicatorName !== 'POP_DEN') {// && d.Metadata_full[i].StepNumber == 0) {
 			record.stepnr = d.Metadata_full[i].StepNumber;
+			record.vis_level = d.Metadata_full[i].VisibilityLevel;
 			record.name = d.Metadata_full[i].OutputIndicatorName;
 			record.parent1 = d.Metadata_full[i].Parent;
 			children.push(record);
 		}
 	};
-	//console.log(children);
 	
 	//fill the lookup table with the metadata-information per variable
 	var genLookup_children = function (field){
@@ -278,8 +268,11 @@ var generateCharts = function (d){
 		return test;
 	};
 	var lookup_children_parent = genLookup_children('parent1');
+	var lookup_children_vis_level = genLookup_children('vis_level');
 	
 	for (var i=0;i<children.length;i++) {
+		
+		
 		children[i].parent2 = lookup_children_parent[children[i].parent1] == 'null' ? undefined : lookup_children_parent[children[i].parent1];
 		children[i].parent3 = lookup_children_parent[children[i].parent2] == 'null' ? undefined : lookup_children_parent[children[i].parent2];
 		children[i].parent4 = lookup_children_parent[children[i].parent3] == 'null' ? undefined : lookup_children_parent[children[i].parent3];
@@ -289,11 +282,24 @@ var generateCharts = function (d){
 		children[i].parent8 = lookup_children_parent[children[i].parent7] == 'null' ? undefined : lookup_children_parent[children[i].parent7];
 		children[i].parent9 = lookup_children_parent[children[i].parent8] == 'null' ? undefined : lookup_children_parent[children[i].parent8];
 		children[i].parent10 = lookup_children_parent[children[i].parent9] == 'null' ? undefined : lookup_children_parent[children[i].parent9];
+		
+		children[i].parent1 = lookup_children_vis_level[children[i].parent1] > 99 ? lookup_children_parent[children[i].parent1] : children[i].parent1;
+		children[i].parent2 = lookup_children_vis_level[children[i].parent2] > 99 ? lookup_children_parent[children[i].parent2] : children[i].parent2;
+		children[i].parent3 = lookup_children_vis_level[children[i].parent3] > 99 ? lookup_children_parent[children[i].parent3] : children[i].parent3;
+		children[i].parent4 = lookup_children_vis_level[children[i].parent4] > 99 ? lookup_children_parent[children[i].parent4] : children[i].parent4;
+		children[i].parent5 = lookup_children_vis_level[children[i].parent5] > 99 ? lookup_children_parent[children[i].parent5] : children[i].parent5;
+		children[i].parent6 = lookup_children_vis_level[children[i].parent6] > 99 ? lookup_children_parent[children[i].parent6] : children[i].parent6;
+		children[i].parent7 = lookup_children_vis_level[children[i].parent7] > 99 ? lookup_children_parent[children[i].parent7] : children[i].parent7;
+		children[i].parent8 = lookup_children_vis_level[children[i].parent8] > 99 ? lookup_children_parent[children[i].parent8] : children[i].parent8;
+		children[i].parent9 = lookup_children_vis_level[children[i].parent9] > 99 ? lookup_children_parent[children[i].parent9] : children[i].parent9;
+		children[i].parent10 = lookup_children_vis_level[children[i].parent10] > 99 ? lookup_children_parent[children[i].parent10] : children[i].parent10;
 
 		children[i].parents = children[i].name + ',' + (children[i].parent1 ? children[i].parent1 + ',' : '') + (children[i].parent2 ? children[i].parent2 + ',' : '') + (children[i].parent3 ? children[i].parent3 + ',' : '') + (children[i].parent4 ? children[i].parent4 + ',' : '') + (children[i].parent5 ? children[i].parent5 + ',' : '')
 									 + (children[i].parent6 ? children[i].parent6 + ',' : '') + (children[i].parent7 ? children[i].parent7 + ',' : '') + (children[i].parent8 ? children[i].parent8 + ',' : '') + (children[i].parent9 ? children[i].parent9 + ',' : '') + (children[i].parent10 ? children[i].parent10 + ',' : '');
 		children[i].parents = children[i].parents.split(',');
 		if (children[i].parents.indexOf('') > -1) { children[i].parents.splice(children[i].parents.indexOf(''), 1); };
+		children[i].parents = children[i].parents.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+		
 		children[i].levels = children[i].parents.length;
 		for (k=0;k<d.source_data.length;k++) {
 			if (children[i].name == d.source_data[k].IndicatorId || lookup_metafull_id[children[i].name] == d.source_data[k].IndicatorId) {
@@ -321,18 +327,29 @@ var generateCharts = function (d){
 		var ind_min = Math.min.apply(Math,ind_data.map(function(o){return o.IndicatorScore;}));
 		//Conditions used 
 		if (ind_max <=10 							//Obvious
-			&& (ind_min >= 0 || ind_min == -99) 	// > 0 is obvious. ==-99 is a code that is possible
+			&& (ind_min >= 0 || ind_min == -99) 	// > 0 is obvious. ==-99 is a code that occurs
 			&& ind_max > 1.1						//This is to rule out 0-1 indicators (such as HDI or percentages)
 			&& (record_temp.Parent || record_temp.OutputIndicatorName == 'INFORM')
+			&& record_temp.VisibilityLevel < 99
 			) {
 			record.name = record_temp.OutputIndicatorName;
 			record.lowest_level = 0;
-			record.format = 'decimal1';
-			record.level = record_temp.VisibilityLevel;
 			if (record.name.indexOf('SS1') > -1 || record.name.indexOf('SS3') > -1) {record.level = record.level + 1;};
 			record.children = record_temp.Children ? record_temp.Children.split(',') : [];
-			if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
-			record.group = !record_temp.Parent ? null : record_temp.Parent.replace('-TEMP','').replace('_AVG',''); // == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
+			
+			
+			for (m=0;m<children.length;m++){
+				if (children[m].parents.indexOf(record_temp.OutputIndicatorName) > -1) {
+					record.level = children[m].levels - children[m].parents.indexOf(record_temp.OutputIndicatorName) - 1;
+					record.group = children[m].parents[children[m].parents.indexOf(record_temp.OutputIndicatorName) + 1];
+					break;	
+				}
+			};
+			
+			//record.level = record_temp.VisibilityLevel;
+			//if (record.children == 'HA.NAT-TEMP') {record.children = ['HA.NAT.EQ','HA.NAT.TS','HA.NAT.FL','HA.NAT.TC','HA.NAT.DR'];}
+			//record.group = !record_temp.Parent ? null : record_temp.Parent.replace('-TEMP','').replace('_AVG',''); // == 'HA.NAT-TEMP' ? 'HA.NAT' : record_temp.Parent; //record_temp.OutputIndicatorName.substring(0,record_temp.OutputIndicatorName.lastIndexOf('.'));
+			//record.group = record_temp.Parent;
 			tables.push(record);
 		} else { // USE THIS FOR inspection of possibly weird variables
 			//console.log(record_temp.OutputIndicatorName);
@@ -466,15 +483,9 @@ var generateCharts = function (d){
 	// The wheredimension returns the unique identifier of the geo area
 	var whereDimension = cf.dimension(function(d) { return d.pcode; });
 	var whereDimension_tab = cf.dimension(function(d) { return d.pcode; });
-		
 	// Create the groups for these two dimensions (i.e. sum the metric)
 	var whereGroupSum = whereDimension.group().reduceSum(function(d) {return d[metric];});
-	var whereGroupSum_tab2 = whereDimension.group().reduceSum(function(d) {return d[metric];});
 	var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {return d[metric];});
-	//var whereGroupSum_scores = whereDimension.group().reduceSum(function(d) {if (d[metric]) {return d[metric];};});
-	//var whereGroupSum_tab_scores = whereDimension_tab.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
-	
-		
 	// group with all, needed for data-count
 	var all = cf.groupAll();
 	// get the count of the number of rows in the dataset (total and filtered)
@@ -556,23 +567,27 @@ var generateCharts = function (d){
 		
 		var risk_score = document.getElementById('risk_score_main');
 		if (risk_score) {
-			//risk_score.textContent = keyvalue.INFORM; //risk_score;
-			risk_score.setAttribute('class','component-score'); // ' + high_med_low('INFORM','INFORM'));					
+			risk_score.textContent = '';
+			risk_score.setAttribute('class','component-score'); 
+			risk_score.setAttribute('style','border:none');		
 		}
 		var vulnerability_score = document.getElementById('vulnerability_score_main');
 		if (vulnerability_score) {
-			//vulnerability_score.textContent = keyvalue.VU; //vulnerability_score;
-			vulnerability_score.setAttribute('class','component-score'); // ' + high_med_low('VU','VU'));				
+			vulnerability_score.textContent = '';
+			vulnerability_score.setAttribute('class','component-score'); 	
+			vulnerability_score.setAttribute('style','border:none');				
 		}
 		var hazard_score = document.getElementById('hazard_score_main');
 		if (hazard_score) {
-			//hazard_score.textContent = keyvalue.HA; //hazard_score;
-			hazard_score.setAttribute('class','component-score'); // ' + high_med_low('HA','HA'));				
+			hazard_score.textContent = '';
+			hazard_score.setAttribute('class','component-score'); 	
+			hazard_score.setAttribute('style','border:none');				
 		}
 		var coping_score = document.getElementById('coping_capacity_score_main');
 		if (coping_score) {
-			//coping_score.textContent = keyvalue.CC; //coping_capacity_score;
-			coping_score.setAttribute('class','component-score'); // ' + high_med_low('CC','CC'));				
+			coping_score.textContent = '';
+			coping_score.setAttribute('class','component-score');	
+			coping_score.setAttribute('style','border:none');					
 		}
 
 		
@@ -620,19 +635,19 @@ var generateCharts = function (d){
 				div.setAttribute('class','component-section');
 				a_prev.appendChild(div);
 				var div0 = document.createElement('div');
-				div0.setAttribute('class','col-md-2');
+				div0.setAttribute('class','col-md-2 col-sm-2 col-xs-2');
 				div.appendChild(div0);	
 				var img1 = document.createElement('img');
 				img1.setAttribute('style','height:20px');
 				img1.setAttribute('src',icon);
 				div0.appendChild(img1);
 				var div1 = document.createElement('div');
-				div1.setAttribute('class','col-md-4 component-label');
+				div1.setAttribute('class','col-md-4 col-sm-4 col-xs-4 component-label');
 				div1.setAttribute('onclick','map_coloring(\''+record.name+'\')');
 				div1.innerHTML = meta_label[record.name];
 				div.appendChild(div1);	
 				var div2 = document.createElement('div');
-				div2.setAttribute('class','col-md-5 bar-container');
+				div2.setAttribute('class','col-md-5 col-sm-5 col-xs-5 bar-container');
 				div.appendChild(div2);
 				var div1a = document.createElement('div');
 				div1a.setAttribute('class','component-score-small');
@@ -647,7 +662,7 @@ var generateCharts = function (d){
 				div2a1.setAttribute('style','width:0%;border:none'); //; background:' + color_cat(record.name)); //'+ width + '%');
 				div2a.appendChild(div2a1);
 				var div3 = document.createElement('div');
-				div3.setAttribute('class','col-sm-1 col-md-1 no-padding');
+				div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
 				div.appendChild(div3);
 				var button = document.createElement('button');
 				button.setAttribute('type','button');
@@ -708,14 +723,14 @@ var generateCharts = function (d){
 					//img1.setAttribute('src',icon);
 					//div0.appendChild(img1);
 					var div1 = document.createElement('div');
-					div1.setAttribute('class','col-md-6 component-label');
+					div1.setAttribute('class','col-md-6 col-sm-6 col-xs-6  component-label');
 					div1.setAttribute('style','padding-left: 5px');
 					div1.setAttribute('onclick','map_coloring(\''+record.name+'\')');
 					div1.innerHTML = meta_label[record.name];
 					//$compile(div1)($scope);
 					div.appendChild(div1);	
 					var div2 = document.createElement('div');
-					div2.setAttribute('class','col-md-5 bar-container');
+					div2.setAttribute('class','col-md-5 col-sm-5 col-xs-5 bar-container');
 					div.appendChild(div2);
 					var div1a = document.createElement('div');
 					div1a.setAttribute('class','component-score-small');
@@ -730,7 +745,7 @@ var generateCharts = function (d){
 					div2a1.setAttribute('style','width:0%; border:none');
 					div2a.appendChild(div2a1);
 					var div3 = document.createElement('div');
-					div3.setAttribute('class','col-sm-1 col-md-1 no-padding');
+					div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
 					div.appendChild(div3);
 					var button = document.createElement('button');
 					button.setAttribute('type','button');
@@ -759,6 +774,7 @@ var generateCharts = function (d){
 	var keyvalue = [];
 	var keyvalues1 = function(filters) {
 		
+		//console.log(filters);
 		var data_area = data_final.filter(function(obj) { return filters[0] == obj.pcode; });	
 		keyvalue = [];
 		tables.forEach(function(t) {
@@ -769,32 +785,21 @@ var generateCharts = function (d){
 		return keyvalue;
 		
 	};
-	
-	//COMPARISON VIEW
-	// var keyvalue2 = [];
-	// var keyvalues2 = function(filters) {
-		
-		// var data_area = data_final.filter(function(obj) { return filters[1] == obj.pcode; });	
-		// keyvalue2 = [];
-		// tables.forEach(function(t) {
-			// var key = t.name;
-			// keyvalue2[key] = data_area[0][key];
-		// });
-		// return keyvalue2;
-	// };
-	
+
 	var mapfilters_length = 0;
 	var rowfilters_length = 0;
-	var updateHTML = function(keyvalue) { //,keyvalue2) {
+	var updateHTML = function(filters) { //,keyvalue2) {
 		
 		//console.log(keyvalue);
 		var risk_score = document.getElementById('risk_score_main');
 		var vulnerability_score = document.getElementById('vulnerability_score_main');
 		var hazard_score = document.getElementById('hazard_score_main');
 		var coping_score = document.getElementById('coping_capacity_score_main');
-		if (mapfilters_length == 1 || rowfilters_length == 1) {
+		if (filters.length == 1) {
+			keyvalue = keyvalues1(filters);
+			
 			if (risk_score) {
-				risk_score.textContent = dec1Format(keyvalue.INFORM); //risk_score;
+				risk_score.textContent = dec1Format(keyvalue.INFORM); 
 				risk_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');		
 			}
 			if (vulnerability_score) {
@@ -810,25 +815,23 @@ var generateCharts = function (d){
 				coping_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');									
 			}
 			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = '#e2e7ee'; };
-			
-		//COMPARISON VIEW
-		//} else if (mapfilters_length == 2) {
+
 			
 		} else {
 			if (risk_score) {
-				risk_score.textContent = ''; //keyvalue.INFORM; //risk_score;
+				risk_score.textContent = ''; 
 				risk_score.setAttribute('style','border:none');									
 			}
 			if (vulnerability_score) {
-				vulnerability_score.textContent = null; //keyvalue.VU;
+				vulnerability_score.textContent = null; 
 				vulnerability_score.setAttribute('style','border:none');									
 			}
 			if (hazard_score) {
-				hazard_score.textContent = null; //keyvalue.HA;
+				hazard_score.textContent = null; 
 				hazard_score.setAttribute('style','border:none');									
 			}
 			if (coping_score) {
-				coping_score.textContent = null; //keyvalue.CC;
+				coping_score.textContent = null; 
 				coping_score.setAttribute('style','border:none');									
 			}
 			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = 'transparent'; };
@@ -839,54 +842,26 @@ var generateCharts = function (d){
 			
 			if (record.level >= 2) { 
 				
-				if (mapfilters_length == 1 || rowfilters_length == 1) {
+				if (filters.length == 1) {
 					
-					//COMPARISON VIEW
-					// var bar = document.getElementById('bar-'+record.name+'-2');
-					// if (bar) { var bar_par = bar.parentNode;}
-					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
-					// if (bar_par) {bar_par.remove();}
-					var width = keyvalue[record.name]*10; //dimensions_scores[record.name].top(1)[0].value.finalVal*10;
+					var width = keyvalue[record.name]*10;
 					var div1a = document.getElementById(record.name);
-					div1a.setAttribute('class','component-score-small'); // ' + high_med_low(record.name,record.scorevar_name));
+					div1a.setAttribute('class','component-score-small');
 					div1a.setAttribute('style','border:solid; border-width:1px; border-color:black');
 					
 					div1a.innerHTML = !keyvalue[record.name] ? '-' : (keyvalue[record.name] == 10 ? '10' : dec1Format(keyvalue[record.name]));
 					var div2a1 = document.getElementById('bar-'+record.name);
-					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
+					div2a1.setAttribute('class','score-bar ');
 					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
-					//div2a1.innerHTML = dec1Format(keyvalue[record.name]);
 				
-				//COMPARISON VIEW
-				// } else if (mapfilters_length == 2) {
-					
-					// var width = keyvalue2[record.name]*10;
-					// var div2 = document.getElementById('bar-'+record.name).parentNode.parentNode;
-					
-					// var div2a = document.createElement('div');
-					// div2a.setAttribute('class','component-scale');
-					// div2.appendChild(div2a);
-					// var div2a1 = document.createElement('div');
-					// div2a1.setAttribute('class','score-bar'); // + color_cat(record.name,record.scorevar_name));
-					// div2a1.setAttribute('id','bar-'+record.name+'-2');
-					// div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
-					// div2a.appendChild(div2a1);
-					
-					
 				} else {
 					
-					//COMPARISON VIEW
-					// var bar = document.getElementById('bar-'+record.name+'-2');
-					// if (bar) { var bar_par = bar.parentNode;}
-					// if (bar_par) { while (bar_par.firstChild) { bar_par.removeChild(bar_par.firstChild); }; };
-					// if (bar_par) {bar_par.remove();}
-					
 					var div1a = document.getElementById(record.name);
-					div1a.innerHTML = '';//null; //keyvalue[record.name];
+					div1a.innerHTML = '';
 					div1a.setAttribute('style','border:none');
 					var div2a1 = document.getElementById('bar-'+record.name);
-					div2a1.setAttribute('class','score-bar ');// + high_med_low(record.name,record.scorevar_name));
-					div2a1.setAttribute('style','width:0%'); //'+ width + '%');
+					div2a1.setAttribute('class','score-bar ');
+					div2a1.setAttribute('style','width:0%');
 					
 					
 				}
@@ -908,7 +883,6 @@ var generateCharts = function (d){
 	//define dc-charts (the name-tag following the # is how you refer to these charts in html with id-tag)
 	var mapChart = dc.leafletChoroplethChart('#map-chart');
 	var rowChart = dc.rowChart('#row-chart');
-	//var tableChart = dc.dataTable('#table-chart');
 		
 		
 		
@@ -924,6 +898,9 @@ var generateCharts = function (d){
 		cntrlIsPressed = false;
 	});
 	var cntrlIsPressed = false;		
+	var click_filter = true;
+	var coming_from_map = false;
+	var coming_from_tab = false;
 
 	//Set up the map itself with all its properties
 	mapChart
@@ -948,36 +925,43 @@ var generateCharts = function (d){
 			}
 		})
 		.featureKeyAccessor(function(feature){
-			return feature.properties.id; //feature.properties.pcode;
+			return feature.properties.id;
 		})
 		.popup(function(d){
-			return lookup[d.key].concat(' - ',meta_label[metric],': ',isNaN(d.value) ? 'No Data' : currentFormat(d.value));
+			return lookup[d.key].concat(' - ',meta_label[metric],': ',isNaN(d.value) ? 'No Data' : dec1Format(d.value));
 		})
 		.renderPopup(true)
 		.turnOnControls(true)
 		.legend(dc.leafletLegend().position('topleft'))
+
 		//Set up what happens when clicking on the map (popup appearing mainly)
 		.on('filtered',function(chart,filters){
-			if(!cntrlIsPressed) {
+			if (cntrlIsPressed) {
+				for (i=0;i<row_filters_old.length;i++){ if (chart.filters().indexOf(row_filters_old[i]) <= -1) { chart.filters().push(row_filters_old[i]); }; };
+			}
+			if(!cntrlIsPressed && click_filter) {
 				while (chart.filters().length > 1) {chart.filters().shift();} 
-			} 	
-			//map_filters = chart.filters();
+			}
 			map_filters = $.extend( [], chart.filters() );
-			//console.log(map_filters);
 			mapfilters_length = map_filters.length;
-			//keyvalue_filters = mapfilters_length == 0 ? [] : [map_filters[mapfilters_length-1]];
-			if (chart_show == 'map') {
+			if (chart_show == 'map' && coming_from_tab) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (row_filters_old.length == 1) {$('.filter-count')[i].innerHTML = lookup[row_filters_old[0]];} 
+					else if (row_filters_old.length > 1) { $('.filter-count')[i].innerHTML = row_filters_old.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};
+				updateHTML(row_filters_old);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];	
+				if (row_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; 
+				} else { resetbutton.style.visibility = 'hidden'; }
+			}
+			if (chart_show == 'map' && !coming_from_tab) {
 				for (var i=0;i<$('.filter-count').length;i++){
 					if (map_filters.length == 1) {$('.filter-count')[i].innerHTML = lookup[map_filters[0]];} 
 					else if (map_filters.length > 1) { $('.filter-count')[i].innerHTML = map_filters.length; }
 					else { $('.filter-count')[i].innerHTML = 'All '; }
-				};	
-			}
-			if (chart_show == 'map') {
-				if (mapfilters_length == 1) { var keyvalue = keyvalues1(map_filters); };
-				//if (mapfilters_length >= 1) { var keyvalue = keyvalues1(keyvalue_filters); };
-				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(map_filters);}
-				updateHTML(keyvalue); //,keyvalue2);
+				};
+				updateHTML(map_filters);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];	
 				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible'; 
 				} else { resetbutton.style.visibility = 'hidden'; }
@@ -994,13 +978,14 @@ var generateCharts = function (d){
 	barheight = 20;
 	var row_filters_old = [];
 	rowChart
-		.width($('#row-chart-container').width()-50)
+		.width($('#row-chart-container').width())
 		.height((barheight + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
-		.ordering(function(d) {return -d.value;})
+		.ordering(function(d) {return isNaN(d.value) ? 0 : -d.value; })
 		//.fixedBarHeight(15 + row_filters_old.length*5)
 		.fixedBarHeight(barheight)
+		.valueAccessor(function(d){ return isNaN(d.value) ? 0 : d.value; })
 		.colors(mapchartColors)
 		.colorCalculator(function(e){
 			if (meta_level[metric] > 3 || color_systems.indexOf(d.system) <= -1){
@@ -1016,67 +1001,75 @@ var generateCharts = function (d){
 		})
 		.label(function(d) {
 			if (d.value == 0) {return '';} else {
-				return lookup[d.key] ? lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
-				//return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
+				return lookup[d.key] ? (isNaN(d.value) ? "No Data" : dec1Format(d.value)).concat(' - ',lookup[d.key]) : dec1Format(d.value).concat(' - ',d.key);
 			}
 		})
-		.labelOffsetX(function(d) {return (rowChart.width()-150) * (d.value / 11) + 10;})
-		//.labelOffsetX(-10)
 		.title(function(d) {
-			return lookup[d.key] ? lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value)) : d.key.concat(' - ',currentFormat(d.value));
-			//return lookup[d.key].concat(' - ',isNaN(d.value) ? "No Data" : currentFormat(d.value));
+			return lookup[d.key] ? (isNaN(d.value) ? "No Data" : dec1Format(d.value)).concat(' - ',lookup[d.key]) : dec1Format(d.value).concat(' - ',d.key);
 		})
 		.on('filtered',function(chart,filters){
-			if(!cntrlIsPressed) {
+			if(!cntrlIsPressed && click_filter) {
 				while (chart.filters().length > 1) {chart.filters().shift();} 
 			} 
-			//row_filters = chart.filters();
 			row_filters = $.extend( [], chart.filters() );
 			rowfilters_length = row_filters.length;
-			//keyvalue_filters = rowfilters_length == 0 ? [] : [row_filters[rowfilters_length-1]];
-			if (chart_show == 'row') {
+			if (chart_show == 'row' && coming_from_map) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (map_filters_old.length == 1) { $('.filter-count')[i].innerHTML = lookup[map_filters_old[0]]; } 
+					else if (map_filters_old.length > 1) { $('.filter-count')[i].innerHTML = map_filters_old.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};	
+				updateHTML(map_filters_old);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];	
+				if (map_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			}
+			if (chart_show == 'row'  && !coming_from_map) {
 				for (var i=0;i<$('.filter-count').length;i++){
 					if (row_filters.length == 1  || row_filters_old.length == 1) { $('.filter-count')[i].innerHTML = rowfilters_length == 0 ? lookup[row_filters_old[0]] : lookup[row_filters[0]]; } 
 					else if (row_filters.length > 1 || row_filters_old.length > 1) { $('.filter-count')[i].innerHTML = Math.max(row_filters.length,row_filters_old.length); }
-					//if (row_filters.length == 1) { $('.filter-count')[i].innerHTML = lookup[row_filters[0]]; } 
-					//else if (row_filters.length > 1) { $('.filter-count')[i].innerHTML = row_filters.length; }
 					else { $('.filter-count')[i].innerHTML = 'All '; }
-				};	
-			}
-			if (chart_show == 'row') {
-				if (rowfilters_length == 1 || row_filters_old.length == 1) { var keyvalue = rowfilters_length == 0 ? keyvalues1(row_filters_old) : keyvalues1(row_filters); };
-				//if (rowfilters_length >= 1) { var keyvalue = keyvalues1(keyvalue_filters); };
-				//if (mapfilters_length == 2) {var keyvalue2 = keyvalues2(row_filters);}
-				updateHTML(keyvalue); //,keyvalue2);
+				};
+				rowfilters_length == 0 ? updateHTML(row_filters_old) : updateHTML(row_filters);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];	
 				if (row_filters.length > 0 || row_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
 			}
-			/* if (cntrlIsPressed && chart_show == 'row' && row_filters.length >= 1) {
-				//cntrlIsPressed = true;
-				mapChart.filter([row_filters]);
-				//rowChart.filter([row_filters]);
-				//cntrlIsPressed = false;
-				rowChart.redraw();
-			} */
+		})
+		.on('renderlet',function(chart,filters){
+			row_text(color_range);
 		})
 		.elasticX(false)
-		.x(d3.scale.linear().range([0,(rowChart.width()-150)]).domain([0,11]))
+		.x(d3.scale.linear().range([0,(rowChart.width())]).domain([0,11]))
 		.xAxis().scale(rowChart.x()).tickValues([])
 		;
-	//rowChart.margins().left = 200;
+	
+	row_text = function(color_range) {
+		for (var i=0;i<$('.dc-chart g.row').length;i++){
+			row = $('.dc-chart g.row')[i];
+			fill = row.getElementsByTagName('rect')[0].getAttribute('fill');
+			selection = row.getElementsByTagName('rect')[0].getAttribute('class');
+			if (fill) {
+				for (j=0;j<color_range.length;j++){
+					if (fill.toString() == color_range[j].HEX) { color_level = j; break};
+				};
+			}
+			text = row.getElementsByTagName('text')[0];
+			if (color_level <= 2 || selection == 'deselected' || !fill) { text.style.fill = 'black'; } else { text.style.fill = 'white';};
+		}
+	}
 	
 	sort = function(type) {
 		if (type === 'value') {
-			rowChart.ordering(function(d) {return -d.value;});
-			rowChart.redraw();
+			rowChart.ordering(function(d) {return isNaN(d.value) ? 0 : -d.value; });
 		} else if (type == 'name') {
-			//mapChart.filter([row_filters]);
-			rowChart.ordering(function(d) {if (d.value == 0) {return 'zzz';} else {return d.key;};});
-			rowChart.redraw();
+			rowChart.ordering(function(d) {if (d.value == 0) {return 'zzz';} else {return lookup[d.key];};});
 		}
-		
+		rowChart.redraw();
+		row_text(color_range);
 	}
 	
+
+
+
 	///////////////////////////////
 	// SIDEBAR: INDICATOR CHANGE //
 	///////////////////////////////
@@ -1123,18 +1116,18 @@ var generateCharts = function (d){
 			})
 		;
 		//dc.redrawAll();
-		//console.log(row_filters);
-		//console.log(map_filters_old);
+		
 		if (chart_show == 'row' && row_filters.length >= 1 && map_filters_old.length >= 1) {
 			row_filters_old = row_filters;
-			cntrlIsPressed = true;
-			mapChart.filter([row_filters]);
+			click_filter = false;
+			//mapChart.filter([row_filters]);
 			rowChart.filter([row_filters]);
-			cntrlIsPressed = false;
+			click_filter = true;
 			rowChart.redraw();
 		} else {
 			dc.redrawAll();
 		}
+		row_text(color_range);
 		
 		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
@@ -1157,9 +1150,6 @@ var generateCharts = function (d){
 		//document.getElementById('zoomin_icon').style.visibility = 'hidden';
 	};
 	
-	
-	
-	
 	/////////////////////////////
 	// SIDEBAR: METADATA POPUP //
 	/////////////////////////////		
@@ -1169,7 +1159,6 @@ var generateCharts = function (d){
 		//console.log(id);
 		metric = id;
 		metric_label = meta_label[metric];
-		//metric_icon = 'img/' + metric.substring(0,6) + '.png';
 		if (groups.indexOf(metric.substring(0,6)) > -1) {
 			metric_icon = 'img/' + metric.substring(0,6) + '.png';
 		} else {
@@ -1201,28 +1190,22 @@ var generateCharts = function (d){
 			for (var i=0;i<$('.metric_desc').length;i++){ $('.metric_desc')[i].innerHTML = metric_desc; };
 		} else if (lookup_indicator[metric].length > 1) {
 			for (var i=0;i<$('.metric_indicator').length;i++){ 
-				//$('.metric_indicator')[i].innerHTML = '<li>' + lookup_indicator_label[metric][0] + '</li>';
 				for (var j=0;j<lookup_provider[metric].length;j++) {
 					$('.metric_indicator')[i].innerHTML += '<li>' + lookup_indicator_label[metric][j] + '</li>';
 				}; 
 			}
 			for (var i=0;i<$('.metric_provider').length;i++){ 
-				//$('.metric_provider')[i].innerHTML = '<li>' + lookup_provider[metric][0] + '</li>';
 				for (var j=0;j<lookup_provider[metric].length;j++) {
 					$('.metric_provider')[i].innerHTML += '<li>' + lookup_provider[metric][j] + '</li>';
 				}; 
 			}
 			for (var i=0;i<$('.metric_source').length;i++){ 
-				//$('.metric_source')[i].innerHTML = '<li>' + lookup_link[metric][0] + '</li>';
 				for (var j=0;j<lookup_provider[metric].length;j++) {
 					$('.metric_source')[i].innerHTML += '<li>' + lookup_link[metric][j] + '</li>';
 					$('.metric_source')[i].href = undefined; 
 				}; 
-				//$('.metric_source')[i].innerHTML = metric_source; 
-				//$('.metric_source')[i].href = metric_source; 
 			};
 			for (var i=0;i<$('.metric_desc').length;i++){ 
-				//$('.metric_desc')[i].innerHTML = '<li>' + lookup_description[metric][0] + '</li>';
 				for (var j=0;j<lookup_provider[metric].length;j++) {
 					$('.metric_desc')[i].innerHTML += '<li>' + lookup_description[metric][j] + '</li>';
 				}; 
@@ -1233,12 +1216,10 @@ var generateCharts = function (d){
 		$('#infoModal').modal('show');
 	};
 	
-	
 	////////////////////////////////
 	// SIDEBAR: ACCORDION CLOSING //
 	////////////////////////////////
 	
-	// ACCORDION AUTOMATIC CLOSING
 	// Make sure that when opening another accordion-panel, the current one collapses	
 	// LEVEL 1
 	var acc = document.getElementsByClassName('accordion-header level1');
@@ -1332,58 +1313,64 @@ var generateCharts = function (d){
 		}
 	}
  	
-	
 	///////////////////////////////////
 	// SIDEBAR: MAP & TABULAR SWITCH //
 	///////////////////////////////////
 	
-	
 	//Switch between MAP and TABULAR view
     mapShow = function() {
 		
-		chart_show = 'map';
-		//Hide row-chart
-		$('#row-chart-container').hide();  
-		//Transfer row-chart filters to map (to make sure that selection is carried)
-		cntrlIsPressed = true;
-		//if (row_filters.length == 0) {row_filters = $.extend( [], map_filters );};
-		mapChart.filter([row_filters]); 
-		//Show map-chart
-		$('#map-chart').show();
-		
+		row_filters_old = $.extend( [], row_filters );
 		//Zoom to selected countries in row-chart
-		if (row_filters.length == 0) {
+		if (row_filters_old.length == 0) {
 			zoomToGeom(d.Districts);
 		} else {
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){
-				if (row_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+				if (row_filters_old.indexOf(d.Districts.features[i].properties.id) > -1) {
 					districts_temp.features.push(d.Districts.features[i]);
 				}
 			}
 			zoomToGeom(districts_temp);
-			//Undo row-chart filters (which are transfered to the map already)
-			rowChart.filter(null);
 		}
-		cntrlIsPressed = false;
+		
+		if (chart_show == 'row') {
+			chart_show = 'map';
+			$('#row-chart-container').hide();  
+			$('#map-chart').show();
+			
+			click_filter = false;
+			coming_from_tab = true;
+			rowChart.filter(null);
+			mapChart.filter([row_filters]);
+			rowChart.filter(null);
+			click_filter = true;
+			coming_from_tab = false;
+		}
+		
+		
+		
 	}
 	
 	map_filters_old = [];
 	tabularShow = function() {
+		
 		chart_show = 'row';
-		//if (map_filters !== null) {rowChart.filter([map_filters]);} else {rowChart.filter(null);}
-		cntrlIsPressed = true;
-		map_filters_old = map_filters;
-		rowChart.filter([map_filters]);
-		mapChart.filter(null);
-		cntrlIsPressed = false;
-		//row_filters = map_filters;
 		$('#map-chart').hide();
-		//$('#mapPopup').hide();
 		document.getElementById('row-chart-container').style.visibility = 'visible';
 		$('#row-chart-container').show();
-		//$('#table-chart').show();
+		
+		click_filter = false;
+		coming_from_map = true;
+		map_filters_old = $.extend( [], map_filters );
+		rowChart.filter([map_filters]);
+		mapChart.filter(null);
+		mapChart.filter([map_filters_old]);
+		rowChart.redraw();
+		click_filter = true;
+		coming_from_map = false;
+		
 	}
 	
 	///////////////////////////
@@ -1396,7 +1383,8 @@ var generateCharts = function (d){
 		map_filters_old = [];
 		row_filters_old = [];
 		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };	
-		zoomToGeom(d.Districts);
+		if (chart_show == 'map') {zoomToGeom(d.Districts);};
+		if (chart_show == 'row') {row_text(color_range);};
 	}
 	
 
@@ -1477,9 +1465,7 @@ var generateCharts = function (d){
 	//Export to GEOJSON
 	link_data = function() {
 		
-		//console.log(country_code);
-		if (country_code == '_INFORM'){
-			//var url = 'http://www.inform-index.org/INFORM-2017-Results-and-data';
+		if (d.system == 'INFORM'){
 			var url = 'http://www.inform-index.org/Results/Global';
 		} else {
 			var url = 'http://www.inform-index.org/Subnational/';
@@ -1489,9 +1475,6 @@ var generateCharts = function (d){
 		excel.click();
 	}
 	//http://www.inform-index.org/LinkClick.aspx?fileticket=K9lWe0MOKGQ%3d&tabid=147&portalid=0&mid=583
-	
-	
-	
 	
 	
 	//////////////////////////////////
@@ -1616,6 +1599,9 @@ var generateCharts = function (d){
 	var zoom_child = $('.leaflet-control-zoom')[0];
 	var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
 	zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
+	
+
+	row_text(color_range);
 		
 	// cntrlIsPressed = true;
 	// map_filters_old = map_filters;

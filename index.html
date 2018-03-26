@@ -37,58 +37,64 @@
 			<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
 				<div class="navbar-header">
-					<a class="navbar-brand" href="www.inform-index.org">
+					<a class="navbar-brand" href="http://www.inform-index.org" target="_blank">
 						<img src="img/inform_logo.png" class="logo">
-						Dashboard
+						<!-- Dashboard -->
 					</a>
+					<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button> -->
 				</div>
-				<ul class="nav navbar-top-links navbar-right">
-					<li class="dropdown">
-						<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
-							<img class="export-icon" src="img/icon-download-options.svg" alt="download options">
-								  Data Access
-							<i class="fa fa-angle-down export-btn-arrow"></i>
-						</a>
-						<ul class="dropdown-menu export-items">
-							<li>
-								<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (incl. source data)</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a href="http://www.inform-index.org/Results/Global" target="_blank" id="excel" onclick="link_data()">Excel (incl. source data)</a>
-							</li>
-							<li class="divider"></li>
-							<li>
-								<a target="_blank" id="download" onclick="export_csv()">CSV (dashboard data)</a>
-							</li>
-							<!-- <li class="divider"></li>
-							<li>
-								<a onclick="export_json()">JSON (for dev. only)</a>
-							</li> -->
-							<li class="divider"></li>
-							<li>
-								<a onclick="share_URL()">Share current settings through URL</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-				<ul class="nav navbar-top-links navbar-left">
-					<li class="dropdown">
-						<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
-							Choose Model
-							<i class="fa fa-angle-down export-btn-arrow"></i>
-						</a>
-						<ul class="dropdown-menu" id="model-items">
-							<li class="dropdown-submenu">
-								<a class="dropdown-toggle export-button submenu-item models1" data-toggle="dropdown" href="#">
-									INFORM Global
-									<i class="fa fa-angle-right export-btn-arrow" style="float:right"></i>
-								</a>
-								<ul class="dropdown-menu" id="global-model-items"></ul>
-							</li>
-						</ul>
-					</li>
-				</ul>
+				<!-- <div id="menu-buttons"> -->
+					<ul class="nav navbar-top-links navbar-right">
+						<li class="dropdown">
+							<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+								<img class="export-icon" src="img/icon-download-options.svg" alt="download options">
+									  Data Access
+								<i class="fa fa-angle-down export-btn-arrow"></i>
+							</a>
+							<ul class="dropdown-menu export-items">
+								<li>
+									<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (incl. source data)</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="http://www.inform-index.org/Results/Global" target="_blank" id="excel" onclick="link_data()">Excel (incl. source data)</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a target="_blank" id="download" onclick="export_csv()">CSV (dashboard data)</a>
+								</li>
+								<!-- <li class="divider"></li>
+								<li>
+									<a onclick="export_json()">JSON (for dev. only)</a>
+								</li> -->
+								<li class="divider"></li>
+								<li>
+									<a onclick="share_URL()">Share current settings through URL</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-top-links navbar-left">
+						<li class="dropdown">
+							<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
+								 <img class="export-icon" src="img/model.svg" alt="model icon">
+								Choose Model
+								<i class="fa fa-angle-down export-btn-arrow"></i>
+							</a>
+							<ul class="dropdown-menu" id="model-items">
+								<li class="dropdown-submenu">
+									<a class="dropdown-toggle export-button submenu-item models1" data-toggle="dropdown" href="#">
+										INFORM Global
+										<i class="fa fa-angle-right export-btn-arrow" style="float:right"></i>
+									</a>
+									<ul class="dropdown-menu" id="global-model-items"></ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				<!-- </div> -->
 			</nav>
 		
 			<div class="content-wrapper">
@@ -101,12 +107,13 @@
 					<!-- start: zoom navigation -->
 					<div class="zoom-level-nav">
 						<div class="btn-group zoom-level" role="group">
-							<button style="width:49%; float:left" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
+							<button style="width:43%; float:left; margin-right:8px" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
 								<span class="button-label">Map View</span>
 							</button>
-							<button style="width:49%; float:right;" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
+							<button style="width:43%; float:left;" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
 								<span class="button-label">Tabular View</span>
 							</button>
+							<div class="collapse-button"></div>
 						</div>
 						<div class="btn-group zoom-level" role="group">
 							<button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary">
@@ -242,43 +249,8 @@
 								</ul>
 							</div>
 						</div>
-						
-						<!-- 
-						<div class="zoom-level-nav">
-							<div class="btn-group zoom-level" role="group">
-								<button style="left: 5%; width:44%; float:left" id="level2" type="button" class="btn btn-secondary btn-active " onclick="sort('name')">
-									<span class="button-label">Sort by area name</span>
-								</button>
-								<button style="right: 5%; width:44%; float:right;" id="level2" type="button" class="btn btn-secondary btn-active " onclick="sort('value')">
-									<span class="button-label">Sort by value</span>
-								</button>
-							</div>
-						</div> -->
 						<div id="row-chart" style="position:absolute; left: 0%; width:100%; height:95%;overflow:auto;background-color:#fff">
 					</div>
-					<!-- <table class='table table-hover table-striped table-bordered' id='table-chart' style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff">
-					  <thead>
-						<tr class='table-header'>
-						</tr>
-					  </thead>
-					</table> -->
-					<!-- <div id="table-chart" style="position:absolute; left: 24%; width:76%; height:100%;overflow:auto;background-color:#fff"></div> -->
-					
-					
-					
-
-					<!-- the above div and inline styles are only for placement -->
-					<!-- <div id="mapPopup" class="map-popup" style="position:absolute;">
-						<div class="popup-header">
-							<span class="name_popup">{{name_popup}}</span>
-						</div>
-						<div class="popup-score">
-						  <div class="score-label"><span class="metric_label">{{metric_label}}</span></div>
-						  <span class="value_popup">{{value_popup}}</span>
-						</div>
-					  </div> -->
-
-
 				</div>
 				<!-- end: map -->
 
@@ -298,7 +270,7 @@
 							</span>
 							<h3 class="modal-title"><span class="metric_label"><div></div></span></h3>
 						</div>
-						<div class="modal-body">
+						<div class="modal-body" style="word-break:break-all">
 							<h5><b>Source Indicator:</b> <span class="metric_indicator"></span></h5><br>
 							<h5><b>Provider:</b> <span class="metric_provider"></span></h5><br>
 							<h5><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h5><br>
@@ -329,11 +301,11 @@
 			<!-- end: URL modal -->
 			
 			<!-- start: phone device message -->
-			<div class="mobile-message">
-				<p>For best experience please use a tablet device, laptop or desktop computer.
-					<a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a>
-				</p>
-			</div>
+			<!-- <div class="mobile-message"> -->
+				<!-- <p>For best experience please use a tablet device, laptop or desktop computer. -->
+					<!-- <a href="/#!/" class="btn link-button" role="button">Dashboard Homepage</a> -->
+				<!-- </p> -->
+			<!-- </div> -->
 			<!-- end: phone device message -->
 
 			<!-- start: IE message -->

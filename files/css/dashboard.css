@@ -38,7 +38,7 @@ body {
 }
 .sidebar {
   /* bottom: 0; */
-  height: 95%;	
+  height: 100%;
   overflow: auto;
   padding: 20px;
   position: fixed;
@@ -562,10 +562,9 @@ a.handle:hover {
     display: none;
   }
 }
-/* .dc-chart g.row text {
+.dc-chart g.row text {
     fill: black;
-} */
-.dc-chart svg g g.axis { display: none; }
+}
 
 .big-icon {
     font-size: 24px;
@@ -729,10 +728,10 @@ body {
 
 /* chart */
 
-/* #row-chart-container{
+#row-chart-container{
   margin-left: -50px;
   width: 100%;
-} */
+}
 @media only screen and (max-width: 1024px){
   .leaflet-left .leaflet-control{
     margin-top: 50px;

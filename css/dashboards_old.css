@@ -11,7 +11,10 @@ body {
 	overflow:hidden;
     font-family: 'Open Sans', sans-serif;
 }
-
+/* .content {
+  margin-top:50px;
+  overflow: hidden;
+} */
 .container-fluid {
   margin-top:50px;
   padding: 0;
@@ -38,26 +41,15 @@ body {
 }
 .sidebar {
   /* bottom: 0; */
-  height: 95%;	
+  height: 95%;
   overflow: auto;
   padding: 20px;
   position: fixed;
+  /* top: 51px; */
   width: 380px;
   z-index: 2;
   background-color: #F3EEE3;
 }
-@media only screen and (max-width: 1024px){
-  .sidebar{
-    height: 100%;
-  }
-}
-
-@media only screen and (max-width: 767px){
-  .sidebar{
-    height: 100%;
-  }
-}
-
 .map-wrapper {
   background: #accfff;
   float: right;
@@ -526,6 +518,94 @@ a.handle:hover {
   width: 15px;
 }
 
+
+
+
+/* responsive styles */
+@media only screen and (max-width: 768px) {
+  .sidebar {
+    padding: 10px;
+    position: fixed;
+    top: 51px;
+    width: 250px;
+  }
+  .component-scale {
+    margin-left: 5px;
+  }
+  .slide-out-tab-province,
+  .slide-out-tab-legend {
+    left: -380px !important;
+  }
+  .slide-out-tab-province.open,
+  .slide-out-tab-legend.open {
+    left: -130px !important;
+  }
+  .zoom-level-nav {
+    left: 290px;
+    width: 60%;
+  }
+  .zoom-level .button-label {
+    font-size: 10px;
+  }
+  .btn-secondary {
+    display: block;
+    text-align: center;
+  }
+  .btn-secondary i {
+    display: none;
+  }
+}
+
+/* mobile message */
+.mobile-message {
+  display: none;
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (max-width : 480px) {
+  .map-wrapper,
+  .sidebar,
+  .navbar-right {
+    display: none;
+  }
+  .mobile-message {
+    background: #0f4882;
+    bottom: 0;
+    color: #ffffff;
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    text-align: center;
+    top: 0;
+    width: 100%;
+  }
+  .mobile-message p {
+    font-size: 25px;
+    padding: 20px;
+    position: absolute;
+    top: 100px;
+  }
+  .mobile-message .link-button {
+    margin-top: 30px;
+    padding: 10px;
+  }
+}
+
+
+/* Own CSS Jannis */
+
+
+/*Give the second column of all data tables a fixed width so that the third column starts at a fixed position */
+/* .table-dashboard > thead > tr > th:nth-child(2),
+.table-dashboard > tbody > tr > th:nth-child(2),
+.table-dashboard > tfoot > tr > th:nth-child(2),
+.table-dashboard > thead > tr > td:nth-child(2),
+.table-dashboard > tbody > tr > td:nth-child(2),
+.table-dashboard > tfoot > tr > td:nth-child(2) {
+  width: 150px;
+} */
+
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
 .leaflet-clickable {
 	fill-opacity: .6;
@@ -535,6 +615,12 @@ a.handle:hover {
 	fill-opacity: .6;
 }
 
+.leaflet-control-zoom {
+	/* top: 90%; */
+}
+/* .legend {
+	 left:380px;
+} */
 
 #loading-bar-spinner {
   display: block;
@@ -550,17 +636,13 @@ a.handle:hover {
 }
 
 .hdx-3w-info {
+	/* position: relative; */
 	float: left;
 	padding:5px;
     background-color:white;
     background: rgba(255,255,255,0.8);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
-}
-@media only screen and (max-width: 1024px){
-  .hdx-3w-info{
-    display: none;
-  }
 }
 /* .dc-chart g.row text {
     fill: black;
@@ -640,6 +722,9 @@ body {
 .accordion h1:not(:last-of-type) {
   border-bottom: 1px dotted #1abc9c;
 } 
+/*  .accordion div, .accordion p {
+  display: none;
+}  */
 .accordion h2 {
   padding: 5px 25px;
   background-color: #1abc9c;
@@ -679,81 +764,8 @@ body {
   display: block;
 }
 
-
-
-.dropdown-submenu {
-    position: relative;
+#model-items,#global-model-items{
+	min-width: 220px;
 }
 
-.dropdown-submenu .dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: -1px;
-}
-
-.navbar-toggler{
-  background-color: #ffffff;
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
-  background-size: 55% 55%;
-  background-repeat: no-repeat;
-  background-position: center center;
-  border: 2px solid #eeeeee;
-  height: 45px;
-  margin-bottom: 3px;
-  position: absolute;
-  top: 3px; 
-  right: 3px;
-  width: 45px;
-}
-
-
-.collapse-button{
-  background-color: #d9dcdc;
-  background-image:
-  url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImNvbGxhcHNlZG93biIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IgoJIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojOTUxMzAxO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTI1NiwyMTMuN0wyNTYsMjEzLjdMMjU2LDIxMy43TDgxLjUsMzgwLjRjLTQuMyw0LjItMTEuNCw0LjEtMTUuOC0wLjJsLTMwLjUtMzBjLTQuNC00LjMtNC41LTExLjMtMC4yLTE1LjUKCWwyMTMuMy0yMDMuNmMyLjItMi4yLDUuMi0zLjIsOC4xLTNjMy0wLjEsNS45LDAuOSw4LjEsM2wyMTIsMjA0LjhjNC4zLDQuMiw0LjIsMTEuMi0wLjIsMTUuNWwtMzAuNywyOS44CgljLTQuNCw0LjMtMTEuNSw0LjQtMTUuOCwwLjJMMjU2LDIxMy43eiIvPgo8L3N2Zz4K");
-  border: 2px solid #d9dcdc;
-  float: right;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: 20px 20px;
-  height: 33px;
-  padding: 10px;
-  width: 33px;
-}
-.collapse-button.up{
-    background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImNvbGxhcHNlZG93biIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IgoJIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojOTUxMzAxO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTI1NiwyOTguNEwyNTYsMjk4LjRMMjU2LDI5OC40bDE3NC0xNjcuM2M0LjMtNC4yLDExLjQtNC4xLDE1LjgsMC4ybDMwLjYsMjkuOWM0LjQsNC4zLDQuNSwxMS4zLDAuMiwxNS41CglMMjY0LjEsMzgxYy0yLjIsMi4yLTUuMiwzLjItOC4xLDNjLTMsMC4xLTUuOS0wLjktOC4xLTNMMzUuMiwxNzYuOWMtNC4zLTQuMi00LjItMTEuMiwwLjItMTUuNUw2NiwxMzEuNWM0LjQtNC4zLDExLjUtNC40LDE1LjgtMC4yCglMMjU2LDI5OC40eiIvPgo8L3N2Zz4K");
-}
-.export-button.models{
-  padding-left: 38px;
-}
-
-/* chart */
-
-/* #row-chart-container{
-  margin-left: -50px;
-  width: 100%;
-} */
-@media only screen and (max-width: 1024px){
-  .leaflet-left .leaflet-control{
-    margin-top: 50px;
-  }
-  .leaflet-right{
-    left: 10px;
-    right: auto;
-  }
-}
-@media only screen and (max-width: 767px){
-  .export-btn-arrow{
-    float: right;
-  }
-}
-
-.modal.in .modal-dialog{
-  width: 95%;
-}
-
-
-#model-items,#global-model-items{		
-  min-width: 220px;		
-}
 

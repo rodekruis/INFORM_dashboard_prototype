@@ -1382,6 +1382,7 @@ var generateCharts = function (d){
 		dc.redrawAll();	
 		map_filters_old = [];
 		row_filters_old = [];
+		updateHTML(row_filters_old);
 		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };	
 		if (chart_show == 'map') {zoomToGeom(d.Districts);};
 		if (chart_show == 'row') {row_text(color_range);};

@@ -1,4 +1,5 @@
 /* NAVBAR CSS, previously in dashboards.css */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
 
 /* header styles*/
 .navbar-inverse {
@@ -123,5 +124,17 @@
 @media only screen and (min-width: 767px){
   .navbar-toggler{
     display: none;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .button-nav .collapse{
+    /* display:none; */
+  }
+  .button-nav .collapse.in{
+    /* display:block; */
+  }
+  .button-nav{
+    display:none;
   }
 }

@@ -45,7 +45,7 @@
 						<span class="navbar-toggler-icon"></span>
 					</button>
 				</div>
-				<div id="menu-buttons" aria-expanded="false">
+				<div id="menu-buttons" aria-expanded="false" class="button-nav">
 					<ul class="nav navbar-top-links navbar-right">
 						<li class="dropdown">
 							<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
@@ -108,13 +108,13 @@
 				<!-- start: zoom navigation -->
 				<div class="zoom-level-nav map-views">
 					<div class="btn-group zoom-level" role="group">
-						<button style="width:43%; float:left; margin-right:8px" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
+						<button type="button" class="btn btn-tab btn-map-view" onclick="mapShow()">
 							<span class="button-label">Map View</span>
 						</button>
-						<button style="width:43%; float:left;" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
+						<button type="button" class="btn btn-tab btn-tabular" onclick="tabularShow()">
 							<span class="button-label">Tabular View</span>
 						</button>
-						<div class="collapse-button" data-toggle="collapse" data-target="#test" aria-expanded="false"></div>
+						<div class="collapse-button" data-toggle="collapse" data-target="#cb" aria-expanded="false">View</div>
 					</div>
 					<div class="btn-group zoom-level" role="group">
 						<button id="indicator-button" style="background-color: #951301;margin-top:3px; color:white; width:100%" type="button" class="btn btn-secondary">
@@ -141,7 +141,7 @@
 				<!-- end: moved tabs -->
 
 				<!-- start: sidebar -->
-				<div class="navbar-default sidebar collapse in" role="navigation" id="test">
+				<div class="navbar-default sidebar" role="navigation" id="cb">
 
 
 				<div>
@@ -241,15 +241,15 @@
 
 						<div class="zoom-level-nav sort-nav">
 							<div class="btn-group zoom-level" role="group">
-								<ul style="left: 15px;" type="button" class="btn btn-secondary btn-active ">
+								<ul type="button" class="btn btn-secondary btn-active ">
 									<div class="dropdown">
 										<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 												  Sort by ...
 											<i class="fa fa-angle-down export-btn-arrow"></i>
 										</a>
-										<ul class="dropdown-menu submenu-items dropdown-menu-right">
+										<ul class="dropdown-menu submenu-items">
 											<li>
-												<a class="submenu-item" onclick="sort('value')" role="button">Indicator Score</a>
+												<a class="	submenu-item" onclick="sort('value')" role="button">Indicator Score</a>
 											</li>
 											<li>
 												<a class="submenu-item" onclick="sort('name')" role="button">Area name</a>

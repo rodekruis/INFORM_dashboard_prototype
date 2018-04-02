@@ -838,7 +838,7 @@ body {
   }
   .collapse-button[aria-expanded="true"]::before{
     background-image: none;
-    content: "show";
+    content: "view";
     width: 100%;
     text-align: center;
   }

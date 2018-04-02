@@ -114,7 +114,8 @@
 						<button type="button" class="btn btn-tab btn-tabular" onclick="tabularShow()">
 							<span class="button-label">Tabular View</span>
 						</button>
-						<div class="collapse-button" data-toggle="collapse" data-target="#cb" aria-expanded="false">View</div>
+						<div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo">
+						</div>
 					</div>
 					<div class="btn-group zoom-level" role="group">
 						<button id="indicator-button" style="background-color: #951301;margin-top:3px; color:white; width:100%" type="button" class="btn btn-secondary">
@@ -141,8 +142,7 @@
 				<!-- end: moved tabs -->
 
 				<!-- start: sidebar -->
-				<div class="navbar-default sidebar" role="navigation" id="cb">
-
+				<div class="navbar-default sidebar-wrapper collapse" role="navigation" id="demo">
 
 				<div>
 
@@ -236,7 +236,7 @@
 								<!-- <div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div> -->
 							<!-- </button> -->
 					<!-- </div> -->
-					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
+					<div id="map-chart" style="position:absolute; width:100%; height:100%;"></div>
 					<div id="row-chart-container" style="position:absolute; width:100%; height:100%;background-color:#fff; visibility:hidden">
 
 						<div class="zoom-level-nav sort-nav">
@@ -370,6 +370,7 @@
 
 	<!--Application JavaScript Files-->
 	<script type="text/javascript" src="bower_components/build/bower/jquery/js/jquery.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 	<script type="text/javascript" src="bower_components/build/bower/crossfilter/js/crossfilter.min.js"></script>
 	<script type="text/javascript" src="bower_components/build/bower/lodash/js/lodash.underscore.min.js"></script>
 	<script type="text/javascript" src="bower_components/build/bower/bootstrap/js/bootstrap.min.js"></script>
@@ -387,6 +388,18 @@
 	<!-- <script type="text/javascript" src="bower_components/build/bower/d3-tip/js/index.js"></script> -->
 	<script type="text/javascript" src="bower_components/build/custom/google-spreadsheets-parser/dist/googleSpreadsheetsParser.js"></script>
 	<script type="text/javascript" src="js/site.js"></script>
+	<script>
+	$('.sidebar-wrapper.collapse').collapse('show');
+	$('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+	// $('.sidebar-wrapper.mobile.collapse').collapse('show');
 
+	$(document).ready(function () {
+        if($(window).width() < 768) {
+           $(".sidebar-wrapper").addClass("mobile");
+           // $("#otherDiv").removeClass("myClass");
+        }
+    });
+
+	</script>
 </body>
 </html>

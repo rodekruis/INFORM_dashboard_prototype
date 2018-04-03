@@ -823,7 +823,7 @@ body {
   float: right;
   background-position: center center;
   background-repeat: no-repeat;
-  background-size: 20px 20px;
+  /* background-size: 20px 20px; */
   height: 34px;
   padding: 10px;
   width: 43px;
@@ -959,6 +959,9 @@ body {
   overflow: auto;
   position: absolute;
   margin-left: 380px;
+  width: 80%;
+  width: -webkit-calc(100% - 370px);
+  width: -moz-calc(100% - 370px);
   width: calc(100% - 370px);
 }
 .tabular{

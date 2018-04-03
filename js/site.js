@@ -50,6 +50,7 @@ spinner_stop = function() {
 // FUNCTION TO INITIALIZE DASHBOARD //
 //////////////////////////////////////
 
+var first_load = true;
 load_dashboard = function(inform_model,workflow_id) {
 
 	spinner_start();
@@ -93,7 +94,7 @@ load_dashboard = function(inform_model,workflow_id) {
 	var workflow_api = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + inform_model;
 
 	//TEMPORARY
-	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
+	if (inform_model.indexOf('_') > -1) {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
 	d3.json(setting == 'api' ? workflow_api : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
         d.workflow_info = workflow_info;                                
 		d.system = workflow_info[0].System.toUpperCase();
@@ -151,9 +152,10 @@ load_dashboard = function(inform_model,workflow_id) {
 							spinner_stop();
 
 							//Check if browser is IE (L_PREFER_CANVAS is a result from an earlier IE-check in layout.server.view.html)
-							if (typeof L_PREFER_CANVAS !== 'undefined') {
+							if (typeof L_PREFER_CANVAS !== 'undefined' && first_load == true) {
 								$('#IEmodal').modal('show');
 							}
+                            first_load = false;
 
 						});
 					});
@@ -748,18 +750,20 @@ var generateCharts = function (d){
 					var div3 = document.createElement('div');
 					div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
 					div.appendChild(div3);
-					var button = document.createElement('button');
-					button.setAttribute('type','button');
-					button.setAttribute('class','btn-modal');
-					button.setAttribute('data-toggle','modal');
-					button.setAttribute('onclick','info(\'' + record.name + '\')');
-					div3.appendChild(button);
-					//$compile(button)($scope);
 					if (record.lowest_level == 1) {
+                        var button = document.createElement('button');
+                        button.setAttribute('type','button');
+                        button.setAttribute('class','btn-modal');
+                        button.setAttribute('data-toggle','modal');
+                        button.setAttribute('onclick','info(\'' + record.name + '\')');
+                        div3.appendChild(button);
+                        var div3a = document.createElement('div');
+                        div3a.setAttribute('style','height:17px;width:auto');
+                        button.appendChild(div3a);
 						var img3 = document.createElement('img');
 						img3.setAttribute('src','img/icon-popup.svg');
-						img3.setAttribute('style','height:17px');
-						button.appendChild(img3);
+						img3.setAttribute('style','height:100%');
+						div3a.appendChild(img3);
 					}
 				}
 			}
@@ -976,15 +980,14 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
     
-	barheight = 20;
+    barheight = 20;
 	var row_filters_old = [];
 	rowChart
-		.width($('#row-chart-container').width() - ($('#demo').width() + 20))
+        .width($('#tabular-wrapper').width())
 		.height((barheight + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
 		.ordering(function(d) {return isNaN(d.value) ? 0 : -d.value; })
-		//.fixedBarHeight(15 + row_filters_old.length*5)
 		.fixedBarHeight(barheight)
 		.valueAccessor(function(d){ return isNaN(d.value) ? 0 : d.value; })
 		.colors(mapchartColors)
@@ -1042,15 +1045,17 @@ var generateCharts = function (d){
 		.x(d3.scale.linear().range([0,(rowChart.width())]).domain([0,11]))
 		.xAxis().scale(rowChart.x()).tickValues([])
 		;
-
+    
 	row_text = function(color_range) {
+        var color_level;
 		for (var i=0;i<$('.dc-chart g.row').length;i++){
-			row = $('.dc-chart g.row')[i];
-			fill = row.getElementsByTagName('rect')[0].getAttribute('fill');
+            row = $('.dc-chart g.row')[i];
+            fill = row.getElementsByTagName('rect')[0].getAttribute('fill');
 			selection = row.getElementsByTagName('rect')[0].getAttribute('class');
 			if (fill) {
 				for (j=0;j<color_range.length;j++){
-					if (fill.toString() == color_range[j].HEX) { color_level = j; break};
+                    if (fill.toString().toLowerCase() == color_range[j].HEX.toLowerCase()) { color_level = j; break};
+                    
 				};
 			}
 			text = row.getElementsByTagName('text')[0];
@@ -1130,7 +1135,6 @@ var generateCharts = function (d){
 			click_filter = false;
             mapChart.filter(null);
 			mapChart.filter([map_filters_old]);
-            console.log(map_filters);
 			click_filter = true;
 			mapChart.redraw();
         } else {
@@ -1458,10 +1462,18 @@ var generateCharts = function (d){
 			finalVal += '\n';
 		}
 
-		var download = document.getElementById('download');
-		download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
-		download.setAttribute('download', 'export.csv');
-		//download.click();
+		if (typeof L_PREFER_CANVAS !== 'undefined') {
+            var IEwindow = window.open();
+            IEwindow.document.write('sep=,\r\n' + finalVal);
+            IEwindow.document.execCommand('SaveAs', null,"export.txt");
+            IEwindow.document.close();
+            IEwindow.close();
+        } else {
+            var download = document.getElementById('download');
+            download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+            download.setAttribute('download', 'export.csv');
+            //download.click();
+        }
 	};
 
 	//Export to JSON
@@ -1568,12 +1580,12 @@ var generateCharts = function (d){
 
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
 				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
-
-				//var _this = this;
+                
+                //var _this = this;
 				(function (_i) {
 
 					d3.json(setting == 'api' ? workflow_info : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
-
+                        
 						if (data_workflows[_i] == 'INFORM_SAHEL') {
 							object = {};
 							object.Author='anonymous';
@@ -1588,7 +1600,7 @@ var generateCharts = function (d){
 							// if(a.Name > b.Name) return 1;
 							// return 0;
 						// });
-
+                        
 						for (var j=0;j<workflow_info.length;j++) {
 							if (workflow_info[j].Author == 'anonymous') { // && active_workflow_names.indexOf(workflow_info[j].Name) > -1) {
 

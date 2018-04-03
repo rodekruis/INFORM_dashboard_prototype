@@ -87,13 +87,17 @@
     position: relative;
   }
 }
-.export-icon {
+.export-icon-container {
   float: left;
   margin-right: 7px;
   margin-top: 2px;
-  width: 18px;
+  width: auto;
   height: 18px;
 }
+.export-icon {
+  height: 100%;
+}
+
 .export-btn-arrow {
   margin-left: 20px;
 }
@@ -108,7 +112,7 @@
 .navbar-toggler{
   background-color: #ffffff;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
-  background-size: 55% 55%;
+  /* background-size: 55% 55%; */
   background-repeat: no-repeat;
   background-position: center center;
   border: 2px solid #eeeeee;

@@ -91,7 +91,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   .sidebar-wrapper.mobile.collapse{
     display: block;
     height: 100% !important;
-    z-index: 3003;
+    z-index: 1003;
   }
 }
 @media only screen and (max-width: 414px){
@@ -139,7 +139,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   margin-left: 385px;
   width: 125px;
 }
-@media only screen and (max-width: 1024px){
+@media only screen and (max-width: 767px){
   .zoom-level-nav.sort-nav{
     position: absolute;
     margin-left: 0;
@@ -148,7 +148,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
     z-index: 3;
   }
 }
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 414px){
   .zoom-level-nav.sort-nav{
     position: relative;
     left:0;
@@ -232,6 +232,9 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 .zoom-level button.btn-active .button-label {
   display: inline-block;
+}
+.zoom-level button.active {
+  background-color: #f3f3f3;
 }
 .btn-metric {
   background-color: #B0DED3;
@@ -493,6 +496,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 .modal .modal-dialog {
   font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
   width: 500px;
   z-index: 2;
 }
@@ -881,7 +885,7 @@ body {
   background-color:#fff;
   visibility:hidden
 }
-@media only screen and (max-width: 1024px){
+@media only screen and (max-width: 767px){
   #row-chart-container{
     position:absolute;
     width:100%;
@@ -906,7 +910,7 @@ body {
   margin-left: -50px;
   width: 100%;
 } */
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 414px){
   #row-chart-container{
     margin-top: 80px;
   }
@@ -951,11 +955,11 @@ body {
 .tabular-wrapper{
   bottom: 0;
   left: -10px;
-  top:30px;
+  top: 30px;
   overflow: auto;
   position: absolute;
   margin-left: 380px;
-  width: calc(100% - 380px);
+  width: calc(100% - 370px);
 }
 .tabular{
   /* position:relative;
@@ -965,7 +969,7 @@ body {
   background-color: #fff;
   padding-bottom: 100px;*/
 }
-@media only screen and (max-width: 1024px){
+@media only screen and (max-width: 767px){
   .tabular-wrapper{
     overflow: auto;
     position: relative;
@@ -985,11 +989,13 @@ body {
   }
 }
 
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 414px){
   .tabular-wrapper{
+    left: -10px;
+    top: 10px;
     margin-top: -50px;
     overflow: auto;
-    width: 100%;
+    width: calc(100% + 10px);
   }
   .tabular{
     left: auto;

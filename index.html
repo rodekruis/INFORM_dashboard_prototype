@@ -107,8 +107,8 @@
 
 				<!-- start: zoom navigation -->
 				<div class="zoom-level-nav map-views">
-					<div class="btn-group zoom-level" role="group">
-						<button type="button" class="btn btn-tab btn-map-view" onclick="mapShow()">
+					<div class="btn-group zoom-level view-buttons" role="group">
+						<button type="button" class="btn btn-tab btn-map-view active" onclick="mapShow()">
 							<span class="button-label">Map View</span>
 						</button>
 						<button type="button" class="btn btn-tab btn-tabular" onclick="tabularShow()">
@@ -280,13 +280,13 @@
 							<span class="panel-header-icon">
 								<img class="metric_icon">
 							</span>
-							<h3 class="modal-title"><span class="metric_label"><div></div></span></h3>
+							<h4 class="modal-title"><span class="metric_label"><div></div></span></h4>
 						</div>
 						<div class="modal-body" style="word-break:break-all">
-							<h5><b>Source Indicator:</b> <span class="metric_indicator"></span></h5><br>
-							<h5><b>Provider:</b> <span class="metric_provider"></span></h5><br>
-							<h5><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h5><br>
-							<h5><b>Description:</b> <span class="metric_desc"></span></h5><br>
+							<h6><b>Source Indicator:</b> <span class="metric_indicator"></span></h6><br>
+							<h6><b>Provider:</b> <span class="metric_provider"></span></h6><br>
+							<h6><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h6><br>
+							<h6><b>Description:</b> <span class="metric_desc"></span></h6><br>
 						</div>
 					</div>
 				</div>
@@ -302,10 +302,10 @@
 							<button type="button" class="close" data-dismiss="modal">
 								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 							</button>
-							<h3 class="modal-title">Share current settings directly through URL<h5>Copy URL and paste in browser</h5></h3>
+							<h4 class="modal-title">Share current settings directly through URL<h6>Copy URL and paste in browser</h6></h4>
 						</div>
 						<div class="modal-body" style="word-break:break-all">
-							<h5><span id="shareable_URL"></span></h5><br>
+							<h6><span id="shareable_URL"></span></h6><br>
 						</div>
 					</div>
 				</div>

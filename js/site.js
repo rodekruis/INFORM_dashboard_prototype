@@ -3,7 +3,7 @@
 // DEFINE VARIABLES //
 //////////////////////
 
-var setting = 'prototype'; //'prototype','api'
+var setting = 'api'; //'prototype','api'
 var active_workflow_groups = [
 	"INFORM2017"
 	, "INFORM_EAST_AFRICA"
@@ -78,7 +78,7 @@ load_dashboard = function(inform_model,workflow_id) {
 		metric = url.split('&')[2].split('=')[1];
 		chart_show = url.split('&')[3].split('=')[1];
 		//map_filters = url.split('&')[4].split('=')[1].split(',');
-		console.log(map_filters);
+		//console.log(map_filters);
 		window.history.pushState({}, document.title, setting == 'api' ? 'http://localhost:8082' : 'https://rodekruis.github.io/INFORM_dashboard_prototype/' );
 	} else {
 		directURLload = false;
@@ -95,6 +95,7 @@ load_dashboard = function(inform_model,workflow_id) {
 	//TEMPORARY
 	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
 	d3.json(setting == 'api' ? workflow_api : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
+        d.workflow_info = workflow_info;                                
 		d.system = workflow_info[0].System.toUpperCase();
 		if (d.system == 'INFORM') { country_code = 'INFORM'; } else { country_code = inform_model.replace('INFORM_',''); };
 
@@ -974,11 +975,11 @@ var generateCharts = function (d){
 	/////////////////////
 	// ROW CHART SETUP //
 	/////////////////////
-
+    
 	barheight = 20;
 	var row_filters_old = [];
 	rowChart
-		.width($('#row-chart-container').width())
+		.width($('#row-chart-container').width() - ($('#demo').width() + 20))
 		.height((barheight + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
@@ -1372,7 +1373,20 @@ var generateCharts = function (d){
 		coming_from_map = false;
 
 	}
+    
+    $(document).ready(function () {
+        $('.view-buttons button').click(function(e) {
 
+            $('.view-buttons button.active').removeClass('active');
+            
+            var $this = $(this);
+            if (!$this.hasClass('active')) {
+                $this.addClass('active');
+            }  
+            e.preventDefault();
+        });
+    });
+    
 	///////////////////////////
 	// SIDEBAR: RESET BUTTON //
 	///////////////////////////
@@ -1409,7 +1423,7 @@ var generateCharts = function (d){
 			if (i === 0) {
 				for (key in value) {
 					if (value.hasOwnProperty(key)) {
-						innerValue = key;
+						innerValue = meta_label[key] ? meta_label[key] : key;
 						result = innerValue.replace(/"/g, '');
 						if (result.search(/("|,|\n)/g) >= 0)
 							result = '' + result + '';

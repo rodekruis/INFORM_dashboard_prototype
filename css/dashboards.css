@@ -48,7 +48,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   overflow: auto;
   padding: 20px;
   position: absolute;
-  top: 117px;
+  top: 114px;
   width: 380px;
   z-index: 2;
   background-color: #F3EEE3;
@@ -76,11 +76,10 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 @media only screen and (max-width: 1024px){
   .sidebar-wrapper{
     height: 100%;
-    top:115px;
+    top:114px;
     z-index: 5;
   }
 }
-
 @media only screen and (max-width: 767px){
   .sidebar-wrapper{
     height: 75%;
@@ -92,17 +91,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   .sidebar-wrapper.mobile.collapse{
     display: block;
     height: 100% !important;
+    z-index: 3003;
   }
 }
-
 @media only screen and (max-width: 414px){
   .sidebar-wrapper{
     padding: 7px;
   }
 }
 
+
 .map-wrapper {
-  background: #accfff;
+  /* background: #accfff; */
+  background: #ffffff;
   float: right;
   bottom: 0;
   height: 100%;
@@ -111,6 +112,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   top: 0;
   width: 100%;
 }
+
 .zoom-level-nav-wrapper{
   width: 380px;
   position: relative;
@@ -123,6 +125,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 .zoom-level-nav {
   border: 3px solid #ffffff;
+  border-top: none;
   padding-top: 0;
   position: relative;
   background: #ffffff;
@@ -134,13 +137,26 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 .zoom-level-nav.sort-nav{
   float: left;
   margin-left: 385px;
-  width: 100px;
+  width: 125px;
+}
+@media only screen and (max-width: 1024px){
+  .zoom-level-nav.sort-nav{
+    position: absolute;
+    margin-left: 0;
+    left: 0;
+    top: 0;
+    z-index: 3;
+  }
 }
 @media only screen and (max-width: 767px){
   .zoom-level-nav.sort-nav{
-    float: none;
-    margin-top: 70px;
+    position: relative;
+    left:0;
+    margin-top: -85px;
+    margin-left: 0;
+    top: 0;
     width: 100%;
+    z-index: 4;
   }
 }
 .zoom-level {
@@ -832,13 +848,13 @@ body {
   }
   .collapse-button[aria-expanded="false"]::before{
     background-image: none;
-    content: "hide";
+    content: "hide panel";
     width: 100%;
     text-align: center;
   }
   .collapse-button[aria-expanded="true"]::before{
     background-image: none;
-    content: "view";
+    content: "view panel";
     width: 100%;
     text-align: center;
   }
@@ -851,18 +867,50 @@ body {
   .collapse-button.collapsed{
     background-image: none;
   }
-
+}
+.export-button-wrapper{
+  background: #ffffff;
 }
 .export-button.models{
   padding-left: 38px;
 }
-
+#row-chart-container{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-color:#fff;
+  visibility:hidden
+}
+@media only screen and (max-width: 1024px){
+  #row-chart-container{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background-color:#fff;
+    visibility:hidden;
+    z-index: 4;
+    top: 110px;
+  }
+}
+#row-chart{
+  position:absolute;
+  left: 0%;
+  width:100%;
+  height:95%;
+  /* overflow:auto; */
+  background-color:#fff
+}
 /* chart */
 
 /* #row-chart-container{
   margin-left: -50px;
   width: 100%;
 } */
+@media only screen and (max-width: 767px){
+  #row-chart-container{
+    margin-top: 80px;
+  }
+}
 @media only screen and (max-width: 1024px){
   .leaflet-left .leaflet-control{
     margin-top: 50px;
@@ -900,29 +948,55 @@ body {
   background: #ffffff;
   margin-left: 5px;
 }
-
+.tabular-wrapper{
+  bottom: 0;
+  left: -10px;
+  top:30px;
+  overflow: auto;
+  position: absolute;
+  margin-left: 380px;
+  width: calc(100% - 380px);
+}
 .tabular{
-  position:absolute;
-  margin-left: 0;
+  /* position:relative;
+  margin-left: 370px;
   height: 95%;
   overflow:auto;
   background-color: #fff;
-  /* width: 75%; */
-  left: 380px;
-  padding-bottom: 100px;
-  border:1px dotted red;
+  padding-bottom: 100px;*/
 }
 @media only screen and (max-width: 1024px){
-  .tabular{
+  .tabular-wrapper{
+    overflow: auto;
+    position: relative;
     margin-left: 0;
-    margin-top: 150px;
+    height: 100%;
     width: 100%;
+  }
+  .tabular{
+    /* margin-left: 0;
+    margin-top: 50px;
+    border:1px solid grey;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
+    top: 0; */
   }
 }
 
 @media only screen and (max-width: 767px){
+  .tabular-wrapper{
+    margin-top: -50px;
+    overflow: auto;
+    width: 100%;
+  }
   .tabular{
-    margin-top: 10px;
+    left: auto;
+    margin-left: 0;
+    margin-top: -10px;
+    width: 100%;
+    position: relative;
   }
 }
 
@@ -934,25 +1008,43 @@ body {
 }
 
 .leaflet-bottom{
-  bottom: 50px;
+  bottom: 10px;
 }
 
 .info.legend.leaflet-control{
   margin-top: 20px;
 }
 
+@media only screen and (max-width: 1024px){
+  .info.legend.leaflet-control{
+    margin-top: 60px;
+  }
+}
+@media only screen and (max-width: 767px){
+  .leaflet-control-container{
+    position: absolute;
+  }
+  .info.legend.leaflet-control{
+    position: absolute;
+    top: 175px;
+    left: 10px;
+    width: 100px;
+    z-index: 3;
+  }
+}
+
 @media only screen and (max-width: 767px){
   .legend,
   .leaflet-control-attribution .leaflet-control{
     position: absolute;
-    z-index: 1;
+    /* z-index: 1; */
   }
 }
 .leaflet-container{
     /* top: -120px; */
 }
 .leaflet-control-attribution{
-  bottom: 5px;
+  bottom: 0px;
 }
 @media only screen and (max-width: 767px){
   .leaflet-container .leaflet-control-attribution,
@@ -965,9 +1057,8 @@ body {
   /* margin-top: 70px; */
 }
 .leaflet-top .hdx-3w-info{
-  margin-top: 10px;
+  margin-top: 60px;
 }
 div.dc-chart{
-  margin-top: 0;
-  top:0;
+/* margin-top: 30px; */
 }

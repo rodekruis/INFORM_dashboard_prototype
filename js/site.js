@@ -3,7 +3,7 @@
 // DEFINE VARIABLES //
 //////////////////////
 
-var setting = 'api'; //'prototype','api'
+var setting = 'prototype'; //'prototype','api'
 var active_workflow_groups = [
 	"INFORM2017"
 	, "INFORM_EAST_AFRICA"

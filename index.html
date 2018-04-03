@@ -33,7 +33,7 @@
 
 	<section class="content">
 		<section class="container-fluid">
-				
+
 			<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
 
 				<div class="navbar-header">
@@ -41,11 +41,11 @@
 						<img src="img/inform_logo.png" class="logo">
 						<!-- Dashboard -->
 					</a>
-					<!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
-					</button> -->
+					</button>
 				</div>
-				<!-- <div id="menu-buttons"> -->
+				<div id="menu-buttons" aria-expanded="false" class="button-nav">
 					<ul class="nav navbar-top-links navbar-right">
 						<li class="dropdown">
 							<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
@@ -62,21 +62,21 @@
 									<a href="http://www.inform-index.org/Results/Global" target="_blank" id="excel" onclick="link_data()">Excel (incl. source data)</a>
 								</li>
 								<li class="divider"></li>
-								<li>
+								<li class="csv-download">
 									<a target="_blank" id="download" onclick="export_csv()">CSV (dashboard data)</a>
 								</li>
 								<!-- <li class="divider"></li>
 								<li>
 									<a onclick="export_json()">JSON (for dev. only)</a>
 								</li> -->
-								<li class="divider"></li>
+								<li class="divider csv-divider"></li>
 								<li>
 									<a onclick="share_URL()">Share current settings through URL</a>
 								</li>
 							</ul>
 						</li>
 					</ul>
-					<ul class="nav navbar-top-links navbar-left">
+					<ul class="nav navbar-top-links navbar-right">
 						<li class="dropdown">
 							<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
 								 <img class="export-icon" src="img/model.svg" alt="model icon">
@@ -87,47 +87,47 @@
 								<li class="dropdown-submenu">
 									<a class="dropdown-toggle export-button submenu-item models1" data-toggle="dropdown" href="#">
 										INFORM Global
-										<i class="fa fa-angle-right export-btn-arrow" style="float:right"></i>
+										<i class="fa fa-angle-left export-btn-arrow menu-arrow"></i>
 									</a>
 									<ul class="dropdown-menu" id="global-model-items"></ul>
 								</li>
 							</ul>
 						</li>
 					</ul>
-				<!-- </div> -->
+				</div>
+
 			</nav>
-		
+
 			<div class="content-wrapper">
-		
+
 				<div id="spinner"></div>
-			
-				<!-- start: sidebar -->
-				<div class="navbar-default sidebar" role="navigation">
-					
-					<!-- start: zoom navigation -->
-					<div class="zoom-level-nav">
-						<div class="btn-group zoom-level" role="group">
-							<button style="width:43%; float:left; margin-right:8px" type="button" class="btn btn-secondary btn-active " onclick="mapShow()">
-								<span class="button-label">Map View</span>
-							</button>
-							<button style="width:43%; float:left;" type="button" class="btn btn-secondary btn-active " onclick="tabularShow()">
-								<span class="button-label">Tabular View</span>
-							</button>
-							<div class="collapse-button"></div>
-						</div>
-						<div class="btn-group zoom-level" role="group">
-							<button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary">
-								<div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div>
-							</button>
+
+				<!-- start: moved tabs -->
+				<div class="zoom-level-nav-wrapper">
+
+				<!-- start: zoom navigation -->
+				<div class="zoom-level-nav map-views">
+					<div class="btn-group zoom-level view-buttons" role="group">
+						<button type="button" class="btn btn-tab btn-map-view active" onclick="mapShow()">
+							<span class="button-label">Map View</span>
+						</button>
+						<button type="button" class="btn btn-tab btn-tabular" onclick="tabularShow()">
+							<span class="button-label">Tabular View</span>
+						</button>
+						<div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo">
 						</div>
 					</div>
-					<!-- end: zoom navigation -->
-					
+					<div class="btn-group zoom-level" role="group">
+						<button id="indicator-button" style="background-color: #951301;margin-top:3px; color:white; width:100%" type="button" class="btn btn-secondary">
+							<div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div>
+						</button>
+					</div>
+
 					<!-- start: community profiles -->
 					<div class="community-profiles-wrapper">
 						<div id="count-info" class="general-info">
-							<!-- <span class="filter-count "></span> / <span class="total-count "></span> <span style="font-size: 12px"> selected<span id="area_selection"></span></span> -->
-							<span class="filter-count" id="area_selection">All </span><span style="font-size: 12px"> selected</span>
+							<span class="filter-count" id="area_selection">All </span>
+							<span style="font-size: 12px"> selected</span>
 							<a class="reset-button" onclick="reset_function()">Select all</a>
 						</div>
 						<div class="row"></div>
@@ -136,7 +136,17 @@
 					</div>
 					<!-- end: community profiles -->
 
-					
+				</div>
+				<!-- end: zoom navigation -->
+			</div>
+				<!-- end: moved tabs -->
+
+				<!-- start: sidebar -->
+				<div class="navbar-default sidebar-wrapper collapse" role="navigation" id="demo">
+
+				<div>
+
+
 					<!-- start: accordion with stats  -->
 					<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
 						<div class="card">
@@ -214,24 +224,24 @@
 						<div class="card"></div>
 					</div>
 					<!-- end: accordion with stats -->
-
+				</div>
 
 				</div>
 				<!-- end: sidebar -->
 
 				<!-- start: map -->
-				<div class="map-wrapper" style="margin-left: 380px; width:calc(100% - 380px); height:95%">
+				<div class="map-wrapper">
 					<!-- <div class="btn-group zoom-level" role="group"> -->
 							<!-- <button id="indicator-button" style="background-color: #951301; color:white; width:100%" type="button" class="btn btn-secondary"> -->
 								<!-- <div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div> -->
 							<!-- </button> -->
 					<!-- </div> -->
-					<div id="map-chart" style="position:absolute; width:100%; height:100%;" ></div>
-					<div id="row-chart-container" style="position:absolute; width:100%; height:100%;background-color:#fff; visibility:hidden">
-						
-						<div class="zoom-level-nav">
+					<div id="map-chart" style="position:absolute; width:100%; height:100%;margin-top:-51px;"></div>
+					<div id="row-chart-container">
+
+						<div class="zoom-level-nav sort-nav">
 							<div class="btn-group zoom-level" role="group">
-								<ul style="left: 15px;" type="button" class="btn btn-secondary btn-active ">
+								<ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
 									<div class="dropdown">
 										<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 												  Sort by ...
@@ -239,7 +249,7 @@
 										</a>
 										<ul class="dropdown-menu submenu-items">
 											<li>
-												<a class="submenu-item" onclick="sort('value')" role="button">Indicator Score</a>
+												<a class="	submenu-item" onclick="sort('value')" role="button">Indicator Score</a>
 											</li>
 											<li>
 												<a class="submenu-item" onclick="sort('name')" role="button">Area name</a>
@@ -249,7 +259,9 @@
 								</ul>
 							</div>
 						</div>
-						<div id="row-chart" style="position:absolute; left: 0%; width:100%; height:95%;overflow:auto;background-color:#fff">
+						<div class="tabular-wrapper">
+							<div id="row-chart" class="tabular">
+						</div>
 					</div>
 				</div>
 				<!-- end: map -->
@@ -268,19 +280,19 @@
 							<span class="panel-header-icon">
 								<img class="metric_icon">
 							</span>
-							<h3 class="modal-title"><span class="metric_label"><div></div></span></h3>
+							<h4 class="modal-title"><span class="metric_label"><div></div></span></h4>
 						</div>
 						<div class="modal-body" style="word-break:break-all">
-							<h5><b>Source Indicator:</b> <span class="metric_indicator"></span></h5><br>
-							<h5><b>Provider:</b> <span class="metric_provider"></span></h5><br>
-							<h5><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h5><br>
-							<h5><b>Description:</b> <span class="metric_desc"></span></h5><br>
+							<h6><b>Source Indicator:</b> <span class="metric_indicator"></span></h6><br>
+							<h6><b>Provider:</b> <span class="metric_provider"></span></h6><br>
+							<h6><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h6><br>
+							<h6><b>Description:</b> <span class="metric_desc"></span></h6><br>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- end: risk score modal -->
-			
+
 			<!-- start: URL modal -->
 			<div id="URLModal" class="modal sidebar-modal" role="dialog">
 				<div class="modal-dialog">
@@ -290,16 +302,16 @@
 							<button type="button" class="close" data-dismiss="modal">
 								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
 							</button>
-							<h3 class="modal-title">Share current settings directly through URL<h5>Copy URL and paste in browser</h5></h3>
+							<h4 class="modal-title">Share current settings directly through URL<h6>Copy URL and paste in browser</h6></h4>
 						</div>
 						<div class="modal-body" style="word-break:break-all">
-							<h5><span id="shareable_URL"></span></h5><br>
+							<h6><span id="shareable_URL"></span></h6><br>
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- end: URL modal -->
-			
+
 			<!-- start: phone device message -->
 			<!-- <div class="mobile-message"> -->
 				<!-- <p>For best experience please use a tablet device, laptop or desktop computer. -->
@@ -326,7 +338,7 @@
 				</div>
 			</div>
 			<!-- end: IE message -->
-		
+
 		</section>
 	</section>
 
@@ -360,6 +372,7 @@
 
 	<!--Application JavaScript Files-->
 	<script type="text/javascript" src="bower_components/build/bower/jquery/js/jquery.min.js"></script>
+	<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
 	<script type="text/javascript" src="bower_components/build/bower/crossfilter/js/crossfilter.min.js"></script>
 	<script type="text/javascript" src="bower_components/build/bower/lodash/js/lodash.underscore.min.js"></script>
 	<script type="text/javascript" src="bower_components/build/bower/bootstrap/js/bootstrap.min.js"></script>
@@ -377,6 +390,17 @@
 	<!-- <script type="text/javascript" src="bower_components/build/bower/d3-tip/js/index.js"></script> -->
 	<script type="text/javascript" src="bower_components/build/custom/google-spreadsheets-parser/dist/googleSpreadsheetsParser.js"></script>
 	<script type="text/javascript" src="js/site.js"></script>
+	<script>
+	$('.sidebar-wrapper.collapse').collapse('show');
+	$('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+	// $('.sidebar-wrapper.mobile.collapse').collapse('show');
 
+	$(document).ready(function () {
+        if($(window).width() < 768) {
+           $(".sidebar-wrapper").addClass("mobile");
+        }
+    });
+
+	</script>
 </body>
 </html>

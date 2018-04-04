@@ -1071,9 +1071,11 @@ var generateCharts = function (d){
 		}
 		rowChart.redraw();
 		row_text(color_range);
-	}
-
-
+	};
+    
+    scrollRowChart = function() {
+        document.getElementById('tabular-wrapper').scrollTop = 0;
+    };
 
 
 	///////////////////////////////

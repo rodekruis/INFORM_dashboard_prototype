@@ -239,10 +239,10 @@
 					<div id="map-chart" style="position:absolute; width:100%; height:100%;margin-top:-51px;"></div>
 					<div id="row-chart-container">
 
-						<div class="zoom-level-nav sort-nav">
-							<div class="btn-group zoom-level" role="group">
-								<ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
-									<div class="dropdown" >
+						<div class="zoom-level-nav sort-nav"> 
+                            <div class="btn-group zoom-level" role="group">
+                                <ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
+									<div class="dropdown">
 										<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
 												  Sort by ...
 											<i class="fa fa-angle-down export-btn-arrow"></i>
@@ -257,7 +257,10 @@
 										</ul>
 									</div>
 								</ul>
-							</div>
+                                <div class="btn btn-secondary" style="color:#4d799d" onclick="scrollRowChart()">
+                                    Scroll to Top
+                                </div>
+                            </div>
 						</div>
 						<div class="tabular-wrapper" id="tabular-wrapper">
 							<div id="row-chart" class="tabular">

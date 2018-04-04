@@ -1546,7 +1546,6 @@ var generateCharts = function (d){
 
 		var ul = document.getElementById('model-items');
 		var ul_global = document.getElementById('global-model-items');
-		//$('#model-items').not(':first').remove();
 		while (ul_global.childElementCount > 0) { ul_global.removeChild(ul_global.firstChild);};
 		while (ul.childElementCount > 1) { ul.removeChild(ul.lastChild);};
 
@@ -1579,7 +1578,7 @@ var generateCharts = function (d){
 				eval("li.appendChild(ul" + i + ");");
 
 				var workflow_info = 'http://www.inform-index.org/API/InformAPI/workflows/GetByWorkflowGroup/' + data_workflows[i];
-				if (data_workflows[i] == 'INFORM2017') {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
+				if (data_workflows[i].indexOf('_') <= -1) {var workflow_string = '';} else {var workflow_string = data_workflows[i].replace('INFORM','');}
                 
                 //var _this = this;
 				(function (_i) {
@@ -1651,9 +1650,12 @@ var generateCharts = function (d){
 	var zoom_child = $('.leaflet-control-zoom')[0];
 	var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
 	zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
-
-
-	row_text(color_range);
+    if($(window).width() < 768) {
+        var legend_child = $(".info.legend.leaflet-control")[0];
+        var legend_parent = $(".leaflet-bottom.leaflet-right")[0];
+        legend_parent.insertBefore(legend_child,legend_parent.childNodes[0]);
+    }
+    row_text(color_range);
 
 	// cntrlIsPressed = true;
 	// map_filters_old = map_filters;
@@ -1687,7 +1689,10 @@ var generateCharts = function (d){
 	} else if (chart_show == 'row') {
 		tabularShow();
 	}
-
+    $(".sidebar-wrapper").addClass("in");
+    $('.view-buttons button.active').removeClass('active');
+    $('.view-buttons button.btn-map-view').addClass('active');
+    
 
 
 

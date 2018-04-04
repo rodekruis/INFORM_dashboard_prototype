@@ -820,6 +820,7 @@ body {
 .collapse-button{
   background-color: #d9dcdc;
   border: 2px solid #d9dcdc;
+  cursor: pointer;                  
   float: right;
   background-position: center center;
   background-repeat: no-repeat;
@@ -923,7 +924,7 @@ body {
 }
 @media only screen and (max-width: 767px){
   .export-btn-arrow{
-    float: right;
+    /* float: right; */
   }
 }
 
@@ -1034,10 +1035,10 @@ body {
     position: absolute;
   }
   .info.legend.leaflet-control{
-    position: absolute;
-    top: 175px;
-    left: 10px;
-    width: 100px;
+    position: fixed; /*absolute;*/
+    bottom: -5px;
+    right: -5px;
+    width: 90px;
     z-index: 3;
   }
 }
@@ -1070,4 +1071,8 @@ body {
 }
 div.dc-chart{
 /* margin-top: 30px; */
+}/* cursor for data toggles to work on  */
+
+[data-toggle~="collapse"] {
+    cursor: pointer;
 }

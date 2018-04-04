@@ -985,7 +985,6 @@ var generateCharts = function (d){
     } else {
         var rowChart_width = $('#row-chart-container').width() - 370;
     }
-    console.log(rowChart_width);
     barheight = 20;
 	var row_filters_old = [];
 	rowChart
@@ -1064,8 +1063,9 @@ var generateCharts = function (d){
                     
 				};
 			}
+            title = row.getElementsByTagName('title')[0].innerHTML.substring(0,3);
 			text = row.getElementsByTagName('text')[0];
-			if (color_level <= 2 || selection == 'deselected' || !fill) { text.style.fill = 'black'; } else { text.style.fill = 'white';};
+			if (color_level <= 2 || selection == 'deselected' || !fill || parseInt(title) < 3) { text.style.fill = 'black'; } else { text.style.fill = 'white';};
 		}
 	}
 

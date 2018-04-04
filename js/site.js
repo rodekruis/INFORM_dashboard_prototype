@@ -1074,7 +1074,9 @@ var generateCharts = function (d){
 	};
     
     scrollRowChart = function() {
-        document.getElementById('tabular-wrapper').scrollTop = 0;
+        setTimeout( function() {
+            $('#tabular-wrapper').scrollTop(0);
+        }, 500 );
     };
 
 

@@ -980,10 +980,16 @@ var generateCharts = function (d){
 	// ROW CHART SETUP //
 	/////////////////////
     
+    if($(window).width() < 768) {
+        var rowChart_width = $('#tabular-wrapper').width();
+    } else {
+        var rowChart_width = $('#row-chart-container').width() - 370;
+    }
+    console.log(rowChart_width);
     barheight = 20;
 	var row_filters_old = [];
 	rowChart
-        .width($('#tabular-wrapper').width())
+        .width(rowChart_width)
 		.height((barheight + 5) * data_final.length + 50)
 		.dimension(whereDimension_tab)
 		.group(whereGroupSum_tab)
@@ -1074,9 +1080,10 @@ var generateCharts = function (d){
 	};
     
     scrollRowChart = function() {
-        setTimeout( function() {
+        //setTimeout( function() {
             $('#tabular-wrapper').scrollTop(0);
-        }, 500 );
+            //$('body').scrollTop(0);
+        //}, 500 );
     };
 
 

@@ -820,6 +820,7 @@ body {
 .collapse-button{
   background-color: #d9dcdc;
   border: 2px solid #d9dcdc;
+  cursor: pointer;
   float: right;
   background-position: center center;
   background-repeat: no-repeat;
@@ -1032,7 +1033,8 @@ body {
   }
   .info.legend.leaflet-control{
     position: absolute;
-    top: 175px;
+    bottom: auto;
+    top: 375px;
     left: 10px;
     width: 100px;
     z-index: 3;
@@ -1065,6 +1067,7 @@ body {
 .leaflet-top .hdx-3w-info{
   margin-top: 60px;
 }
-div.dc-chart{
-/* margin-top: 30px; */
+/* cursor for data toggles to work on  */
+[data-toggle~="collapse"] {
+    cursor: pointer;
 }

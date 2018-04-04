@@ -95,7 +95,7 @@ load_dashboard = function(inform_model,workflow_id) {
 	//TEMPORARY
 	if (inform_model == 'INFORM_GTM') {var workflow_string = inform_model.replace('INFORM','');} else {var workflow_string = '';};
 	d3.json(setting == 'api' ? workflow_api : 'data/workflow' + workflow_string + '.json',function(workflow_info) {
-        d.workflow_info = workflow_info;                                
+        d.workflow_info = workflow_info;
 		d.system = workflow_info[0].System.toUpperCase();
 		if (d.system == 'INFORM') { country_code = 'INFORM'; } else { country_code = inform_model.replace('INFORM_',''); };
 
@@ -975,7 +975,7 @@ var generateCharts = function (d){
 	/////////////////////
 	// ROW CHART SETUP //
 	/////////////////////
-    
+
 	barheight = 20;
 	var row_filters_old = [];
 	rowChart
@@ -1373,20 +1373,20 @@ var generateCharts = function (d){
 		coming_from_map = false;
 
 	}
-    
+
     $(document).ready(function () {
         $('.view-buttons button').click(function(e) {
 
             $('.view-buttons button.active').removeClass('active');
-            
+
             var $this = $(this);
             if (!$this.hasClass('active')) {
                 $this.addClass('active');
-            }  
+            }
             e.preventDefault();
         });
     });
-    
+
 	///////////////////////////
 	// SIDEBAR: RESET BUTTON //
 	///////////////////////////

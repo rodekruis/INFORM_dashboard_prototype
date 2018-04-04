@@ -150,6 +150,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 }
 @media only screen and (max-width: 414px){
   .zoom-level-nav.sort-nav{
+    p/* osition: absolute;
+    margin-left: 0;
+    left: 0;
+    top: 0;
+    z-index: 3; */
     position: relative;
     left:0;
     margin-top: -85px;
@@ -882,15 +887,16 @@ body {
 #row-chart-container{
   position:absolute;
   width:100%;
-  height:100%;
+  height:95%;
   background-color:#fff;
   visibility:hidden
 }
 @media only screen and (max-width: 767px){
   #row-chart-container{
-    position:absolute;
+    /* position:relative; */
     width:100%;
-    height:100%;
+    height:80%;
+    height: calc(100% - 175px);
     background-color:#fff;
     visibility:hidden;
     z-index: 4;
@@ -1035,9 +1041,9 @@ body {
     position: absolute;
   }
   .info.legend.leaflet-control{
-    position: fixed; /*absolute;*/
-    bottom: -5px;
-    right: -5px;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
     width: 90px;
     z-index: 3;
   }

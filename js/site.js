@@ -19,7 +19,7 @@ var setting = 'prototype'; //'prototype','api'  //Setting used during developmen
 //Important settings
 var api_base = 'http://www.inform-index.org/API/InformAPI/';    //API basepath. Adapt if this ever changes.
 var topojson_path = 'http://www.inform-index.org/DesktopModules/MVC/InformMVC/Model/';
-var img_path = topojson_path + 'img/';
+var img_path = setting == 'api'? topojson_path + 'img/' : 'img/';
 var url_global = 'http://www.inform-index.org/Results/Global';
 var inform_levels = 10;                                         //Hierarchy levels used in INFORM models. 10 is robust as it is much more than the current maximum of 6 needed in the most extensive model (global model. If this should every increase, there are multiple occurences in the code that need to be updated.
 var metric = 'INFORM';                                          //Default metric

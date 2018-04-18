@@ -75,7 +75,7 @@ load_dashboard = function(inform_model,workflow_id) {
 		workflow_id = url.split('&')[1].split('=')[1];
 		metric = url.split('&')[2].split('=')[1];
 		chart_show = url.split('&')[3].split('=')[1];
-        window.history.pushState({}, document.title, dashboard_location);
+        window.history.pushState({}, document.title, setting == 'api' ? dashboard_location : 'https://rodekruis.github.io/INFORM_dashboard_prototype/');
 	} else {
 		directURLload = false;
 	}

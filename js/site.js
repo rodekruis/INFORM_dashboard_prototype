@@ -155,7 +155,7 @@ load_dashboard = function(inform_model,workflow_id) {
                                     d.default_color = $.grep(d.Colors, function(e) { return e.OutputIndicatorName == 'INFORM' && e.Ordinal == 4;});
 
                                     //Print data to screen (for development/debug purposes)
-                                        console.log(d);
+                                    //console.log(d);
 
                                     //RESET default settings (after switching to a different models)
                                     if (!directURLload) {metric = 'INFORM';};

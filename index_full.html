@@ -1,0 +1,5045 @@
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><style type="text/css">.gm-err-container{height:100%;width:100%;display:table;background-color:#e0e0e0;position:relative;left:0;top:0}.gm-err-content{border-radius:1px;padding-top:0;padding-left:10%;padding-right:10%;position:static;vertical-align:middle;display:table-cell}.gm-err-content a{color:#4285f4}.gm-err-icon{text-align:center}.gm-err-title{margin:5px;margin-bottom:20px;color:#616161;font-family:Roboto,Arial,sans-serif;text-align:center;font-size:24px}.gm-err-message{margin:5px;color:#757575;font-family:Roboto,Arial,sans-serif;text-align:center;font-size:12px}.gm-err-autocomplete{padding-left:20px;background-repeat:no-repeat;background-size:15px 15px}</style><style type="text/css">@charset "UTF-8";[ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>
+	<title>INFORM Global dashboard</title>
+
+	<!-- General META -->
+	<meta charset="utf-8">
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<!-- Semantic META -->
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+
+
+	<!-- Fav Icon -->
+	<link href="/img/brand/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+	<!--Application CSS Files-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.0.0-beta.3/dc.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.css">
+    
+    <style>
+    
+/* DC-LEAFLET-LEGEND.CSS */  
+.info {
+  padding: 6px 8px;
+  font: 12px/14px Arial, Helvetica, sans-serif;
+  background: white;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+}
+.info h4 {
+  margin: 0 0 5px;
+  color: #777;
+}
+.legend {
+  line-height: 18px;
+  color: #555;
+}
+.legend i {
+  width: 16px;
+  height: 16px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
+}
+        
+/* HEADER.CSS */        
+/* NAVBAR CSS, previously in dashboards.css */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
+/* header styles*/
+.navbar-inverse {
+  background: white; /*#4C8293; /*white; */
+  border-color: white; /*#4C8293; /*white; */
+}
+.navbar-inverse .navbar-brand {
+  color: #4C8293; /*#ffffff; /*;*/
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: bold;
+}
+.navbar-inverse .navbar-brand:hover{
+	color:#4C8293;
+}
+.logo {
+  float: left;
+  margin-right: 15px;
+  height: 25px;
+}
+.title-hightlight {
+  color: #cfe7fb;
+}
+.navbar-right {
+  background: white; /*#eceff4;
+  border: 1px solid #cad3df;*/
+  border-radius: 0px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+@media only screen and (max-width: 767px){
+  .navbar-right{
+    border-bottom: 1px solid #eeeeee;
+    margin-right: 0;
+    margin-top: 0;
+  }
+}
+.navbar-left {
+  background: white; /*#eceff4;
+  border: 1px solid #cad3df;*/
+  border-radius: 0px;
+  margin-right: 15px;
+  margin-top: 8px;
+}
+.dropdown-toggle {
+  color: #4d799d;
+}
+.nav>li>a {
+  padding:6px 10px;
+}
+.export-items li {
+  padding: 0 14px;
+}
+.dropdown-submenu {
+    position: relative;
+}
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: auto;
+    margin-top: -1px;
+    right: 100%;
+}
+
+@media only screen and (max-width: 767px){
+  .dropdown-submenu .dropdown-menu{
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid #eeeeee;
+    margin-top: 0;
+    margin-left: 3%;
+    left: 0;
+    position: relative;
+    width: 100%;
+  }
+
+  .dropdown-menu.export-items{
+    border: none;
+    border-radius: 0;
+    width: 100%;
+  }
+
+  .dropdown-submenu .dropdown-menu ul{
+    margin-top: 5px;
+    left: -10px;
+    position: relative;
+  }
+}
+.export-icon-container {
+  float: left;
+  margin-right: 7px;
+  margin-top: 2px;
+  width: auto;
+  height: 18px;
+}
+.export-icon {
+  height: 100%;
+}
+
+.export-btn-arrow {
+  margin-left: 20px;
+}
+
+.menu-arrow{
+  float: left;
+  margin-left: 0;
+  margin-right: 10px;
+  margin-top: 3px;
+  margin-right: 5px;
+  margin-left: -10px;
+}
+
+.navbar-toggler{
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PScwIDAgMzAgMzAnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggc3Ryb2tlPSdyZ2JhKDAsIDAsIDAsIDAuNSknIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbWl0ZXJsaW1pdD0nMTAnIGQ9J000IDdoMjJNNCAxNWgyMk00IDIzaDIyJy8+PC9zdmc+");
+  /* background-size: 55% 55%; */
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: 2px solid #eeeeee;
+  height: 45px;
+  margin-bottom: 3px;
+  outline: none;
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 45px;
+}
+
+@media only screen and (min-width: 767px){
+  .navbar-toggler{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .button-nav .collapse{
+    /* display:none; */
+  }
+  .button-nav .collapse.in{
+    /* display:block; */
+  }
+  .button-nav{
+    display:none;
+  }
+}
+
+/* DASHBOARDS.CSS */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+
+html, body {
+    font-family: 'Open Sans', sans-serif;
+    min-height:100%;
+    height: 100%;
+}
+
+body {
+	background: #B0DED3; /* #0f4882; */
+	padding: 0px;
+	margin: 0px;
+	overflow-x: hidden;
+	overflow:hidden;
+  font-family: 'Open Sans', sans-serif;
+}
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
+  font-family: 'Open Sans', sans-serif;
+}
+.container-fluid {
+  margin-top:50px;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  /* position:relative; */
+}
+#header {
+  visibility:none;
+  display:inline-block;
+  position:absolute;
+}
+.content-wrapper {
+  height: 100%;
+  overflow: hidden;
+  width: 100%;
+  display:inline-block;
+  position:absolute;
+}
+.no-padding {
+  padding: 0;
+}
+.sidebar-wrapper {
+  border: 3px solid #F3EEE3;
+  height: 95%;
+  height: calc(100% - 166px);
+  left: 0;
+  overflow: auto;
+  padding: 20px;
+  position: absolute;
+  top: 112px;
+  width: 380px;
+  z-index: 2;
+  background-color: #F3EEE3;
+}
+
+.sidebar {
+  border: 3px solid #F3EEE3;
+  height: 95%;
+  left: 0;
+  overflow: auto;
+  padding: 20px;
+  position: absolute;
+  top: 117px;
+  width: 380px;
+  z-index: 2;
+  background-color: #F3EEE3;
+}
+.sidebar.collapse{
+  /* display: block !important; */
+  /* height: 95%; */
+}
+.sidebar.collapse.in{
+  /* display: none !important; */
+}
+@media only screen and (max-width: 1024px){
+  .sidebar-wrapper{
+    height: 100%;
+    top:114px;
+    z-index: 5;
+  }
+}
+@media only screen and (max-width: 767px){
+  .sidebar-wrapper{
+    height: 75%;
+    width: 100%;
+  }
+  .sidebar-wrapper.collapse.in.mobile{
+    display: none;
+  }
+  .sidebar-wrapper.mobile.collapse{
+    display: block;
+    height: 100% !important;
+    z-index: 1003;
+  }
+}
+@media only screen and (max-width: 414px){
+  .sidebar-wrapper{
+    padding: 7px;
+  }
+}
+
+
+.map-wrapper {
+  /* background: #accfff; */
+  background: #ffffff;
+  float: right;
+  bottom: 0;
+  height: 100%;
+  position: absolute;
+  /* left: 380px;  */
+  top: 0;
+  width: 100%;
+}
+
+.zoom-level-nav-wrapper{
+  width: 380px;
+  position: relative;
+  overflow: hidden;
+}
+@media only screen and (max-width: 767px){
+  .zoom-level-nav-wrapper{
+    width: 100%;
+  }
+}
+.zoom-level-nav {
+  border: 3px solid #ffffff;
+  border-top: none;
+  padding-top: 0;
+  position: relative;
+  background: #ffffff;
+  z-index: 3;
+}
+.zoom-level-nav.map-views{
+  z-index: 5;
+}
+.zoom-level-nav.sort-nav{
+  float: left;
+  margin-left: 385px;
+  width: 250;
+}
+@media only screen and (max-width: 767px){
+  .zoom-level-nav.sort-nav{
+    position: absolute;
+    margin-left: 0;
+    left: 0;
+    top: 0;
+    z-index: 3;
+  }
+}
+@media only screen and (max-width: 414px){
+  .zoom-level-nav.sort-nav{
+    p/* osition: absolute;
+    margin-left: 0;
+    left: 0;
+    top: 0;
+    z-index: 3; */
+    position: relative;
+    left:0;
+    margin-top: -85px;
+    margin-left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 4;
+  }
+}
+.zoom-level {
+  width: 100%;
+}
+.zoom-level button {
+  background: #f1f1f1;
+  border-radius: 0px; /*4px;*/
+  color: #bbbbbb;
+  /* margin-right: 3px; */
+  text-align: left;
+  font-size: 12px;
+  display: block;
+  /* min-width: 180px; */
+  width: 106px;
+  height: 34px;
+}
+.zoom-level button:hover {
+  background: #4C8293;
+  color: #ffffff;
+}
+.zoom-level button.btn-tab {
+  background: #d9dcdc;
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-left: 15px;
+  padding-right: 15px;
+  text-align: left;
+}
+.btn-tab.btn-map-view{
+  float:left;
+  margin-right:6px;
+  width:43%;
+}
+@media only screen and (max-width: 767px){
+  .zoom-level button.btn-tab{
+    text-align: center;
+    font-size: 10px;
+  }
+  .btn-tab.btn-map-view{
+    font-size: 10px;
+    margin-right: 1%;
+    text-align: center;
+    width: 42%
+  }
+}
+.btn-tab.btn-tabular{
+  float:left;
+  margin-right:4px;
+  width:43%;
+}
+@media only screen and (max-width: 767px){
+  .btn-tab.btn-tabular{
+    font-size: 10px;
+    margin-right: 1%;
+    text-align: center;
+    width: 42%
+  }
+}
+.metric_label{
+  overflow: hidden;
+  text-transform:uppercase;
+}
+.zoom-level .button-label {
+  font-size: 12px;
+  /* margin-left: 5px; */
+}
+@media only screen and (max-width: 767px){
+  .zoom-level .button-label {
+    font-size: 10px;
+  }
+}
+.zoom-level button.btn-active .button-label {
+  display: inline-block;
+}
+.zoom-level button.active {
+  background-color: #f3f3f3;
+}
+.btn-metric {
+  background-color: #B0DED3;
+  color:black;
+  border-color:#4C8293
+}
+.indicators-panels .card-header{
+  background: #f3f3f3;
+  border-bottom: none;
+  border-left: 1px solid #e6eaee;
+  border-right: 1px solid #e6eaee;
+  border-top: 1px solid #e6eaee;
+  border-radius: 2px;
+  overflow: hidden;
+  padding: 10px;
+}
+.indicators-panels .card-block {
+  border-bottom: none;
+  background-color: #fff;
+  /*border-left: 1px solid #e6eaee;
+  border-right: 1px solid #e6eaee;*/
+  border-top: none;
+  padding: 10px;
+}
+.panel-header-icon {
+  background: #e8eaf1;
+  display: block;
+  float: left;
+  margin-right: 12px;
+  padding: 10px;
+  border: solid;
+  border-width: 2px;
+}
+.panel-header-icon img {
+  width: 20px;
+}
+.panel-header-content{
+  display: inline-block;
+  width: 80%;
+}
+.panel-header-content:hover {
+  cursor: pointer;
+}
+.panel-header-title {
+  color: #000000;
+  font-weight: bold;
+  display: block;
+}
+.panel-header-description {
+  color: #b5b5b5;
+  display: block;
+  font-size: 12px;
+  font-style: italic;
+}
+.score {
+  font-weight: bold;
+}
+.component-section {
+  overflow: hidden;
+  padding: 5px 0;
+}
+.component-section:hover {
+  background: #f3f3f3;
+  border-radius: 5px;
+}
+.component-label {
+  font-size: 11px;
+  line-height: 13px;
+  padding: 0;
+}
+
+.component-label,
+.general-component-label:hover {
+ cursor:pointer;
+}
+
+.bar-container {
+	display:inline-block;
+}
+
+.component-scale {
+  background: transparent; /*#e2e7ee;*/
+  border-radius: 5px;
+  height: 12px;
+  margin-top: 3px; /*10px;*/
+  position: relative;
+  margin-left: 20px;
+  width: 100%;
+  display: inline-block;
+  white-space: normal;
+  vertical-align: middle;
+
+}
+
+.score-bar {
+  border-radius: 5px;
+  height: 12px;
+  margin-left: 0%;
+  margin-top: 0px; /*10px;*/
+  position: relative;
+  padding-left: 5px;
+  color: black;
+  text-height: 12px;
+  vertical-align: middle;
+  font-weight:bold;
+}
+
+.component-score-small {
+	border-radius:5px;
+	width:25px;
+	font-size: 12px;
+	background-color: white;
+	/* border: solid; */
+	border-color: black;
+	border-width: 1px;
+	text-align: center;
+	position: absolute;
+	z-index: 10;
+  display: inline-block;
+  white-space: normal;
+  vertical-align: middle;
+}
+
+.score-bar.good {
+  background: #1a9641;
+}
+.score-bar.medium-good {
+  background: #a6d96a;
+}
+.score-bar.medium {
+  background: #f1d121;
+}
+.score-bar.medium-bad {
+  background: #fd6161;
+}
+.score-bar.bad {
+  background: #d7191c;
+}
+.component-score {
+  color: black;
+  font-weight: bold;
+	border-radius:5px;
+	 width:25px;
+	 margin-left: 5px;
+	font-size: 14px;
+	background-color: white;
+	/* border: solid; */
+	border-color: black;
+	border-width: 1px;
+	text-align: center;
+	position: absolute;
+	z-index: 10;
+/*   display: inline-block;
+  white-space: normal;
+  vertical-align: middle; */
+}
+/*
+.component-score.good {
+  color: #1a9641;
+}
+.component-score.medium-good {
+  color: #a6d96a;
+}
+.component-score.medium {
+  color: #f1d121;
+}
+.component-score.medium-bad {
+  color: #fd6161;
+}
+.component-score.bad {
+  color: #d7191c;
+}
+.component-score.notavailable {
+  color: #cccccc;
+}
+*/
+
+.component-score {
+	font-weight: bold;
+    /* text-shadow: -1px 0 grey, 0 1px grey, 1px 0 grey, 0 -1px grey; */
+}
+.scale-icon {
+  background: #4C8293; /*#397ab0*/;
+  border-radius: 50%;
+  padding: 5px;
+  position: absolute;
+  top: -7px;
+  width: 25px;
+  border: 3px solid #ffffff;
+}
+
+/*community profiles*/
+.community-profiles-wrapper {
+  background: #fff; /*#4C8293; /*#B0DED3; /*#f3faff;*/
+  /* color: #fff; */
+  /*border: 1px solid #e9e9e9;*/
+  border-radius: 2px;
+  margin-top: 0px;
+  padding: 10px;
+}
+.community-title {
+  color: #1d2531;
+  font-size: 16px;
+  font-weight: bold;
+}
+.total-count{
+  color: #444444;
+  font-size: 20px;
+}
+#area_selection {
+  font-weight:bold;
+  text-transform:uppercase;
+  color: #951301;
+  font-size: 12px;
+}
+
+.total-count-pi{
+  color: #4C8293; /*#3780bb;*/
+  font-size: 14px;
+  font-weight: bold;
+}
+.filter-count-pi{
+  color: #444444;
+  font-size: 14px;
+  font-weight: bold;
+}
+.score-helptext {
+  font-size: 11px;
+}
+.profile-item {
+  border-radius: 3px;
+  color: #354052;
+  font-size: 12px;
+  font-weight: bold;
+  margin-left: -5px;
+  margin-right: -5px;
+  padding: 7px;
+}
+.profile-item:hover {
+  background: #4C8293;
+  color: #ffffff;
+}
+.profile-item .col {
+  padding: 0;
+}
+.community-icon {
+  width: 17px;
+  height: 17px;
+}
+.btn-modal {
+  background: none;
+  border: none;
+  float: right;
+  /* margin-top: 8px; */
+  opacity: 1;
+  padding: 0;
+  width: 20px;
+}
+.btn-modal:hover {
+  opacity: 0.75;
+}
+.modal .modal-dialog {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  width: 500px;
+  z-index: 2;
+}
+@media only screen and (max-width: 1024px){
+  .modal.in .modal-dialog{
+    width: 95%;
+  }
+}
+.modal-backdrop {
+  z-index: 2;
+}
+.sidebar-modal{
+  font-family: 'Open Sans', sans-serif;
+}
+.sidebar-modal .modal-header {
+  background: #269df9;
+  color: #ffffff;
+}
+.sidebar-modal .close {
+  opacity: 1;
+  color: #ffffff;
+  text-shadow: none;
+}
+.sidebar-modal h4 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+.sidebar-modal p {
+  margin-bottom: 15px;
+}
+
+.map-popup {
+  background: #215784;
+  border-radius: 4px;
+  color: #ffffff;
+  padding: 15px;
+  width: 200px;
+  visibility: hidden;
+}
+.map-popup .popup-header {
+  color: #daeaf7;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+}
+.map-popup .popup-score {
+  font-size: 35px;
+  text-transform: uppercase;
+}
+.map-popup .popup-score .score-unit {
+  font-size: 20px;
+  text-transform: lowercase;
+}
+.map-popup .score-label {
+  color: #daeaf7;
+  font-size: 11px;
+}
+
+/* slide out tabs */
+.slide-out-tab-province,
+.slide-out-tab-legend {
+  background: #ffffff;
+  margin-left: 380px;
+  min-height: 250px;
+}
+.slide-out-tab-province {
+  height: 500px;
+}
+.slide-out-tab-province.open,
+.slide-out-tab-legend.open {
+  z-index: 4;
+}
+
+.handle, .handle-legend {
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-bottomright: 5px;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background: #eeeeee;
+  color: #bbbbbb;
+  height: 150px;
+  width: 35px;
+  z-index: 3;
+}
+
+a.handle:hover {
+  color: #4C8293; /*#397ab0;*/
+  text-decoration: none;
+}
+.handle-label {
+  display: inline-block;
+  font-size: 13px;
+  margin-left: 4px;
+  margin-top: 26px;
+  white-space: nowrap;
+  width: 30px;
+
+  /*styles below are for text rotation*/
+  /* Safari */
+  -webkit-transform: rotate(90deg);
+  /* Firefox */
+  -moz-transform: rotate(90deg);
+  /* IE */
+  -ms-transform: rotate(-90deg);
+  /* Opera */
+  -o-transform: rotate(90deg);
+  /* Internet Explorer */
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+.slide-out-tab-legend .handle-label {
+  margin-top: 60px;
+}
+.slideout-content-wrapper {
+  color: #888888;
+  padding: 20px;
+  width: 250px;
+}
+.slideout-content-wrapper h4{
+  color: #000000;
+  font-size: 15px;
+  font-weight: normal;
+  margin-bottom: 20px;
+}
+.selected-projects {
+  border-left: 1px solid #bbbbbb;
+  color: #888888;
+  font-size: 10px;
+  margin-left: 5px;
+  padding-left: 5px;
+}
+.options-list label{
+  font-size: 12px;
+  font-weight: normal;
+}
+.options-list .list-label {
+  margin-left: 5px;
+}
+.options-list ul,
+.select-options{
+  list-style: none;
+  padding-left: 0;
+}
+.select-options label {
+  font-weight: normal;
+}
+.select-options {
+  display: block;
+  padding-bottom: 25px;
+}
+.select-options li {
+  float: left;
+  font-size: 12px;
+  margin-right: 15px;
+}
+.select-options input[type=radio] {
+  height: 15px;
+  width: 15px;
+}
+
+/* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
+.leaflet-interactive {
+	fill-opacity: .6;
+}
+
+
+#loading-bar-spinner {
+  display: block;
+  position: fixed;
+  z-index: 10002;
+  top: 50%;
+  left: 50%;
+}
+
+#loading-bar-spinner .spinner-icon {
+  width: 34px;
+  height: 34px;
+}
+
+.hdx-3w-info {
+	float: left;
+	padding:5px;
+    background-color:white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+@media only screen and (max-width: 1024px){
+  .hdx-3w-info{
+    display: none;
+  }
+}
+/* .dc-chart g.row text {
+    fill: black;
+} */
+.dc-chart svg g g.axis { display: none; }
+
+.big-icon {
+    font-size: 24px;
+}
+.reset-button,
+.reset-button:visited{
+	visibility:hidden;
+	background-color: #951301;
+	text-decoration: none;
+	font-weight: bold;
+	color: white;
+	padding: 2px 10px 2px 10px;
+    border-radius: 5px;
+}
+.reset-button:hover,
+.reset-button:focus{
+	visibility:hidden;
+	background-color: #045a8d;
+	color: white;
+	text-decoration: none;
+	cursor:pointer;
+}
+
+/* Collapsible sidebar */
+
+body {
+    background: none repeat scroll 0 0 white;
+}
+.sidebar-menu-collapsed {
+    width: 75px;
+}
+.sidebar-menu-expanded {
+    width: 380px;
+}
+}
+
+
+/* Multi-level Accordion */
+/* * {
+  margin: 0; padding: 0;
+}
+body {
+  font-size: 100%;
+} */
+.accordion {
+  width: 380px;
+  margin: 20px auto;
+}
+.accordion h1, h2, h3, h4 {
+  cursor: pointer;
+} /*
+ .accordion h2, h3, h4 {
+  font-family: "News Cycle";
+} */
+ .accordion h1 {
+  padding: 15px 20px;
+  background-color: #333;
+  font-family: Lobster;
+  font-size: 1.5rem;
+  font-weight: normal;
+  color: #1abc9c;
+}
+.accordion h1:hover {
+  color: #4afcdc;
+}
+.accordion h1:first-child {
+  border-radius: 10px 10px 0 0;
+}
+.accordion h1:last-of-type {
+  border-radius: 0 0 10px 10px;
+}
+.accordion h1:not(:last-of-type) {
+  border-bottom: 1px dotted #1abc9c;
+}
+.accordion h2 {
+  padding: 5px 25px;
+  background-color: #1abc9c;
+  font-size: 1.1rem;
+  color: #333;
+}
+.accordion h2:hover {
+  background-color: #09ab8b;
+}
+.accordion h3 {
+  padding: 5px 30px;
+  background-color: #b94152;
+  font-size: .9rem;
+  color: #ddd;
+}
+.accordion h3:hover {
+  background-color: #a93142;
+}
+.accordion h4 {
+  padding: 5px 35px;
+  background-color: #ffc25a;
+  font-size: .9rem;
+  color: #af720a;
+}
+.accordion h4:hover {
+  background-color: #e0b040;
+}
+.accordion p {
+  padding: 15px 35px;
+  background-color: #ddd;
+  font-family: "Georgia";
+  font-size: .8rem;
+  color: #333;
+  line-height: 1.3rem;
+}
+.accordion .opened-for-codepen {
+  display: block;
+}
+
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.collapse-button{
+  background-color: #d9dcdc;
+  border: 2px solid #d9dcdc;
+  cursor: pointer;                  
+  float: right;
+  background-position: center center;
+  background-repeat: no-repeat;
+  /* background-size: 20px 20px; */
+  height: 34px;
+  padding: 10px;
+  width: 43px;
+}
+.collapse-button[aria-expanded="true"]{
+  background-image:
+  url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImNvbGxhcHNlZG93biIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IgoJIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojOTUxMzAxO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTI1NiwyMTMuN0wyNTYsMjEzLjdMMjU2LDIxMy43TDgxLjUsMzgwLjRjLTQuMyw0LjItMTEuNCw0LjEtMTUuOC0wLjJsLTMwLjUtMzBjLTQuNC00LjMtNC41LTExLjMtMC4yLTE1LjUKCWwyMTMuMy0yMDMuNmMyLjItMi4yLDUuMi0zLjIsOC4xLTNjMy0wLjEsNS45LDAuOSw4LjEsM2wyMTIsMjA0LjhjNC4zLDQuMiw0LjIsMTEuMi0wLjIsMTUuNWwtMzAuNywyOS44CgljLTQuNCw0LjMtMTEuNSw0LjQtMTUuOCwwLjJMMjU2LDIxMy43eiIvPgo8L3N2Zz4K");
+}
+.collapse-button[aria-expanded="false"]{
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDIxLjEuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPgo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9ImNvbGxhcHNlZG93biIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IgoJIHk9IjBweCIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPHN0eWxlIHR5cGU9InRleHQvY3NzIj4KCS5zdDB7ZmlsbDojOTUxMzAxO30KPC9zdHlsZT4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTI1NiwyOTguNEwyNTYsMjk4LjRMMjU2LDI5OC40bDE3NC0xNjcuM2M0LjMtNC4yLDExLjQtNC4xLDE1LjgsMC4ybDMwLjYsMjkuOWM0LjQsNC4zLDQuNSwxMS4zLDAuMiwxNS41CglMMjY0LjEsMzgxYy0yLjIsMi4yLTUuMiwzLjItOC4xLDNjLTMsMC4xLTUuOS0wLjktOC4xLTNMMzUuMiwxNzYuOWMtNC4zLTQuMi00LjItMTEuMiwwLjItMTUuNUw2NiwxMzEuNWM0LjQtNC4zLDExLjUtNC40LDE1LjgtMC4yCglMMjU2LDI5OC40eiIvPgo8L3N2Zz4K");
+}
+@media only screen and (max-width: 767px){
+  .collapse-button{
+     width: 14%;
+  }
+}
+
+/* @media only screen and (max-width: 767px){
+  .collapse-button[aria-expanded="true"],
+  .collapse-button[aria-expanded="false"]{
+    background-image: none;
+  }
+  .collapse-button{
+    background-image: none;
+    float: left;
+    font-size:10px;
+    font-weight: bold;
+    line-height: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    width: 33%
+  }
+  .collapse-button[aria-expanded="false"]::before{
+    background-image: none;
+    content: "hide panel";
+    width: 100%;
+    text-align: center;
+  }
+  .collapse-button[aria-expanded="true"]::before{
+    background-image: none;
+    content: "view panel";
+    width: 100%;
+    text-align: center;
+  }
+  .collapse-button.collapsed{
+    background-image: none;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .collapse-button.collapsed{
+    background-image: none;
+  }
+} */
+.export-button-wrapper{
+  background: #ffffff;
+}
+.export-button.models{
+  padding-left: 38px;
+}
+#row-chart-container{
+  position:absolute;
+  width:100%;
+  height:95%;
+  background-color:#fff;
+  visibility:hidden
+}
+@media only screen and (max-width: 767px){
+  #row-chart-container{
+    /* position:relative; */
+    width:100%;
+    height:80%;
+    height: calc(100% - 175px);
+    background-color:#fff;
+    visibility:hidden;
+    z-index: 4;
+    top: 110px;
+  }
+}
+#row-chart{
+  position:absolute;
+  left: 0%;
+  width:100%;
+  height:95%;
+  /* overflow:auto; */
+  background-color:#fff
+}
+/* chart */
+
+/* #row-chart-container{
+  margin-left: -50px;
+  width: 100%;
+} */
+@media only screen and (max-width: 414px){
+  #row-chart-container{
+    margin-top: 80px;
+  }
+}
+@media only screen and (max-width: 1024px){
+  .leaflet-left .leaflet-control{
+    margin-top: 50px;
+  }
+
+}
+@media only screen and (max-width: 767px){
+  .export-btn-arrow{
+    /* float: right; */
+  }
+}
+
+#model-items,#global-model-items{
+  min-width: 220px;
+}
+
+@media only screen and (max-width: 1024px){
+  #model-items,#global-model-items{
+    border-radius: 0;
+    border: none;
+    margin-left: -3px;
+    width: 100%;
+  }
+  .csv-download{
+    display: none;
+  }
+  .divider.csv-divider{
+    display: none;
+  }
+  .leaflet-control-zoom{
+    display: none;
+  }
+}
+.navbar-top-links li{
+  background: #ffffff;
+  margin-left: 5px;
+}
+.tabular-wrapper{
+  bottom: 0;
+  left: -10px;
+  top: 30px;
+  overflow-y: auto;
+  position: absolute;
+  margin-left: 380px;
+  width: 80%;
+  width: -webkit-calc(100% - 370px);
+  width: -moz-calc(100% - 370px);
+  width: calc(100% - 370px);
+}
+.tabular{
+  /* position:relative;
+  margin-left: 370px;
+  height: 95%;
+  overflow:auto;
+  background-color: #fff;
+  padding-bottom: 100px;*/
+}
+@media only screen and (max-width: 767px){
+  .tabular-wrapper{
+    overflow: auto;
+    position: relative;
+    margin-left: 0;
+    height: 100%;
+    width: 100%;
+  }
+  .tabular{
+    /* margin-left: 0;
+    margin-top: 50px;
+    border:1px solid grey;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    width: 100%;
+    top: 0; */
+  }
+}
+
+@media only screen and (max-width: 414px){
+  .tabular-wrapper{
+    left: -10px;
+    top: 10px;
+    margin-top: -50px;
+    overflow: auto;
+    width: calc(100% + 10px);
+  }
+  .tabular{
+    left: auto;
+    margin-left: 0;
+    margin-top: -10px;
+    width: 100%;
+    position: relative;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .leaflet-top.leaflet-right{
+    top: auto;
+    bottom: 60px;
+  }
+}
+
+.leaflet-bottom{
+  bottom: 10px;
+}
+
+.info.legend.leaflet-control{
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 1024px){
+  .info.legend.leaflet-control{
+    margin-top: 60px;
+  }
+}
+@media only screen and (max-width: 767px){
+  .leaflet-control-container{
+    position: absolute;
+  }
+  .info.legend.leaflet-control{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    width: 90px;
+    z-index: 3;
+  }
+}
+
+@media only screen and (max-width: 767px){
+  .legend,
+  .leaflet-control-attribution .leaflet-control{
+    position: absolute;
+    /* z-index: 1; */
+  }
+}
+.leaflet-container{
+    /* top: -120px; */
+}
+.leaflet-control-attribution{
+  bottom: 0px;
+}
+@media only screen and (max-width: 767px){
+  .leaflet-container .leaflet-control-attribution,
+  .leaflet-container .leaflet-control-scale{
+    display: none;
+  }
+}
+
+.leaflet-top .leaflet-control{
+  /* margin-top: 70px; */
+}
+.leaflet-top .hdx-3w-info{
+  margin-top: 60px;
+}
+div.dc-chart{
+/* margin-top: 30px; */
+}/* cursor for data toggles to work on  */
+
+[data-toggle~="collapse"] {
+    cursor: pointer;
+}
+
+
+    </style>
+        
+    
+</head>
+
+<body class="">
+
+	<section class="content">
+		<section class="container-fluid">
+
+			<nav id="header" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+
+				<div class="navbar-header">
+					<a class="navbar-brand" href="http://www.inform-index.org" target="_blank">
+						<img src="" id="inform_logo-png" class="logo">
+					</a>
+                    <span id="model-title" class="navbar-brand" style="padding-left:0px; font-size:12px;"></span>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#menu-buttons" aria-controls="dataaccess" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+				</div>
+				<div id="menu-buttons" aria-expanded="false" class="button-nav">
+					<ul class="nav navbar-top-links navbar-right">
+						<li class="dropdown">
+							<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+								<div class="export-icon-container"><img class="export-icon" id="icon-download-options-svg" alt="download options"></div>
+									  Data Access
+								<i class="fa fa-angle-down export-btn-arrow"></i>
+							</a>
+							<ul class="dropdown-menu export-items">
+								<li>
+									<a href ="http://www.inform-index.org/API-documentation" target="_blank">API (incl. source data)</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="http://www.inform-index.org/Results/Global" target="_blank" id="excel" onclick="link_data()">Excel (incl. source data)</a>
+								</li>
+								<li class="divider"></li>
+								<li class="csv-download">
+									<a target="_blank" id="download" onclick="export_csv()">CSV (dashboard data)</a>
+								</li>
+								<li class="divider csv-divider"></li>
+								<li>
+									<a onclick="share_URL()">Share current settings through URL</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-top-links navbar-right">
+						<li class="dropdown">
+							<a class="dropdown-toggle export-button models0" data-toggle="dropdown" href="#">
+								 <div class="export-icon-container"><img class="export-icon" id="model-svg" alt="model icon"></div>
+								Choose Model
+								<i class="fa fa-angle-down export-btn-arrow"></i>
+							</a>
+							<ul class="dropdown-menu" id="model-items"></ul>
+						</li>
+					</ul>
+				</div>
+
+			</nav>
+
+			<div class="content-wrapper">
+
+				<div id="spinner"></div>
+
+				<!-- start: moved tabs -->
+				<div class="zoom-level-nav-wrapper">
+
+				<!-- start: zoom navigation -->
+				<div class="zoom-level-nav map-views">
+					<div class="btn-group zoom-level view-buttons" role="group">
+						<button type="button" class="btn btn-tab btn-map-view active" onclick="mapShow()">
+							<span class="button-label">Map View</span>
+						</button>
+						<button type="button" class="btn btn-tab btn-tabular" onclick="tabularShow()">
+							<span class="button-label">Tabular View</span>
+						</button>
+						<div class="collapse-button" data-toggle="collapse" data-target="#demo" aria-expanded="false" aria-controls="demo">
+						</div>
+					</div>
+					<div class="btn-group zoom-level" role="group">
+						<button id="indicator-button" style="margin-top:3px; color:white; width:100%" type="button" class="btn btn-secondary">
+							<div class="metric_label" id="metric_label"><div>INFORM RISK INDEX</div></div>
+						</button>
+					</div>
+
+					<!-- start: community profiles -->
+					<div class="community-profiles-wrapper">
+						<div id="count-info" class="general-info">
+							<span class="filter-count" id="area_selection">All </span>
+							<span style="font-size: 12px"> selected</span>
+							<a class="reset-button" onclick="reset_function()">Select all</a>
+						</div>
+						<div class="row"></div>
+						<div class='tablearea' id='general'></div>
+						<div class="row"></div>
+					</div>
+					<!-- end: community profiles -->
+
+				</div>
+				<!-- end: zoom navigation -->
+                </div>
+				<!-- end: moved tabs -->
+
+				<!-- start: sidebar -->
+				<div class="navbar-default sidebar-wrapper collapse" role="navigation" id="demo">
+
+				<div>
+
+
+					<!-- start: accordion with stats  -->
+					<div id="accordion" class="indicators-panels" role="tablist" aria-multiselectable="true">
+						<div class="card">
+							<div class="card-header accordion-header level1" role="tab" id="headingOne" style="background-color:#d9dcdc">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									<span class="panel-header-icon" style="border-color:#951301">
+										<img id="INFORM-png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="change_indicator('INFORM')">INFORM Risk Index  <span class="component-score" id="risk_score_main"></span></span>
+									</span>
+								</a>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header level1" role="tab" id="headingThree">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+									<span class="panel-header-icon" style="border-color:#F9B48A">
+										<img id="HA-png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="change_indicator('HA')">Hazards & Exposure Index  <span class="component-score" id="hazard_score_main"></span></span>
+										<span class="panel-header-description">Click for hazard components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseThree" class="collapse level1" role="tabpanel" aria-labelledby="headingThree">
+								<div class="card-block" id="HA"></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header level1" role="tab" id="headingTwo">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="Two">
+									<span class="panel-header-icon" style="border-color:#678FCB">
+										<img id="VU-png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="change_indicator('VU')">Vulnerability Index  <span class="component-score" id="vulnerability_score_main"></span></span>
+										<span class="panel-header-description">Click for vulnerability components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse level1" role="tabpanel" aria-labelledby="headingTwo">
+								<div class="card-block" id="VU"></div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-header accordion-header level1" role="tab" id="headingFour">
+								<a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+									<span class="panel-header-icon" style="border-color:#A7BD88">
+										<img id="CC-png">
+									</span>
+									<span class="panel-header-content">
+										<span class="panel-header-title" onclick="change_indicator('CC')">Lack of Coping Capacity Index  <span class="component-score" id="coping_capacity_score_main"></span></span>
+										<span class="panel-header-description">Click for coping capacity components</span>
+									</span>
+								</a>
+							</div>
+							<div id="collapseFour" class="collapse level1" role="tabpanel" aria-labelledby="headingFour">
+								<div class="card-block" id="CC"></div>
+							</div>
+						</div>
+						<div class="card"></div>
+					</div>
+					<!-- end: accordion with stats -->
+				</div>
+
+				</div>
+				<!-- end: sidebar -->
+
+				<!-- start: map/rowchart container -->
+				<div class="map-wrapper">
+					<div id="map-chart" style="position:absolute; width:100%; height:100%;margin-top:-51px;z-index:0"></div>
+					<div id="row-chart-container">
+
+						<div class="zoom-level-nav sort-nav"> 
+                            <div class="btn-group zoom-level" role="group">
+                                <ul type="button" class="btn btn-secondary btn-active export-button-wrapper">
+									<div class="dropdown">
+										<a class="dropdown-toggle export-button" data-toggle="dropdown" href="#">
+												  Sort by ...
+											<i class="fa fa-angle-down export-btn-arrow"></i>
+										</a>
+										<ul class="dropdown-menu submenu-items">
+											<li>
+												<a class="	submenu-item" onclick="sort('value')" role="button">Indicator Score</a>
+											</li>
+											<li>
+												<a class="submenu-item" onclick="sort('name')" role="button">Area name</a>
+											</li>
+										</ul>
+									</div>
+								</ul>
+                                <div class="btn btn-secondary" style="color:#4d799d" onclick="scrollRowChart()">
+                                    Scroll to Top
+                                </div>
+                            </div>
+						</div>
+						<div class="tabular-wrapper" id="tabular-wrapper">
+							<div id="row-chart" class="tabular">
+						</div>
+					</div>
+				</div>
+				<!-- end: map/rowchart container -->
+
+			</div>
+
+			<!-- start: risk score modal -->
+			<div id="infoModal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<span class="panel-header-icon">
+								<img class="metric_icon">
+							</span>
+							<h4 class="modal-title"><span class="metric_label"><div></div></span></h4>
+						</div>
+						<div class="modal-body" style="word-break:break-all">
+							<h6><b>Source Indicator:</b> <span class="metric_indicator"></span></h6><br>
+							<h6><b>Provider:</b> <span class="metric_provider"></span></h6><br>
+							<h6><b>Source link:</b> <a href="" target="_blank" class="metric_source"></a></h6><br>
+							<h6><b>Description:</b> <span class="metric_desc"></span></h6><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: risk score modal -->
+
+			<!-- start: URL modal -->
+			<div id="URLModal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<h4 class="modal-title">Share current settings directly through URL<h6>Copy URL and paste in browser</h6></h4>
+						</div>
+						<div class="modal-body" style="word-break:break-all">
+							<h6><span id="shareable_URL"></span></h6><br>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: URL modal -->
+
+			<!-- start: IE message -->
+			<div id="IEmodal" class="modal sidebar-modal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">
+								<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+							</button>
+							<h3 class="modal-title">Warning</h3>
+						</div>
+						<div class="modal-body">
+							<p>This dashboard is best viewed in Google Chrome, Firefox or Safari. Internet Explorer works as well, but has interaction downsides.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end: IE message -->
+
+		</section>
+	</section>
+
+<script>
+    var ie = (function(){
+        var undef,rv = -1; // Return value assumes failure.
+        var ua = window.navigator.userAgent;
+        var msie = ua.indexOf('MSIE ');
+        var trident = ua.indexOf('Trident/');
+
+        if (msie > 0) {
+            // IE 10 or older => return version number
+            rv = parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+        } else if (trident > 0) {
+            // IE 11 (or newer) => return version number
+            var rvNum = ua.indexOf('rv:');
+            rv = parseInt(ua.substring(rvNum + 3, ua.indexOf('.', rvNum)), 10);
+        }
+
+        return ((rv > -1) ? rv : undef);
+    }());
+    if (ie) {
+        L_PREFER_CANVAS = true;
+    }
+</script>
+
+<!--Application JavaScript Files-->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/leaflet.js"></script> 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.0.0-beta.3/dc.min.js"></script>
+<!-- <script type="text/javascript" src="bower_components/build/custom/dc-leaflet/js/dc-leaflet-dev.js"></script> -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3&amp;sensor=true"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<!-- <script type="text/javascript" src="bower_components/build/custom/dc-addons/dist/leaflet-map/dc-leaflet.js"></script> -->
+
+<script>
+$('.sidebar-wrapper.collapse').collapse('show');
+$('.sidebar-wrapper.collapse.in.mobile').collapse('hide');
+$(document).ready(function () {
+    if($(window).width() < 768) {
+       $(".sidebar-wrapper").addClass("mobile");
+    }
+});
+</script>
+    
+<!-- dc-leaflet.js -->
+<script>
+
+/*!
+ * dc-addons v0.13.5
+ *
+ * 2016-08-17 08:09:00
+ *
+ */
+(function () {
+    'use strict';
+
+    if (dc.baseMapChart) {
+        return false;
+    }
+
+    dc.baseMapChart = function (_chart) {
+        _chart = dc.baseChart(_chart);
+
+        var _map;
+
+        var _renderPopup = true;
+        var _mapOptions = false;
+        var _defaultCenter = false;
+        var _defaultZoom = false;
+        var _brushOn = false;
+
+        var _tiles = function (map) {
+            L.tileLayer(
+                'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+                {
+                    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                }
+            ).addTo(map);
+        };
+
+        var _popup = function (d) {
+            return _chart.title()(d);
+        };
+
+        _chart._doRender = function () {
+            // abstract
+        };
+
+        _chart._postRender = function () {
+            // abstract
+        };
+
+        _chart.toLocArray = function () {
+            // abstract
+        };
+
+        _chart.mapOptions = function (_) {
+            if (!arguments.length) {
+                return _mapOptions;
+            }
+
+            _mapOptions = _;
+            return _chart;
+        };
+
+        _chart.center = function (_) {
+            if (!arguments.length) {
+                return _defaultCenter;
+            }
+
+            _defaultCenter = _;
+            return _chart;
+        };
+
+        _chart.zoom = function (_) {
+            if (!arguments.length) {
+                return _defaultZoom;
+            }
+
+            _defaultZoom = _;
+            return _chart;
+        };
+
+        _chart.tiles = function (_) {
+            if (!arguments.length) {
+                return _tiles;
+            }
+
+            _tiles = _;
+            return _chart;
+        };
+
+        _chart.map = function (_) {
+            if (!arguments.length) {
+                return _map;
+            }
+
+            _map = _;
+            return _map;
+        };
+
+        _chart.popup = function (_) {
+            if (!arguments.length) {
+                return _popup;
+            }
+
+            _popup = _;
+            return _chart;
+        };
+
+        _chart.renderPopup = function (_) {
+            if (!arguments.length) {
+                return _renderPopup;
+            }
+
+            _renderPopup = _;
+            return _chart;
+        };
+
+        _chart.brushOn = function (_) {
+            if (!arguments.length) {
+                return _brushOn;
+            }
+
+            _brushOn = _;
+            return _chart;
+        };
+
+        return _chart;
+    };
+})();
+
+(function () {
+    'use strict';
+
+    if (dc.baseLeafletChart) {
+        return false;
+    }
+
+    dc.baseLeafletChart = function (_chart) {
+        _chart = dc.baseMapChart(_chart);
+
+        _chart._doRender = function () {
+            var _map = L.map(_chart.root().node(), _chart.mapOptions());
+
+            if (_chart.center() && _chart.zoom()) {
+                _map.setView(_chart.toLocArray(_chart.center()), _chart.zoom());
+            }
+
+            _chart.tiles()(_map);
+
+            _chart.map(_map);
+
+            _chart._postRender();
+
+            return _chart._doRedraw();
+        };
+
+        _chart.toLocArray = function (value) {
+            if (typeof value === 'string') {
+                // expects '11.111,1.111'
+                value = value.split(',');
+            }
+            // else expects [11.111,1.111]
+            return value;
+        };
+
+        return _chart;
+    };
+})();
+
+(function () {
+    'use strict';
+
+    if (dc.leafletChoroplethChart) {
+        return false;
+    }
+
+    dc.leafletChoroplethChart = function (parent, chartGroup) {
+        var _chart = dc.colorChart(dc.baseLeafletChart({}));
+
+        var _geojsonLayer = false;
+        var _dataMap = [];
+
+        var _geojson = false;
+        var _featureOptions = {
+            fillColor: 'black',
+            color: 'gray',
+            opacity: 0.4,
+            fillOpacity: 0.6,
+            weight: 1
+        };
+
+        var _featureKey = function (feature) {
+            return feature.key;
+        };
+
+        var _featureStyle = function (feature) {
+            var v = _dataMap[_chart.featureKeyAccessor()(feature)];
+
+            var options = _chart.featureOptions();
+            var optionsIsFunction = options instanceof Function;
+
+            if (optionsIsFunction) {
+                options = options(feature, v);
+            }
+            options = JSON.parse(JSON.stringify(options));
+
+            if (v && v.d && !optionsIsFunction) {
+                options.fillColor = _chart.getColor(v.d, v.i);
+                if (_chart.filters().indexOf(v.d.key) !== -1) {
+                    options.opacity = 0.8;
+                    options.fillOpacity = 1;
+                }
+            }
+            return options;
+        };
+
+        _chart._postRender = function () {
+            _geojsonLayer = L.geoJson(_chart.geojson(), {
+                style: _chart.featureStyle(),
+                onEachFeature: processFeatures
+            });
+            _chart.map().addLayer(_geojsonLayer);
+        };
+
+        _chart._doRedraw = function () {
+            _geojsonLayer.clearLayers();
+            _dataMap = [];
+            _chart._computeOrderedGroups(_chart.data()).forEach(function (d, i) {
+                _dataMap[_chart.keyAccessor()(d)] = {d: d, i: i};
+            });
+            _geojsonLayer.addData(_chart.geojson());
+        };
+
+        _chart.geojson = function (_) {
+            if (!arguments.length) {
+                return _geojson;
+            }
+
+            _geojson = _;
+            return _chart;
+        };
+
+        _chart.featureOptions = function (_) {
+            if (!arguments.length) {
+                return _featureOptions;
+            }
+
+            _featureOptions = _;
+            return _chart;
+        };
+
+        _chart.featureKeyAccessor = function (_) {
+            if (!arguments.length) {
+                return _featureKey;
+            }
+
+            _featureKey = _;
+            return _chart;
+        };
+
+        _chart.featureStyle = function (_) {
+            if (!arguments.length) {
+                return _featureStyle;
+            }
+
+            _featureStyle = _;
+            return _chart;
+        };
+
+        var processFeatures = function (feature, layer) {
+            var v = _dataMap[_chart.featureKeyAccessor()(feature)];
+            if (v && v.d) {
+                layer.key = v.d.key;
+
+                if (_chart.renderPopup()) {
+                    layer.bindPopup(_chart.popup()(v.d, feature));
+                }
+
+                if (_chart.brushOn()) {
+                    layer.on('click', selectFilter);
+                }
+            }
+        };
+
+        var selectFilter = function (e) {
+            if (!e.target) {
+                return;
+            }
+
+            var filter = e.target.key;
+            dc.events.trigger(function () {
+                _chart.filter(filter);
+                dc.redrawAll(_chart.chartGroup());
+            });
+        };
+
+        return _chart.anchor(parent, chartGroup);
+    };
+})();
+
+(function () {
+    'use strict';
+
+    if (dc.leafletMarkerChart) {
+        return false;
+    }
+
+    dc.leafletMarkerChart = function (parent, chartGroup) {
+        var _chart = dc.baseLeafletChart({});
+
+        var _cluster = false; // requires leaflet.markerCluster
+        var _clusterOptions = false;
+        var _rebuildMarkers = false;
+        var _brushOn = true;
+        var _filterByArea = false;
+
+        var _innerFilter = false;
+        var _zooming = false;
+        var _layerGroup = false;
+        var _markerList = {};
+
+        var _fitOnRender = true;
+        var _fitOnRedraw = false;
+        var _disableFitOnRedraw = false;
+
+        var _renderPopup = true;
+        var _popupOnHover = false;
+
+        _chart.renderTitle(true);
+
+        var _location = function (d) {
+            return _chart.keyAccessor()(d);
+        };
+
+        var _marker = function (d) {
+            var marker = new L.Marker(_chart.toLocArray(_chart.locationAccessor()(d)),{
+                title: _chart.renderTitle() ? _chart.title()(d) : '',
+                alt: _chart.renderTitle() ? _chart.title()(d) : '',
+                icon: _icon(d, _chart.map()),
+                clickable: _chart.renderPopup() || (_chart.brushOn() && !_filterByArea),
+                draggable: false
+            });
+            return marker;
+        };
+
+        var _icon = function (d,map) {
+            return new L.Icon.Default();
+        };
+
+        var _popup = function (d,marker) {
+            return _chart.title()(d);
+        };
+
+        _chart._postRender = function () {
+            if (_chart.brushOn()) {
+                if (_filterByArea) {
+                    _chart.filterHandler(doFilterByArea);
+                }
+
+                _chart.map().on('zoomend moveend', zoomFilter, this);
+                if (!_filterByArea) {
+                    _chart.map().on('click', zoomFilter, this);
+                }
+                _chart.map().on('zoomstart', zoomStart, this);
+            }
+
+            if (_cluster) {
+                _layerGroup = new L.MarkerClusterGroup(_clusterOptions ? _clusterOptions : null);
+            }
+            else {
+                _layerGroup = new L.LayerGroup();
+            }
+            _chart.map().addLayer(_layerGroup);
+        };
+
+        _chart._doRedraw = function () {
+            var groups = _chart._computeOrderedGroups(_chart.data()).filter(function (d) {
+                return _chart.valueAccessor()(d) !== 0;
+            });
+
+            if (_rebuildMarkers) {
+                _markerList = {};
+            }
+            _layerGroup.clearLayers();
+
+            var addList = [];
+            groups.forEach(function (v,i) {
+                var key = _chart.keyAccessor()(v);
+                var marker = null;
+                if (!_rebuildMarkers && key in _markerList) {
+                    marker = _markerList[key];
+                }
+                else {
+                    marker = createmarker(v,key);
+                }
+
+                var curFilters = _chart.filters();
+                var markerOpacity = curFilters.length ? 0.3 : 1.0;
+                curFilters.forEach(function (filter) {
+                    if (key === filter) {
+                        markerOpacity = 1.0;
+                    }
+                });
+                marker.setOpacity(markerOpacity);
+
+                if (!_chart.cluster()) {
+                    _layerGroup.addLayer(marker);
+                }
+                else {
+                    addList.push(marker);
+                }
+            });
+
+            if (_chart.cluster() && addList.length > 0) {
+                _layerGroup.addLayers(addList);
+            }
+
+            if (addList.length > 0) {
+                if (_fitOnRender || (_fitOnRedraw && !_disableFitOnRedraw)) {
+                    var featureGroup = new L.featureGroup(addList);
+                    _chart.map().fitBounds(featureGroup.getBounds());//.pad(0.5));
+                }
+            }
+
+            _disableFitOnRedraw = false;
+            _fitOnRender = false;
+        };
+
+        _chart.locationAccessor = function (_) {
+            if (!arguments.length) {
+                return _location;
+            }
+            _location = _;
+            return _chart;
+        };
+
+        _chart.marker = function (_) {
+            if (!arguments.length) {
+                return _marker;
+            }
+            _marker = _;
+            return _chart;
+        };
+
+        _chart.icon = function (_) {
+            if (!arguments.length) {
+                return _icon;
+            }
+            _icon = _;
+            return _chart;
+        };
+
+        _chart.popup = function (_) {
+            if (!arguments.length) {
+                return _popup;
+            }
+            _popup = _;
+            return _chart;
+        };
+
+        _chart.renderPopup = function (_) {
+            if (!arguments.length) {
+                return _renderPopup;
+            }
+            _renderPopup = _;
+            return _chart;
+        };
+
+        _chart.popupOnHover = function (_) {
+            if (!arguments.length) {
+                return _popupOnHover;
+            }
+            _popupOnHover = _;
+            return _chart;
+        };
+
+        _chart.cluster = function (_) {
+            if (!arguments.length) {
+                return _cluster;
+            }
+            _cluster = _;
+            return _chart;
+        };
+
+        _chart.clusterOptions = function (_) {
+            if (!arguments.length) {
+                return _clusterOptions;
+            }
+            _clusterOptions = _;
+            return _chart;
+        };
+
+        _chart.rebuildMarkers = function (_) {
+            if (!arguments.length) {
+                return _rebuildMarkers;
+            }
+            _rebuildMarkers = _;
+            return _chart;
+        };
+
+        _chart.brushOn = function (_) {
+            if (!arguments.length) {
+                return _brushOn;
+            }
+            _brushOn = _;
+            return _chart;
+        };
+
+        _chart.filterByArea = function (_) {
+            if (!arguments.length) {
+                return _filterByArea;
+            }
+            _filterByArea = _;
+            return _chart;
+        };
+
+        _chart.fitOnRender = function (_) {
+            if (!arguments.length) {
+                return _fitOnRender;
+            }
+
+            _fitOnRender = _;
+            return _chart;
+        };
+
+        _chart.fitOnRedraw = function (_) {
+            if (!arguments.length) {
+                return _fitOnRedraw;
+            }
+
+            _fitOnRedraw = _;
+            return _chart;
+        };
+
+        _chart.markerGroup = function () {
+            return _layerGroup;
+        };
+
+        var createmarker = function (v,k) {
+            var marker = _marker(v);
+            marker.key = k;
+            if (_chart.renderPopup()) {
+                marker.bindPopup(_chart.popup()(v,marker));
+
+                if (_chart.popupOnHover()) {
+                    marker.on('mouseover', function () {
+                        marker.openPopup();
+                    });
+
+                    marker.on('mouseout', function () {
+                        marker.closePopup();
+                    });
+                }
+            }
+
+            if (_chart.brushOn() && !_filterByArea) {
+                marker.on('click',selectFilter);
+            }
+            _markerList[k] = marker;
+            return marker;
+        };
+
+        var zoomStart = function (e) {
+            _zooming = true;
+        };
+
+        var zoomFilter = function (e) {
+            if (e.type === 'moveend' && (_zooming || e.hard)) {
+                return;
+            }
+            _zooming = false;
+
+            _disableFitOnRedraw = true;
+
+            if (_filterByArea) {
+                var filter;
+                if (_chart.map().getCenter().equals(_chart.center()) && _chart.map().getZoom() === _chart.zoom()) {
+                    filter = null;
+                }
+                else {
+                    filter = _chart.map().getBounds();
+                }
+                dc.events.trigger(function () {
+                    _chart.filter(null);
+                    if (filter) {
+                        _innerFilter = true;
+                        _chart.filter(filter);
+                        _innerFilter = false;
+                    }
+                    dc.redrawAll(_chart.chartGroup());
+                });
+            } else if (_chart.filter() && (e.type === 'click' ||
+                                           (_markerList.hasOwnProperty(_chart.filter()) &&
+                                            !_chart.map().getBounds().contains(_markerList[_chart.filter()].getLatLng())))) {
+                dc.events.trigger(function () {
+                    _chart.filter(null);
+                    if (_renderPopup) {
+                        _chart.map().closePopup();
+                    }
+                    dc.redrawAll(_chart.chartGroup());
+                });
+            }
+        };
+
+        var doFilterByArea = function (dimension, filters) {
+            _disableFitOnRedraw = true;
+            _chart.dimension().filter(null);
+            if (filters && filters.length > 0) {
+                _chart.dimension().filterFunction(function (d) {
+                    if (!(d in _markerList)) {
+                        return false;
+                    }
+                    var locO = _markerList[d].getLatLng();
+                    return locO && filters[0].contains(locO);
+                });
+                if (!_innerFilter && _chart.map().getBounds().toString !== filters[0].toString()) {
+                    _chart.map().fitBounds(filters[0]);
+                }
+            }
+        };
+
+        var selectFilter = function (e) {
+            if (!e.target) {
+                return;
+            }
+
+            _disableFitOnRedraw = true;
+            var filter = e.target.key;
+            dc.events.trigger(function () {
+                _chart.filter(filter);
+                dc.redrawAll(_chart.chartGroup());
+            });
+        };
+
+        return _chart.anchor(parent, chartGroup);
+    };
+})();
+
+(function () {
+    'use strict';
+
+    if (dc.leafletCustomChart) {
+        return false;
+    }
+
+    dc.leafletCustomChart = function (parent, chartGroup) {
+        var _chart = dc.baseLeafletChart({});
+
+        var _redrawItem = null;
+        var _renderItem = null;
+
+        _chart.renderTitle(true);
+
+        _chart._postRender = function () {
+            var data = _chart._computeOrderedGroups(_chart.data());
+
+            data.forEach(function (d, i) {
+                _chart.renderItem()(_chart, _chart.map(), d, i);
+            });
+        };
+
+        _chart._doRedraw = function () {
+            var data = _chart._computeOrderedGroups(_chart.data());
+
+            var accessor = _chart.valueAccessor();
+
+            data.forEach(function (d, i) {
+                d.filtered = accessor(d) === 0;
+                _chart.redrawItem()(_chart, _chart.map(), d, i);
+            });
+        };
+
+        _chart.redrawItem = function (_) {
+            if (!arguments.length) {
+                return _redrawItem;
+            }
+
+            _redrawItem = _;
+            return _chart;
+        };
+
+        _chart.renderItem = function (_) {
+            if (!arguments.length) {
+                return _renderItem;
+            }
+
+            _renderItem = _;
+            return _chart;
+        };
+
+        return _chart.anchor(parent, chartGroup);
+    };
+})();
+
+//Legend code adapted from http://leafletjs.com/examples/choropleth.html
+dc.leafletLegend = function () {
+    var _parent, _legend = {};
+    var _leafletLegend = null;
+    var _position = 'bottomleft';
+
+    _legend.parent = function (parent) {
+        if (!arguments.length) {
+            return _parent;
+        }
+        _parent = parent;
+        return this;
+    };
+
+    var _LegendClass = function () {
+        return L.Control.extend({
+            options: {position: _position},
+            onAdd: function (map) {
+                this._div = L.DomUtil.create('div', 'info legend');
+                map.on('moveend',this._update,this);
+                this._update();
+                return this._div;
+            },
+            _update: function () {
+                if (_parent.colorDomain()) { // check because undefined for marker charts
+                    var minValue = _parent.colorDomain()[0],
+                        maxValue = _parent.colorDomain()[1], //_parent.colorDomain().length - 1],
+                        palette = _parent.colors().range(),
+                        colorLength = _parent.colors().range().length,
+                        delta = (maxValue - minValue) / colorLength,
+                        length = _parent.colorDomain().length,
+                        step = Math.floor(length/5),
+                        i;
+
+                    // define grades for legend colours
+                    // based on equation in dc.js colorCalculator (before version based on colorMixin)
+                    var grades = [];
+                    //grades[0] = Math.round(minValue);
+                    for (i = 1; i < colorLength; i++) {
+                        grades[i] = Math.round(_parent.colorDomain()[step*(i)]*10)/10; //Math.round((0.5 + (i - 1)) * delta + minValue);
+                        if (grades[i] >= 1000000) {grades[i]=Math.round(grades[i]/100000)/10 + 'M';}
+                        else if (grades[i] >= 1000) {grades[i]=Math.round(grades[i]/100)/10 + 'k';}
+                    }
+                    var labels = ['low risk','','','','high risk'];
+
+                    // var div = L.DomUtil.create('div', 'info legend');
+                    // loop through our density intervals and generate a label with a colored
+                    // square for each interval
+                    this._div.innerHTML = ''; //reset so that legend is not plotted multiple times
+                    for (i = 0; i < grades.length; i++) {
+                        this._div.innerHTML +=
+                            '<i style="background:' + palette[i] + '"></i> ' +
+                            //grades[i] + (i < grades.length - 1 ? ' &ndash; ' + grades[i + 1] + '<br>' : '+');
+                            labels[i] + (i < grades.length - 1 ? '<br>' : '');
+                    }
+                }
+            }
+        });
+    };
+
+    _legend.LegendClass = function (LegendClass) {
+        if (!arguments.length) {
+            return _LegendClass;
+        }
+
+        _LegendClass = LegendClass;
+        return _legend;
+    };
+
+    _legend.render = function () {
+        // unfortunately the dc.js legend has no concept of redraw, it's always render
+        if (!_leafletLegend) {
+            // fetch the legend class creator, invoke it
+            var Legend = _legend.LegendClass()();
+            // and constuct that class
+            _leafletLegend = new Legend();
+            _leafletLegend.addTo(_parent.map());
+        }
+
+        return _legend.redraw();
+    };
+
+    _legend.redraw = function () {
+        _leafletLegend._update();
+        return _legend;
+    };
+
+    _legend.leafletLegend = function () {
+        return _leafletLegend;
+    };
+
+    _legend.position = function (position) {
+        if (!arguments.length) {
+            return _position;
+        }
+        _position = position;
+        return _legend;
+    };
+
+    return _legend;
+};
+</script>
+    
+<!-- dc-leaflet-dev.js -->
+<script>
+/* global dc, L */
+dc.leafletChart = function (_chart) {
+    "use strict";
+    _chart = dc.baseChart(_chart);
+
+    var _map;
+
+    var _mapOptions = false;
+    var _defaultCenter = false;
+    var _defaultZoom = false;
+
+    var _createLeaflet = function(root) {
+        return L.map(root.node(),_mapOptions);
+    }; 
+    
+    var _tiles = function (map) {
+        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+        //});
+        //L.tileLayer('https://a.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //    attribution: '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+    };
+    
+    _chart.createLeaflet = function(_) {
+        if(!arguments.length) {
+            return _createLeaflet;
+        }
+        _createLeaflet = _;
+        return _chart;
+    };
+
+    _chart._doRender = function () {
+        _map = _createLeaflet(_chart.root());
+        if (_defaultCenter && _defaultZoom) {
+            _map.setView(_chart.toLocArray(_defaultCenter), _defaultZoom);
+        }
+        _chart.tiles()(_map);
+        _chart._postRender();
+
+        return _chart._doRedraw();
+    };
+
+    _chart._postRender = function () {
+        //abstract
+    };
+
+    _chart.mapOptions = function (_) {
+        if (!arguments.length) {
+            return _mapOptions;
+        }
+        _mapOptions = _;
+        return _chart;
+    };
+
+    _chart.center = function (_) {
+        if (!arguments.length) {
+            return _defaultCenter;
+        }
+        _defaultCenter = _;
+        return _chart;
+    };
+
+    _chart.zoom = function (_) {
+        if (!arguments.length) {
+            return _defaultZoom;
+        }
+        _defaultZoom = _;
+        return _chart;
+    };
+
+    _chart.tiles = function (_) {
+        if (!arguments.length) {
+            return _tiles;
+        }
+        _tiles = _;
+        return _chart;
+    };
+
+    _chart.map = function () {
+        return _map;
+    };
+
+    _chart.toLocArray = function (value) {
+        if (typeof value === "string") {
+            // expects '11.111,1.111'
+            value = value.split(",");
+        }
+        // else expects [11.111,1.111]
+        return value;
+    };
+
+    return _chart;
+};
+
+
+/***************************
+ LeafletBubbleChart
+ ***************************/
+dc.leafletBubbleChart = function (parent, chartGroup) {
+    "use strict";
+
+    /* ####################################
+     * Private variables -- default values.
+     * ####################################
+     */
+    var _chart = dc.leafletChart({});
+    var _selectedMarkerList = [];
+    var _selectedColor = 'blue';
+    var _unselectedColor = 'gray';
+    var _layerGroup = false;
+
+    var _location = function (d) {
+        return _chart.keyAccessor()(d);
+    };
+
+    var _r = d3.scale.linear().domain([0, 100]);
+    var _brushOn = true;
+
+    var _marker = function (d, map) {
+        var key = _chart.locationAccessor()(d);
+        var locArray = _chart.toLocArray(key);
+
+        var latlng = L.latLng(+locArray[0], +locArray[1]);
+        var circle = L.circleMarker(latlng);
+
+        circle.setRadius(_chart.r()(_chart.valueAccessor()(d)));
+        circle.on("mouseover", function (e) {
+            // TODO - Tooltips!
+            console.log(_chart.title()(d));
+        });
+        var isSelected = (-1 !== _selectedMarkerList.indexOf(key));
+
+        circle.options.color = isSelected ? _chart.selectedColor() : _chart.unselectedColor();
+
+        return circle;
+    };
+
+    /* ########################
+     * Private helper functions
+     * ########################
+     */
+
+    function clearSelectedMarkerList() {
+        while (_selectedMarkerList.length > 0) {
+            _selectedMarkerList.pop();
+        }
+    }
+
+    /* ################
+     * Public interface
+     * ################
+    */
+
+
+    /**
+     #### .r([bubbleRadiusScale])
+     Get or set bubble radius scale. By default bubble chart uses ```d3.scale.linear().domain([0, 100])``` as it's r scale .
+
+     **/
+    _chart.r = function (_) {
+        if (!arguments.length) return _r;
+        _r = _;
+        return _chart;
+    };
+
+    _chart.brushOn = function (_) {
+        if (!arguments.length) {
+            return _brushOn;
+        }
+        _brushOn = _;
+        return _chart;
+    };
+
+    _chart.locationAccessor = function (_) {
+        if (!arguments.length) {
+            return _location;
+        }
+        _location = _;
+        return _chart;
+    };
+    /**
+     #### .selectedColor([color])
+     Get or set the color of a selected (filter) bubble.
+
+     */
+    _chart.selectedColor = function (_) {
+        if (!arguments.length) {
+            return _selectedColor;
+        }
+        _selectedColor = _;
+        return _chart;
+    };
+
+    /**
+     #### .unselectedColor([color])
+     Get or set the color of a bubble which is not currently in the filter.
+
+     */
+    _chart.unselectedColor = function (_) {
+        if (!arguments.length) {
+            return _unselectedColor;
+        }
+        _unselectedColor = _;
+        return _chart;
+    };
+
+    var createmarker = function (v, k) {
+        var marker = _chart.marker()(v);
+        marker.key = k;
+        if (_chart.brushOn()) {
+            marker.on("click", selectFilter);
+        }
+        return marker;
+    };
+
+    _chart.marker = function (_) {
+        if (!arguments.length) {
+            return _marker;
+        }
+        _marker = _;
+        return _chart;
+    };
+
+    /* Render and redraw overrides */
+    _chart.filterAll = function () {
+        // Clear selectedMarkerList on a call to filterAll.
+        clearSelectedMarkerList();
+        return _chart.filter(null);
+    };
+
+    _chart._postRender = function () {
+        if (_chart.brushOn()) {
+
+            _chart.map().on('click', function (e) {
+                while (_selectedMarkerList.length > 0) {
+                    _selectedMarkerList.pop();
+                }
+                dc.events.trigger(function () {
+                    _chart.filter(null);
+                    dc.redrawAll(_chart.chartGroup());
+                });
+            });
+        }
+        _chart.map().on('boxzoomend', boxzoomFilter, this);
+        _layerGroup = new L.LayerGroup();
+        _chart.map().addLayer(_layerGroup);
+    };
+
+    _chart._doRedraw = function () {
+        var groups = _chart._computeOrderedGroups(_chart.data()).filter(function (d) {
+            return _chart.valueAccessor()(d) !== 0;
+        });
+        _layerGroup.clearLayers();
+        groups.forEach(function (v, i) {
+            var key = _chart.keyAccessor()(v);
+            var marker = null;
+
+            marker = createmarker(v, key);
+            _layerGroup.addLayer(marker)
+        });
+    };
+
+    /* Callback functions */
+    function boxzoomFilter(e) {
+        clearSelectedMarkerList();
+
+        _layerGroup.eachLayer(function (layer) {
+            var latLng = layer.getLatLng();
+            if (e.boxZoomBounds.contains(latLng)) {
+                _selectedMarkerList.push(layer.key);
+            }
+        });
+
+        dc.events.trigger(function (e) {
+            _chart.dimension().filterFunction(function (d) {
+                return _selectedMarkerList.indexOf(d) !== -1;
+            });
+            dc.redrawAll();
+        });
+    }
+
+    var selectFilter = function (e) {
+        if (!e.target) {
+            dc.events.trigger(function () {
+                _chart.filter(null);
+                dc.redrawAll(_chart.chartGroup());
+            });
+            return;
+        }
+        var filter = e.target.key;
+
+        if (e.originalEvent.ctrlKey) {
+            // If ctrl key modifier was pressed on click.
+            var selectedIndex = _selectedMarkerList.indexOf(filter);
+            if (selectedIndex === -1) {
+                // If target not already in selected marker list, add it.
+                _selectedMarkerList.push(filter);
+            }
+            else {
+                // Else, remove it.
+                _selectedMarkerList.splice(selectedIndex, 1);
+            }
+        }
+        else {
+            // If ctrl key wasnt pressed, clear filter and selection and add target to a empty selectedMarkersList.
+            while (_selectedMarkerList.length > 0) {
+                _selectedMarkerList.pop();
+            }
+            _selectedMarkerList.push(filter);
+        }
+        dc.events.trigger(function () {
+            if (_selectedMarkerList.length > 0) {
+                _chart.dimension().filterFunction(function (d) {
+                    return _selectedMarkerList.indexOf(d) !== -1;
+                });
+            } else {
+                _chart.filter(null);
+            }
+            dc.redrawAll(_chart.chartGroup());
+        });
+    };
+
+
+    return _chart.anchor(parent, chartGroup);
+}
+;
+
+/***********************************
+ Markers
+ ***********************************/
+dc.leafletMarkerChart = function (parent, chartGroup) {
+    "use strict";
+    var _chart = dc.leafletChart({});
+
+    var _renderPopup = true;
+    var _cluster = false; // requires leaflet.markerCluster
+    var _clusterOptions = false;
+    var _rebuildMarkers = false;
+    var _brushOn = true;
+    var _filterByArea = false;
+
+    var _filter;
+    var _innerFilter = false;
+    var _zooming = false;
+    var _layerGroup = false;
+    var _markerList = [];
+    var _currentGroups = false;
+
+    _chart.renderTitle(true);
+
+    var _location = function (d) {
+        return _chart.keyAccessor()(d);
+    };
+
+    var _marker = function (d, map) {
+        var marker = new L.Marker(_chart.toLocArray(_chart.locationAccessor()(d)), {
+            title: _chart.renderTitle() ? _chart.title()(d) : '',
+            alt: _chart.renderTitle() ? _chart.title()(d) : '',
+            icon: _icon(),
+            clickable: _chart.renderPopup() || (_chart.brushOn() && !_filterByArea),
+            draggable: false
+        });
+        return marker;
+    };
+
+    var _icon = function (d, map) {
+        return new L.Icon.Default();
+    };
+
+    var _popup = function (d, marker) {
+        return _chart.title()(d);
+    };
+
+    _chart._postRender = function () {
+        if (_chart.brushOn()) {
+            if (_filterByArea) {
+                _chart.filterHandler(doFilterByArea);
+            }
+
+            _chart.map().on('zoomend moveend', zoomFilter, this);
+            if (!_filterByArea) {
+                _chart.map().on('click', zoomFilter, this);
+                    }
+            _chart.map().on('zoomstart', zoomStart, this);
+                }
+
+        if (_cluster) {
+            _layerGroup = new L.MarkerClusterGroup(_clusterOptions ? _clusterOptions : null);
+        }
+        else {
+            _layerGroup = new L.LayerGroup();
+        }
+        _chart.map().addLayer(_layerGroup);
+    };
+
+    _chart._doRedraw = function () {
+        var groups = _chart._computeOrderedGroups(_chart.data()).filter(function (d) {
+            return _chart.valueAccessor()(d) !== 0;
+        });
+        if (_currentGroups && _currentGroups.toString() === groups.toString()) {
+            return;
+        }
+        _currentGroups = groups;
+
+        if (_rebuildMarkers) {
+            _markerList = [];
+        }
+        _layerGroup.clearLayers();
+
+        var addList = [];
+        groups.forEach(function (v, i) {
+            var key = _chart.keyAccessor()(v);
+            var marker = null;
+            if (!_rebuildMarkers && key in _markerList) {
+                marker = _markerList[key];
+            }
+            else {
+                marker = createmarker(v, key);
+                }
+            if (!_chart.cluster()) {
+                _layerGroup.addLayer(marker);
+            }
+            else {
+                addList.push(marker);
+            }
+        });
+
+        if (_chart.cluster() && addList.length > 0) {
+            _layerGroup.addLayers(addList);
+        }
+    };
+
+    _chart.locationAccessor = function (_) {
+        if (!arguments.length) {
+            return _location;
+        }
+        _location = _;
+        return _chart;
+    };
+
+    _chart.marker = function (_) {
+        if (!arguments.length) {
+            return _marker;
+        }
+        _marker = _;
+        return _chart;
+    };
+
+    _chart.icon = function (_) {
+        if (!arguments.length) {
+            return _icon;
+        }
+        _icon = _;
+        return _chart;
+    };
+
+    _chart.popup = function (_) {
+        if (!arguments.length) {
+            return _popup;
+        }
+        _popup = _;
+        return _chart;
+    };
+
+    _chart.renderPopup = function (_) {
+        if (!arguments.length) {
+            return _renderPopup;
+        }
+        _renderPopup = _;
+        return _chart;
+    };
+
+
+    _chart.cluster = function (_) {
+        if (!arguments.length) {
+            return _cluster;
+        }
+        _cluster = _;
+        return _chart;
+    };
+
+    _chart.clusterOptions = function (_) {
+        if (!arguments.length) {
+            return _clusterOptions;
+        }
+        _clusterOptions = _;
+        return _chart;
+    };
+
+    _chart.rebuildMarkers = function (_) {
+        if (!arguments.length) {
+            return _rebuildMarkers;
+        }
+        _rebuildMarkers = _;
+        return _chart;
+    };
+
+    _chart.brushOn = function (_) {
+        if (!arguments.length) {
+            return _brushOn;
+        }
+        _brushOn = _;
+        return _chart;
+    };
+
+    _chart.filterByArea = function (_) {
+        if (!arguments.length) {
+            return _filterByArea;
+        }
+        _filterByArea = _;
+        return _chart;
+    };
+
+    _chart.markerGroup = function () {
+        return _layerGroup;
+    };
+
+    var createmarker = function (v, k) {
+        var marker = _marker(v);
+        marker.key = k;
+        if (_chart.renderPopup()) {
+            marker.bindPopup(_chart.popup()(v, marker));
+        }
+        if (_chart.brushOn() && !_filterByArea) {
+            marker.on("click", selectFilter);
+        }
+        _markerList[k] = marker;
+        return marker;
+    };
+
+    var zoomStart = function (e) {
+        _zooming = true;
+    };
+
+    var zoomFilter = function (e) {
+        if (e.type === "moveend" && (_zooming || e.hard)) {
+            return;
+        }
+        _zooming = false;
+
+        if (_filterByArea) {
+            var filter;
+            if (_chart.map().getCenter().equals(_chart.center()) && _chart.map().getZoom() === _chart.zoom()) {
+                filter = null;
+            }
+            else {
+                filter = _chart.map().getBounds();
+            }
+            dc.events.trigger(function () {
+                _chart.filter(null);
+                if (filter) {
+                    _innerFilter = true;
+                    _chart.filter(filter);
+                    _innerFilter = false;
+                }
+                dc.redrawAll(_chart.chartGroup());
+            });
+        } else if (_chart.filter() && (e.type === "click" ||
+            (_markerList.indexOf(_chart.filter()) !== -1 && !_chart.map().getBounds().contains(_markerList[_chart.filter()].getLatLng())))) {
+            dc.events.trigger(function () {
+                _chart.filter(null);
+                if (_renderPopup) {
+                    _chart.map().closePopup();
+                }
+                dc.redrawAll(_chart.chartGroup());
+            });
+        }
+    };
+
+    var doFilterByArea = function (dimension, filters) {
+        _chart.dimension().filter(null);
+        if (filters && filters.length > 0) {
+            _chart.dimension().filterFunction(function (d) {
+                if (!(d in _markerList)) {
+                    return false;
+                }
+                var locO = _markerList[d].getLatLng();
+                return locO && filters[0].contains(locO);
+            });
+            if (!_innerFilter && _chart.map().getBounds().toString !== filters[0].toString()) {
+                _chart.map().fitBounds(filters[0]);
+            }
+        }
+    };
+
+    var selectFilter = function (e) {
+        if (!e.target) {
+            return;
+        }
+        var filter = e.target.key;
+        dc.events.trigger(function () {
+            _chart.filter(filter);
+            dc.redrawAll(_chart.chartGroup());
+        });
+    };
+
+    return _chart.anchor(parent, chartGroup);
+};
+
+
+/***************************
+ choropleth
+ ***************************/
+
+
+dc.leafletChoroplethChart = function (parent, chartGroup) {
+    "use strict";
+    var _chart = dc.colorChart(dc.leafletChart({}));
+
+    var _geojsonLayer = false;
+    var _dataMap = [];
+    var _info = false;
+
+    var _geojson = false;
+    var _renderPopup = true;
+    var _brushOn = true;
+    var _featureOptions = {
+        'fillColor': 'black',
+        'color': 'gray',
+        'opacity':0,
+        'fillOpacity': 0,
+        'weight': 1
+    };
+
+    var _featureKey = function (feature) {
+        return feature.key;
+    };
+    
+    function isSelectedGeo(d) {
+        return _chart.hasFilter(d.key);
+    }    
+
+    var _featureStyle = function (feature) {
+        var options = _chart.featureOptions();
+        if (options instanceof Function) {
+            options = options(feature);
+        }
+        options = JSON.parse(JSON.stringify(options));
+        var v = _dataMap[_chart.featureKeyAccessor()(feature)];
+        if (v && v.d) {
+            if (_chart.hasFilter()) {
+                if (isSelectedGeo(v.d)) {
+                    options.fillColor = _chart.getColor(v.d.value, v.i);
+                    options.opacity = 0.8;
+                    options.fillOpacity = 1;                                
+                } else {
+                    options.fillColor = _chart.getColor(0, v.i);
+                    options.opacity = 0.8;
+                    options.fillOpacity = 1;                                
+                }
+            } else {
+                options.fillColor = _chart.getColor(v.d.value, v.i);
+                options.opacity = 0.8;
+                options.fillOpacity = 1;                 
+            }           
+        }
+        return options;
+    };
+
+    var _popup = function (d, feature) {
+        return _chart.title()(d);
+    };
+
+    _chart._postRender = function () {
+
+        _geojsonLayer = L.geoJson(_chart.geojson(), {
+            style: _chart.featureStyle(),
+            onEachFeature: processFeatures
+        });
+
+        _info = L.control();
+
+        _info.onAdd = function (map) {
+            this._div = L.DomUtil.create('div', 'hdx-3w-info');
+            this.update();
+                return this._div;
+            };
+
+        _info.update = function (name) {
+                this._div.innerHTML = (name ? name: 'Hover for name');
+            };
+
+        _info.addTo(_chart.map());
+                
+        _chart.map().addLayer(_geojsonLayer);
+    };
+
+    _chart._doRedraw = function () {
+        _geojsonLayer.clearLayers();
+        _dataMap = [];
+        _chart._computeOrderedGroups(_chart.data()).forEach(function (d, i) {
+            _dataMap[_chart.keyAccessor()(d)] = {'d': d, 'i': i};
+        });
+        _geojsonLayer.addData(_chart.geojson());
+    };
+
+    _chart.geojson = function (_) {
+        if (!arguments.length) {
+            return _geojson;
+        }
+        _geojson = _;
+        return _chart;
+    };
+
+    _chart.featureOptions = function (_) {
+        if (!arguments.length) {
+            return _featureOptions;
+        }
+        _featureOptions = _;
+        return _chart;
+    };
+
+    _chart.featureKeyAccessor = function (_) {
+        if (!arguments.length) {
+            return _featureKey;
+        }
+        _featureKey = _;
+        return _chart;
+    };
+
+    _chart.featureStyle = function (_) {
+        if (!arguments.length) {
+            return _featureStyle;
+        }
+        _featureStyle = _;
+        return _chart;
+    };
+
+    _chart.popup = function (_) {
+        if (!arguments.length) {
+            return _popup;
+        }
+        _popup = _;
+        return _chart;
+    };
+
+    _chart.renderPopup = function (_) {
+        if (!arguments.length) {
+            return _renderPopup;
+        }
+        _renderPopup = _;
+        return _chart;
+    };
+
+    _chart.brushOn = function (_) {
+        if (!arguments.length) {
+            return _brushOn;
+        }
+        _brushOn = _;
+        return _chart;
+    };
+
+    var processFeatures = function (feature, layer) {
+        var v = _dataMap[_chart.featureKeyAccessor()(feature)];
+        if (v && v.d) {
+            layer.key = v.d.key;
+            if (_chart.renderPopup()) {             
+                //layer.bindPopup(_chart.popup()(v.d, feature));
+                layer.on("mouseover",function(){
+                    _info.update(_chart.popup()(v.d, feature));
+                });
+                layer.on("mouseout",function(){
+                    _info.update();
+                });                
+            }
+            if (_chart.brushOn()) {
+                layer.on("click", selectFilter);
+            }
+        }
+    };
+
+    var selectFilter = function (e) {
+        if (!e.target) {
+            return;
+        }
+        var filter = e.target.key;
+        dc.events.trigger(function () {
+            _chart.filter(filter);
+            dc.redrawAll(_chart.chartGroup());
+        });
+    };
+
+    return _chart.anchor(parent, chartGroup);
+};
+</script>
+
+<!-- site.js -->
+<script>
+///////////////////////
+// USER INPUT INFORM //
+///////////////////////
+
+// If you want to create a copy only for SAHEL: set filter_models = true & system_filter = ["INFORM_SAH"];
+var filter_models = false;
+var system_filter = ["INFORM_SAH"]; //["INFORM_ESAF", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAH", "INFORM_CCA", "INFORM_COL"];
+
+// Also needed (for the parameter-specific URL) is the exact base-path of the dashboard page.
+var dashboard_pagename = 'Dashboard-Test';
+var dashboard_location = 'http://www.inform-index.org/' + dashboard_pagename; 
+ 
+var setting = 'api'; //'prototype','api'  //Setting used during development to quickly switch to Github-page settings (using hardcopy .json-files)
+
+//////////////////////
+// DEFINE VARIABLES //
+//////////////////////
+
+//Important settings
+var api_base = 'http://www.inform-index.org/API/InformAPI/';    //API basepath. Adapt if this ever changes.
+var topojson_path = 'http://www.inform-index.org/DesktopModules/MVC/InformMVC/Model/';
+var img_path = setting == 'api'? topojson_path + 'img/' : 'img/';
+var url_global = 'http://www.inform-index.org/Results/Global';
+var inform_levels = 10;                                         //Hierarchy levels used in INFORM models. 10 is robust as it is much more than the current maximum of 6 needed in the most extensive model (global model. If this should every increase, there are multiple occurences in the code that need to be updated.
+var metric = 'INFORM';                                          //Default metric
+var groups = ['INFORM','HA','VU','CC','HA.HUM','HA.NAT','VU.SEV','VU.VGR','CC.INF','CC.INS'];   //The indicators up to level 2 are assumed constant across models (e.g. for picture-icons). However, if an unknown indicator appears (like CC.FES in East Africa, the parent is automatically used.)
+
+//Declare empty variables
+var chart_show = 'map';
+var inform_model;
+var workflow_id;
+var map_filters = [];
+var row_filters = [];
+var map;
+
+//Function to start loading spinner
+spinner_start = function() {
+	var target = document.getElementById('spinner')
+	spinner = new Spinner({length: 28, width:14}).spin(target);
+}
+//Function to stop loading spinner
+spinner_stop = function() {
+	spinner.stop();
+}
+
+//Load image-paths
+$('#inform_logo-png').attr('src',img_path + 'inform_logo.png');
+$('#icon-download-options-svg').attr('src',img_path + 'icon-download-options.svg');
+$('#model-svg').attr('src',img_path + 'model.svg');
+$('#INFORM-png').attr('src',img_path + 'INFORM.png');
+$('#HA-png').attr('src',img_path + 'HA.png');
+$('#VU-png').attr('src',img_path + 'VU.png');
+$('#CC-png').attr('src',img_path + 'CC.png');
+
+//////////////////////////////////////
+// FUNCTION TO INITIALIZE DASHBOARD //
+//////////////////////////////////////
+
+var first_load = true;      //Added, such that Internet Explorer warning does not appear upon every model-load.
+load_dashboard = function(inform_model,workflow_id) {
+
+	spinner_start();
+    
+    //Load the map-view by default
+    $('#map-chart').show();
+	chart_show = 'map';
+    document.getElementsByClassName('sidebar-wrapper')[0].setAttribute('style','');     //Fix needed in case of switching models while sidebar collapsed
+
+	//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
+	var url = location.href;
+	if (url.indexOf('?') > -1) {
+		url = url.split('?')[1];
+		directURLload = true;
+		inform_model = url.split('&')[0].split('=')[1];
+		workflow_id = url.split('&')[1].split('=')[1];
+		metric = url.split('&')[2].split('=')[1];
+		chart_show = url.split('&')[3].split('=')[1];
+        window.history.pushState({}, document.title, dashboard_location);
+	} else {
+		directURLload = false;
+	}
+
+	//Start loading data
+	d = {};
+	d.inform_model = inform_model;
+	d.workflow_id = workflow_id;
+    
+    //0. Load default workflow
+    var default_api = api_base + 'workflows/Default';
+    d3.json(setting == 'api' ? default_api : 'data/default_workflow.json',function(default_workflow) {
+        if (!workflow_id) {d.workflow_id = default_workflow.WorkflowId;}
+        if (!workflow_id) {d.inform_model = default_workflow.WorkflowGroupName;}
+        d.system = default_workflow.System;
+        
+        if (setting == 'prototype'){
+            if (d.inform_model == 'INFORM_EAST_AFRICA') {
+                d.system = 'INFORM_ESAF';
+            } else if (d.inform_model == 'INFORM_SAHEL') {
+                d.system = 'INFORM_SAH';
+            } else if (d.inform_model.indexOf('_') > -1) {
+                d.system = d.inform_model;
+            } else {
+                d.system = 'INFORM';
+            } 
+        }
+        
+        //1. Load the workflows related to inform_model/workflowgroupname
+        var workflow_api = api_base + 'workflows/GetByWorkflowGroup/' + d.inform_model;
+        d3.json(setting == 'api' ? workflow_api : 'data/workflow_' + d.system + '.json',function(workflow_info) {
+            
+            // Loop through the different workflows to get the right one (by workflow_id)
+            for (i=0;i<workflow_info.length;i++){
+                if (workflow_info[i].WorkflowId == d.workflow_id) {
+                    d.system = workflow_info[i].System.toUpperCase();
+                    d.geo_filename = workflow_info[i].GeometryFilename.replace('.json','');
+                    d.workflow_name = workflow_info[i].Name;
+                }
+            }
+            //if (d.system == 'INFORM') { country_code = 'INFORM'; } else { country_code = d.inform_model.replace('INFORM_',''); };
+
+            //2. Get source-indicators for metadata
+            var source_api = api_base + 'Indicators/Index/';
+            d3.json(setting == 'api' ? source_api : 'data/sourcedata.json',function(source_data) {
+                d.source_data = source_data;
+
+                //3. Get the indicator-framework for this model
+                var url_meta = api_base + 'Processes/GetByWorkflowId/' + d.workflow_id;
+                d3.json(setting == 'api' ? url_meta : 'data/metadata_' + d.system + '.json', function(meta_data) {
+                    d.Metadata = meta_data;
+                    inform_indicators = [];
+                    for (i=0;i<d.Metadata.length;i++) { inform_indicators.push(d.Metadata[i].OutputIndicatorName); }
+
+                    //From indicator framework, derive which indicators to call for in the data-call
+                    //var url_data = api_base + 'countries/Scores/?WorkflowId=' + workflow_id + '&IndicatorId=' + inform_indicators.toString();
+                    var url_data = api_base + 'countries/Scores/?WorkflowId=' + d.workflow_id;
+
+                    //4. Load INFORM data
+                    d3.json(setting == 'api' ? url_data : 'data/inform_data_' + d.system + '.json', function(inform_data){
+                        d.inform_data = $.grep(inform_data, function(e){ return inform_indicators.indexOf(e.IndicatorId) > -1;});
+
+                        //5. Load Geo-data
+                        var url_geo_direct = topojson_path + d.geo_filename + '.json';
+                        d3.json(setting == 'api' ? url_geo_direct : 'data/' + d.geo_filename + '.json', function(geo_data) {
+                            d.Districts = topojson.feature(geo_data,geo_data.objects[d.geo_filename]);
+                            
+                            //5a. Load Geo-boundary data
+                            var geo_lines = 'INFORM_lines';
+                            d3.json(setting == 'api' ? topojson_path + geo_lines + '.json' : 'data/INFORM_lines.json',function(border_data){
+                                if (d.system == 'INFORM') { d.borders = topojson.feature(border_data,border_data.objects[geo_lines]); };
+                                
+                                //6. Load color-data
+                                var url_color = api_base + 'Processes/GetColorPaletteByWorkflowId/' + d.workflow_id;
+                                d3.json(setting == 'api' ? url_color : 'data/colors.json', function(color_data) {
+                                    d.Colors = $.grep(color_data, function(e){ return e.ValueFrom !== e.ValueTo; });
+                                    d.default_color = $.grep(d.Colors, function(e) { return e.OutputIndicatorName == 'INFORM' && e.Ordinal == 4;});
+
+                                    //Print data to screen (for development/debug purposes)
+                                    //console.log(d);
+
+                                    //RESET default settings (after switching to a different models)
+                                    if (!directURLload) {metric = 'INFORM';};
+                                    document.getElementById('metric_label').firstChild.innerHTML = 'INFORM Risk Index';
+                                    document.getElementById('indicator-button').style.backgroundColor = d.default_color;
+                                    document.getElementById('area_selection').style.color = d.default_color;
+                                    document.getElementsByClassName('reset-button')[0].style.backgroundColor = d.default_color;
+                                    document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden';
+                                    document.getElementById('model-title').innerHTML = d.workflow_name;
+                                    for (var i=0;i<$('.level1.in').length;i++){ $('.level1.in')[i].classList.remove('in');};
+                                    for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
+                                    
+                                    // Main function to generate all content (see below)
+                                    generateCharts(d);
+                                    
+                                    spinner_stop();
+
+                                    //Check if browser is Internet Explorer and if this is the initial load. If so: display a warning.
+                                    if (typeof L_PREFER_CANVAS !== 'undefined' && first_load == true) {
+                                        $('#IEmodal').modal('show');
+                                    }
+                                    first_load = false;
+                                });
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+};
+
+//Load the dashboard
+load_dashboard(inform_model,workflow_id);
+
+
+
+///////////////////////////////////////////
+// MAIN FUNCTION TO GENERATE ALL CONTENT //
+///////////////////////////////////////////
+
+var generateCharts = function (d){
+    
+    //////////////////////////
+	// SET UP LOOKUP TABLES //
+	//////////////////////////
+
+	// fill a lookup table which finds the area name with the area code
+	var genLookup = function (field){
+		var lookup = {};
+		d.Districts.features.forEach(function(e){
+			lookup[e.properties.id] = String(e.properties[field]);
+		});
+		return lookup;
+	};
+	// fill a lookup table with the metadata-information per variable
+	var genLookup_meta = function (d,field){
+		var lookup_meta = {};
+		d.Metadata.forEach(function(e){
+			lookup_meta[e.OutputIndicatorName] = String(e[field]);
+		});
+		return lookup_meta;
+	};
+
+    var lookup = genLookup('name');
+	var meta_label = genLookup_meta(d,'Fullname');
+	var meta_level = genLookup_meta(d,'VisibilityLevel');
+	var lookup_metafull_id = genLookup_meta(d,'IndicatorId');
+	metric_label = meta_label[metric];
+	document.getElementById('metric_label').firstChild.innerHTML = metric_label;
+    var dec1Format = d3.format(',.1f');
+
+
+	////////////////////
+	// METADATA SETUP //
+	////////////////////
+    
+    // Here we define the full indicator-structure of children and parents. Used for determining the indicator-structure in the sidebar, and for retrieving metadata-information.
+    var children = [];
+	for (var i=0; i < d.Metadata.length; i++) {
+
+		var record = {};
+		if (d.Metadata[i].OutputIndicatorName !== 'POP' && d.Metadata[i].OutputIndicatorName !== 'POP_DEN') {   //NOTE: 'POP' and 'POP_DEN' are left out, because assumed to generic to list for all normalized indicator they are used in.
+			record.stepnr = d.Metadata[i].StepNumber;
+			record.vis_level = d.Metadata[i].VisibilityLevel;
+			record.name = d.Metadata[i].OutputIndicatorName;
+			record.parent1 = d.Metadata[i].Parent;
+			children.push(record);
+		}
+	};
+
+	//fill the lookup table with the metadata-information per variable
+	var genLookup_children = function (field){
+		var test = {};
+		children.forEach(function(e){
+			test[e.name] = String(e[field]);
+		});
+		return test;
+	};
+	var lookup_children_parent = genLookup_children('parent1');
+	var lookup_children_vis_level = genLookup_children('vis_level');
+
+	for (var i=0;i<children.length;i++) {
+        
+        //For each indicators, find also the grandparents (etc.)
+        children[i].parent2 = lookup_children_parent[children[i].parent1] == 'null' ? undefined : lookup_children_parent[children[i].parent1];
+		children[i].parent3 = lookup_children_parent[children[i].parent2] == 'null' ? undefined : lookup_children_parent[children[i].parent2];
+		children[i].parent4 = lookup_children_parent[children[i].parent3] == 'null' ? undefined : lookup_children_parent[children[i].parent3];
+		children[i].parent5 = lookup_children_parent[children[i].parent4] == 'null' ? undefined : lookup_children_parent[children[i].parent4];
+		children[i].parent6 = lookup_children_parent[children[i].parent5] == 'null' ? undefined : lookup_children_parent[children[i].parent5];
+		children[i].parent7 = lookup_children_parent[children[i].parent6] == 'null' ? undefined : lookup_children_parent[children[i].parent6];
+		children[i].parent8 = lookup_children_parent[children[i].parent7] == 'null' ? undefined : lookup_children_parent[children[i].parent7];
+		children[i].parent9 = lookup_children_parent[children[i].parent8] == 'null' ? undefined : lookup_children_parent[children[i].parent8];
+		children[i].parent10 = lookup_children_parent[children[i].parent9] == 'null' ? undefined : lookup_children_parent[children[i].parent9];
+        
+        //If there is a >99-indicator in between (like HA.NAT-TEMP) skip it
+		children[i].parent1 = lookup_children_vis_level[children[i].parent1] > 99 ? lookup_children_parent[children[i].parent1] : children[i].parent1;
+		children[i].parent2 = lookup_children_vis_level[children[i].parent2] > 99 ? lookup_children_parent[children[i].parent2] : children[i].parent2;
+		children[i].parent3 = lookup_children_vis_level[children[i].parent3] > 99 ? lookup_children_parent[children[i].parent3] : children[i].parent3;
+		children[i].parent4 = lookup_children_vis_level[children[i].parent4] > 99 ? lookup_children_parent[children[i].parent4] : children[i].parent4;
+		children[i].parent5 = lookup_children_vis_level[children[i].parent5] > 99 ? lookup_children_parent[children[i].parent5] : children[i].parent5;
+		children[i].parent6 = lookup_children_vis_level[children[i].parent6] > 99 ? lookup_children_parent[children[i].parent6] : children[i].parent6;
+		children[i].parent7 = lookup_children_vis_level[children[i].parent7] > 99 ? lookup_children_parent[children[i].parent7] : children[i].parent7;
+		children[i].parent8 = lookup_children_vis_level[children[i].parent8] > 99 ? lookup_children_parent[children[i].parent8] : children[i].parent8;
+		children[i].parent9 = lookup_children_vis_level[children[i].parent9] > 99 ? lookup_children_parent[children[i].parent9] : children[i].parent9;
+		children[i].parent10 = lookup_children_vis_level[children[i].parent10] > 99 ? lookup_children_parent[children[i].parent10] : children[i].parent10;
+        
+        //Concatenate all parents into array
+		children[i].parents = children[i].name + ',' + (children[i].parent1 ? children[i].parent1 + ',' : '') + (children[i].parent2 ? children[i].parent2 + ',' : '') + (children[i].parent3 ? children[i].parent3 + ',' : '') + (children[i].parent4 ? children[i].parent4 + ',' : '') + (children[i].parent5 ? children[i].parent5 + ',' : '')
+									 + (children[i].parent6 ? children[i].parent6 + ',' : '') + (children[i].parent7 ? children[i].parent7 + ',' : '') + (children[i].parent8 ? children[i].parent8 + ',' : '') + (children[i].parent9 ? children[i].parent9 + ',' : '') + (children[i].parent10 ? children[i].parent10 + ',' : '');
+		children[i].parents = children[i].parents.split(',');
+		if (children[i].parents.indexOf('') > -1) { children[i].parents.splice(children[i].parents.indexOf(''), 1); };
+		children[i].parents = children[i].parents.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+
+		//For each indicator search if it's found in the available source-data index. By setting it up like this, all metadata that is found anywhere down the chain of indicator can be bound to it.
+        children[i].levels = children[i].parents.length;
+		for (k=0;k<d.source_data.length;k++) {
+			if (children[i].name == d.source_data[k].IndicatorId || lookup_metafull_id[children[i].name] == d.source_data[k].IndicatorId) {
+				children[i].indicator = d.source_data[k].IndicatorId;
+				children[i].indicator_label = d.source_data[k].IndicatorDescription;
+				children[i].provider = d.source_data[k].Provider;
+				children[i].link = d.source_data[k].Link;
+				children[i].description = d.source_data[k].IndicatorNote;
+			}
+		}
+    }
+    // for (var m=0;m<children.length;m++){
+        // if (children[m].vis_level >= 99) {
+            // children.splice(m,1);
+        // };
+    // };
+    //INSPECT RESULT
+	//console.log(children);
+
+	var max_stepnr = Math.max.apply(Math,d.Metadata.map(function(o){return o.StepNumber;}));
+	
+    //Here we fill the tables-array with all indicators that will be shown in the dashboard.
+    tables = [];
+	for (var i=0; i < d.Metadata.length; i++) {
+
+		var record = {};
+		var record_temp = d.Metadata[i];
+
+		//Before the DataType-tag (0/1) was introduced in the API, the below business-rules were used to recognize normalized (0-10) indicators.
+        //Check per indicator the MIN and MAX to determine if we're dealing with a normalized (0-10) indicator
+		var ind_data = $.grep(d.inform_data, function(e) {return e.IndicatorId == record_temp.OutputIndicatorName;});
+		var ind_max = Math.max.apply(Math,ind_data.map(function(o){return o.IndicatorScore;}));
+		var ind_min = Math.min.apply(Math,ind_data.map(function(o){return o.IndicatorScore;}));
+		if (
+            ((setting == 'api' && record_temp.DataType == 1)                   //This is the NEWLY ADDED way to recognize normalized indicators
+            || (setting == 'prototype'
+                //OLD CONDITIONS USED
+                && ind_max <=10 							//Obvious
+                && (ind_min >= 0 || ind_min == -99) 	    // > 0 is obvious. ==-99 is a code that occurs
+                && ind_max > 1.1						    //This is to rule out 0-1 indicators (such as HDI or percentages)
+                && (record_temp.Parent || record_temp.OutputIndicatorName == 'INFORM')   //the indicator should have a parent (unless it is the INFORM-indicator itself)
+			))
+            && record_temp.VisibilityLevel < 99         //In both OLD and NEW approach, these indicators are filtered out here.
+			) {
+			record.name = record_temp.OutputIndicatorName;
+			record.lowest_level = 0;
+
+            //Based on the children-object above, we determine the CHILDREN, the LEVEL and the GROUP (=parent) of each indicator.
+			record.children = [];
+            for (m=0;m<children.length;m++){
+                if (children[m].parent1 == record.name && children[m].vis_level < 99) {
+                    record.children.push(children[m].name);
+                }
+            };
+            for (m=0;m<children.length;m++){
+				if (children[m].parents.indexOf(record_temp.OutputIndicatorName) > -1) {
+                    record.level = children[m].levels - children[m].parents.indexOf(record_temp.OutputIndicatorName) - 1;
+					record.group = children[m].parents[children[m].parents.indexOf(record_temp.OutputIndicatorName) + 1];
+					break;
+				}
+			};
+            tables.push(record);
+		} else { // USE THIS FOR inspection of possibly weird variables
+			// console.log(record_temp.OutputIndicatorName);
+			// console.log(ind_max);
+			// console.log(ind_min);
+		}
+
+	}
+    //INSPECT RESULT
+	//console.log(tables);
+    
+    
+    //Here we retrieve the right metadata per indicator.
+	
+    // For each selected indicator ..
+	tables.forEach(function(t) {
+		t.indicator = [];
+		t.indicator_label = [];
+		t.provider = [];
+		t.link = [];
+		t.description = [];
+        
+		// if no children: this is a lowest-level indicator
+		if (t.children.length == 0) {t.lowest_level = 1;};
+        
+		// .. and for each child of that indicator
+		var match = 0;
+		var match2 = 0;
+		for (i=0;i<t.children.length;i++) {
+			for (j=0;j<tables.length;j++) {
+                
+				// .. look up if the child is also in Tables-object (if so: it is not a lowest-level indicator)
+				if (t.children[i] == tables[j].name) {
+					match = 1;
+				};
+			};
+            
+			// .. if no match, this is a lowest-level indicator
+			if (match == 0) {
+				t.lowest_level = 1;
+
+				//.. Now search in the previously-made children array for the child-indicator, if found take the metadata-info from it. 
+				for (m=0;m<children.length;m++){
+					if (children[m].parents.indexOf(t.children[i]) > -1 && children[m].indicator) {
+						if (t.indicator.indexOf(children[m].indicator) <= -1) {
+							t.indicator.push(children[m].indicator);
+							t.indicator_label.push(children[m].indicator_label);
+							t.provider.push(children[m].provider);
+							t.link.push(children[m].link);
+							t.description.push(children[m].description);
+						}
+						match2 = 1;
+					}
+				}
+			};
+		};
+        
+        // .. If no match found yet, also check for the indicator-name itself (instead of it's child)
+		if (match2 == 0) {
+			for (m=0;m<children.length;m++){
+				if (children[m].parents.indexOf(t.name) > -1 && children[m].indicator) {
+					if (t.indicator.indexOf(children[m].indicator) <= -1) {
+						t.indicator.push(children[m].indicator);
+						t.indicator_label.push(children[m].indicator_label);
+						t.provider.push(children[m].provider);
+						t.link.push(children[m].link);
+						t.description.push(children[m].description);
+					}
+				}
+			}
+		}
+	});
+    //INSPECT RESULT
+	//console.log(tables);
+    
+    //INSPECT RESULT: Check for lowest-level indicators, that have no metadata bound to it.
+	tables.forEach(function(t) {
+		if (t.lowest_level == 1 && t.indicator.length == 0) {
+			//console.log(t);
+		}
+	});
+
+	//fill the lookup table with the metadata-information per variable
+	var genLookup_tables = function (field){
+		var test = {};
+		tables.forEach(function(e){
+			test[e.name] = e[field];
+		});
+		return test;
+	};
+	var lookup_indicator = genLookup_tables('indicator');
+	var lookup_indicator_label = genLookup_tables('indicator_label');
+	var lookup_provider = genLookup_tables('provider');
+	var lookup_link = genLookup_tables('link');
+	var lookup_description = genLookup_tables('description');
+
+
+	////////////////
+	// DATA SETUP //
+	////////////////
+
+	//First PIVOT the INFORM data from row*indicator level to row level (with indicators als columns)
+	var grouped = [];
+	d.inform_data.forEach(function (a) {
+		if (!this[a.Iso3]) {
+			this[a.Iso3] = { pcode: a.Iso3, values: [] };
+			grouped.push(this[a.Iso3]);
+		}
+		this[a.Iso3].values.push({ IndicatorId: a.IndicatorId, IndicatorScore: a.IndicatorScore });
+	}, Object.create(null)); // Object.create creates an empty object without prototypes
+
+	var data_final = [];
+	for (var i=0; i < grouped.length; i++) {
+		var record = {};
+		var record_temp = grouped[i];
+		record.pcode = record_temp.pcode;
+		record.name = lookup[record_temp.pcode] ? lookup[record_temp.pcode] : '';
+		for (var j=0; j < tables.length; j++) {
+			count=0;
+			for (var k=0;k<record_temp.values.length;k++) {
+				var record_temp2 = record_temp.values[k];
+				if (tables[j].name == record_temp2.IndicatorId) {
+					record[tables[j].name] = record_temp2.IndicatorScore == 0 ? '0.01' : String(record_temp2.IndicatorScore);   //Replace 0 by 0.01 (to easily differentiate between real 0-values and crossfilter unselected 0-values). 0.01 will be rounded to 0 anyway when shown in the dashboard.
+					count=1;
+				}
+			}
+			if (count==0) {record[tables[j].name] = '';}
+
+		}
+		data_final[i] = record;
+	}
+    //INSPECT RESULT
+	//console.log(data_final);
+
+    // Start CROSSFILTER
+	var cf = crossfilter(data_final);
+	for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };
+
+	// The wheredimension returns the unique identifier of the geo area
+	var whereDimension = cf.dimension(function(d) { return d.pcode; });
+	var whereDimension_tab = cf.dimension(function(d) { return d.pcode; });
+	
+    // Create the groups for these two dimensions (i.e. sum the metric)
+	var whereGroupSum = whereDimension.group().reduceSum(function(d) {return d[metric];});
+	var whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) {return d[metric];});
+    	
+    
+    ////////////////////////////
+	// SET UP COLOR FUNCTIONS //
+	////////////////////////////
+    
+    //Define the colors and thresholds for the selected indicator. To feed to the map/chart. It accepts the current metrics as input. It gives a full color-range + quantile-range as output.
+	mapchartColors_func = function(metric) {
+        
+        //Define the color-group (i.e. the level-2 indicator-group - like VU.SEV) the indicator belongs to.
+		var color_group = metric.split('.')[0].concat((metric.split('.')[1]) ? '.'.concat(metric.split('.')[1]) : '');
+		if (groups.indexOf(color_group) <= -1) {
+			color_group = color_group.split('.')[0];
+		}
+        
+        //Derive the HEX-colors and thresholds from the color-API-call
+		color_range = [];
+		colors = [];
+		for (j=0;j<d.Colors.length;j++) {
+			if (d.Colors[j].OutputIndicatorName == color_group) {
+				var record = {threshold: d.Colors[j].ValueTo, HEX: d.Colors[j].HEX};
+				color_range.push(record);
+				colors.push(d.Colors[j].HEX);
+			}
+		}
+        
+        //Sort them (to be sure)
+		color_range.sort(function(a,b) {
+			return parseFloat(a.threshold) - parseFloat(b.threshold);
+		});
+        
+        //For lower-level indicators we use quintiles for color-thresholds. Therefore it needs to full the range of values (sorted).
+		var quantile_range = [];
+		for (i=0;i<data_final.length;i++) {
+            if (data_final[i][metric]) {quantile_range.push(data_final[i][metric]);};
+			quantile_range.sort();
+		};
+		return d3.scale.quantile()
+				.domain(quantile_range)
+				.range(colors);
+	};
+	mapchartColors = mapchartColors_func(metric);
+	document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
+	document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
+	document.getElementById('area_selection').style.color = color_range[3].HEX;
+    
+    //We need a similar, but separate function to use for all the sidebar-bars (that show when selecting one country). It gives as output one specific color for one specific indicator.
+	color_cat = function(ind) {
+        
+        //Color depends on the value (width) of each indicator
+		var width = keyvalue[ind];
+        
+        //Again determine the color group
+		var color_group = ind.split('.')[0].concat((ind.split('.')[1]) ? '.'.concat(ind.split('.')[1]) : '');
+		if (groups.indexOf(color_group) <= -1) {
+			color_group = color_group.split('.')[0];
+		}
+        
+        //Retrieve the colors/thresholds from API-call
+		color_ranges = [];
+		for (j=0;j<d.Colors.length;j++) {
+			if (d.Colors[j].OutputIndicatorName == color_group) {
+				var record = {threshold: d.Colors[j].ValueTo, HEX: d.Colors[j].HEX};
+				color_ranges.push(record);
+			}
+		}
+        //Sort by threshold value
+		color_ranges.sort(function(a,b) {
+			return parseFloat(a.threshold) - parseFloat(b.threshold);
+		});
+        
+        //Return the right color, based on the value
+		if (isNaN(width)) {return '#ccc';}
+		else if (width<=color_ranges[0].threshold) {return color_ranges[0].HEX;}
+		else if (width<=color_ranges[1].threshold) {return color_ranges[1].HEX;}
+		else if (width<=color_ranges[2].threshold) {return color_ranges[2].HEX;}
+		else if (width<=color_ranges[3].threshold) {return color_ranges[3].HEX;}
+		else if (width<=color_ranges[4].threshold) {return color_ranges[4].HEX;}
+	};
+
+    
+    ////////////////////////////
+	// SET UP COLOR FUNCTIONS //
+	////////////////////////////
+    
+    //Create all level2 HTML (HA.NAT level etc.)
+	var createHTML_level2 = function() {
+        
+        var risk_score = document.getElementById('risk_score_main');
+		if (risk_score) {
+			risk_score.textContent = '';
+			risk_score.setAttribute('class','component-score');
+			risk_score.setAttribute('style','border:none');
+		}
+		var vulnerability_score = document.getElementById('vulnerability_score_main');
+		if (vulnerability_score) {
+			vulnerability_score.textContent = '';
+			vulnerability_score.setAttribute('class','component-score');
+			vulnerability_score.setAttribute('style','border:none');
+		}
+		var hazard_score = document.getElementById('hazard_score_main');
+		if (hazard_score) {
+			hazard_score.textContent = '';
+			hazard_score.setAttribute('class','component-score');
+			hazard_score.setAttribute('style','border:none');
+		}
+		var coping_score = document.getElementById('coping_capacity_score_main');
+		if (coping_score) {
+			coping_score.textContent = '';
+			coping_score.setAttribute('class','component-score');
+			coping_score.setAttribute('style','border:none');
+		}
+
+
+		//Empty the existing HTML first (so that when switching models, the HTML doesn't duplicate)
+		var INFORM = document.getElementById('INFORM');
+		var VU = document.getElementById('VU');
+		var HA = document.getElementById('HA');
+		var CC = document.getElementById('CC');
+		if (INFORM) {while (INFORM.firstChild) { INFORM.removeChild(INFORM.firstChild); };}
+		if (VU) {while (VU.firstChild) { VU.removeChild(VU.firstChild); };}
+		if (HA) {while (HA.firstChild) { HA.removeChild(HA.firstChild); };}
+		if (CC) {while (CC.firstChild) { CC.removeChild(CC.firstChild); };}
+
+        //Loop through all indicators in tables-object
+		for (var i=0;i<tables.length;i++) {
+			var record = tables[i];
+            
+            //Determine the right icon
+			if (groups.indexOf(record.name.substring(0,6)) > -1) {
+				icon = img_path + record.name.substring(0,6) + '.png';
+			} else {
+				icon = img_path + record.name.substring(0,2) + '.png';
+			}
+            
+            //Only do this for level2-indicators (lower-level indicators have separate function below. While level 0 (INFORM) and 1 (HA,VU,CC) are hardcoded in HTML)
+			if (record.level == 2) {
+
+                var div_heading = document.createElement('div');
+				div_heading.setAttribute('id','heading'+record.name.split('.').join('-'));
+				div_heading.setAttribute('class','accordion-header level2');
+				var parent = document.getElementById(record.group)
+				parent.appendChild(div_heading);
+				var a_prev = document.createElement('a');
+				a_prev.setAttribute('data-toggle','collapse');
+				a_prev.setAttribute('href','#collapse'+record.name.split('.').join('-'));
+				div_heading.appendChild(a_prev);
+				var div_collapse = document.createElement('div');
+				div_collapse.setAttribute('id','collapse'+record.name.split('.').join('-'));
+				div_collapse.setAttribute('class','panel-collapse collapse level2');
+				parent.appendChild(div_collapse);
+				var div = document.createElement('div');
+				div.setAttribute('class','component-section');
+				a_prev.appendChild(div);
+				var div0 = document.createElement('div');
+				div0.setAttribute('class','col-md-2 col-sm-2 col-xs-2');
+				div.appendChild(div0);
+				var img1 = document.createElement('img');
+				img1.setAttribute('style','height:20px');
+				img1.setAttribute('src',icon);
+				div0.appendChild(img1);
+				var div1 = document.createElement('div');
+				div1.setAttribute('class','col-md-4 col-sm-4 col-xs-4 component-label');
+				div1.setAttribute('onclick','change_indicator(\''+record.name+'\')');
+				div1.innerHTML = meta_label[record.name];
+				div.appendChild(div1);
+				var div2 = document.createElement('div');
+				div2.setAttribute('class','col-md-5 col-sm-5 col-xs-5 bar-container');
+				div.appendChild(div2);
+				var div1a = document.createElement('div');
+				div1a.setAttribute('class','component-score-small');
+				div1a.setAttribute('id',record.name);
+				div2.appendChild(div1a);
+				var div2a = document.createElement('div');
+				div2a.setAttribute('class','component-scale');
+				div2.appendChild(div2a);
+				var div2a1 = document.createElement('div');
+				div2a1.setAttribute('class','score-bar');
+				div2a1.setAttribute('id','bar-'+record.name);
+				div2a1.setAttribute('style','width:0%;border:none');
+				div2a.appendChild(div2a1);
+				var div3 = document.createElement('div');
+				div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
+				div.appendChild(div3);
+                if (record.lowest_level == 1) {
+                    var button = document.createElement('button');
+                    button.setAttribute('type','button');
+                    button.setAttribute('class','btn-modal');
+                    button.setAttribute('data-toggle','modal');
+                    button.setAttribute('onclick','info(\'' + record.name + '\')');
+                    div3.appendChild(button);
+                    var div3a = document.createElement('div');
+                    div3a.setAttribute('style','height:17px;width:auto');
+                    button.appendChild(div3a);
+                    var img3 = document.createElement('img');
+                    img3.setAttribute('src',img_path + 'icon-popup.svg');
+                    img3.setAttribute('style','height:100%');
+                    div3a.appendChild(img3);
+                }
+            }
+		}
+	};
+	createHTML_level2();
+    
+    //Similar function for level 3 indicators and below
+	var createHTML_level3 = function(input_level) {
+
+        //Define the grey-shades that are used for subsequent levels of the accordion opening up
+		var grey_shades = ['#f0f0f0','#d9d9d9','#bdbdbd','#969696','#737373','#969696','#737373','#969696'];
+		var background_color = grey_shades[input_level-3];
+        
+        //Loop through indicators ...
+		for (var i=0;i<tables.length;i++) {
+			var record = tables[i];
+
+			if (record.level == input_level) {
+
+                var div_heading = document.createElement('div');
+				div_heading.setAttribute('id','heading'+record.name.split('.').join('-'));
+				div_heading.setAttribute('class','accordion-header level' + input_level);
+                //INSPECT RESULT: can be handy if an error arises
+				//console.log(record);
+				var parent = document.getElementById('collapse'+record.group.split('.').join('-'))
+                //Extra check to make sure the application does not break
+				if (parent) {
+					parent.appendChild(div_heading);
+					var a_prev = document.createElement('a');
+					a_prev.setAttribute('data-toggle','collapse');
+					a_prev.setAttribute('href','#collapse'+record.name.split('.').join('-'));
+					div_heading.appendChild(a_prev);
+					var div_collapse = document.createElement('div');
+					div_collapse.setAttribute('id','collapse'+record.name.split('.').join('-'));
+					div_collapse.setAttribute('class','panel-collapse collapse level' + input_level);
+					parent.appendChild(div_collapse);
+					var div = document.createElement('div');
+					div.setAttribute('class','component-section');
+					div.setAttribute('style','background-color:' + background_color + '; color:black');
+					var parent = document.getElementById('collapse'+record.group.split('.').join('-'));
+					a_prev.appendChild(div);
+					var div1 = document.createElement('div');
+					div1.setAttribute('class','col-md-6 col-sm-6 col-xs-6  component-label');
+					div1.setAttribute('style','padding-left: 5px');
+					div1.setAttribute('onclick','change_indicator(\''+record.name+'\')');
+					div1.innerHTML = meta_label[record.name];
+					div.appendChild(div1);
+					var div2 = document.createElement('div');
+					div2.setAttribute('class','col-md-5 col-sm-5 col-xs-5 bar-container');
+					div.appendChild(div2);
+					var div1a = document.createElement('div');
+					div1a.setAttribute('class','component-score-small');
+					div1a.setAttribute('id',record.name);
+					div2.appendChild(div1a);
+					var div2a = document.createElement('div');
+					div2a.setAttribute('class','component-scale');
+					div2.appendChild(div2a);
+					var div2a1 = document.createElement('div');
+					div2a1.setAttribute('class','score-bar');
+					div2a1.setAttribute('id','bar-'+record.name);
+					div2a1.setAttribute('style','width:0%; border:none');
+					div2a.appendChild(div2a1);
+					var div3 = document.createElement('div');
+					div3.setAttribute('class','col-md-1 col-sm-1 col-xs-1 no-padding');
+					div.appendChild(div3);
+					if (record.lowest_level == 1) {
+                        var button = document.createElement('button');
+                        button.setAttribute('type','button');
+                        button.setAttribute('class','btn-modal');
+                        button.setAttribute('data-toggle','modal');
+                        button.setAttribute('onclick','info(\'' + record.name + '\')');
+                        div3.appendChild(button);
+                        var div3a = document.createElement('div');
+                        div3a.setAttribute('style','height:17px;width:auto');
+                        button.appendChild(div3a);
+						var img3 = document.createElement('img');
+						img3.setAttribute('src',img_path + 'icon-popup.svg');
+						img3.setAttribute('style','height:100%');
+						div3a.appendChild(img3);
+					}
+				}
+			}
+		}
+	}
+    
+    //Create HTML for all levels
+	createHTML_level3(3);
+	createHTML_level3(4);
+	createHTML_level3(5);
+	createHTML_level3(6);
+	createHTML_level3(7);
+	createHTML_level3(8);
+	createHTML_level3(9);
+	createHTML_level3(10);
+
+    
+    //This is a function (used in updateHTML function) that retrieves the data for the selected area(s).
+	var keyvalue = [];
+	var keyvalues1 = function(filters) {
+
+		var data_area = data_final.filter(function(obj) { return filters[0] == obj.pcode; });
+		keyvalue = [];
+		tables.forEach(function(t) {
+			var key = t.name;
+			keyvalue[key] = data_area[0][key];
+		});
+		return keyvalue;
+
+	};
+    
+    //This function fill the sidebar-indicator-structure with values and color bar-charts (when selecting 1 area) or empties it again (when moving to multiple/all area-selection)
+	var updateHTML = function(filters) {
+
+		var risk_score = document.getElementById('risk_score_main');
+		var vulnerability_score = document.getElementById('vulnerability_score_main');
+		var hazard_score = document.getElementById('hazard_score_main');
+		var coping_score = document.getElementById('coping_capacity_score_main');
+        
+        //Fill the (white-backgrounded) values for the main-components (if one area selected) ..
+		if (filters.length == 1) {
+			keyvalue = keyvalues1(filters);
+
+			if (risk_score) {
+				risk_score.textContent = dec1Format(keyvalue.INFORM);
+				risk_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');
+			}
+			if (vulnerability_score) {
+				vulnerability_score.textContent = dec1Format(keyvalue.VU);
+				vulnerability_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');
+			}
+			if (hazard_score) {
+				hazard_score.textContent = dec1Format(keyvalue.HA);
+				hazard_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');
+			}
+			if (coping_score) {
+				coping_score.textContent = dec1Format(keyvalue.CC);
+				coping_score.setAttribute('style','border:solid; border-width:1px; border-color:grey');
+			}
+			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = '#e2e7ee'; };
+
+        // .. or empty them again (if multiple/all areas selected)
+		} else {
+			if (risk_score) {
+				risk_score.textContent = '';
+				risk_score.setAttribute('style','border:none');
+			}
+			if (vulnerability_score) {
+				vulnerability_score.textContent = null;
+				vulnerability_score.setAttribute('style','border:none');
+			}
+			if (hazard_score) {
+				hazard_score.textContent = null;
+				hazard_score.setAttribute('style','border:none');
+			}
+			if (coping_score) {
+				coping_score.textContent = null;
+				coping_score.setAttribute('style','border:none');
+			}
+			for (var i=0;i<$('.component-scale').length;i++){ $('.component-scale')[i].style.background = 'transparent'; };
+		};
+        
+        //Loop through all lower-level indicators now
+		for (var i=0;i<tables.length;i++) {
+			var record = tables[i];
+
+			if (record.level >= 2) {
+                
+                // .. and fill the values and the bar-charts per indicator (if one area selected)
+				if (filters.length == 1) {
+
+					var width = keyvalue[record.name]*10;
+					var div1a = document.getElementById(record.name);
+					div1a.setAttribute('class','component-score-small');
+					div1a.setAttribute('style','border:solid; border-width:1px; border-color:black');
+
+					div1a.innerHTML = !keyvalue[record.name] ? '-' : (keyvalue[record.name] == 10 ? '10' : dec1Format(keyvalue[record.name]));
+					var div2a1 = document.getElementById('bar-'+record.name);
+					div2a1.setAttribute('class','score-bar ');
+					div2a1.setAttribute('style','width:'+ width + '%; background:' + color_cat(record.name));
+                
+                // .. or empty them again (if multiple/all areas selected)
+				} else {
+
+					var div1a = document.getElementById(record.name);
+					div1a.innerHTML = '';
+					div1a.setAttribute('style','border:none');
+					var div2a1 = document.getElementById('bar-'+record.name);
+					div2a1.setAttribute('class','score-bar ');
+					div2a1.setAttribute('style','width:0%');
+
+
+				}
+			}
+		}
+	};
+
+
+
+
+	/////////////////
+	// CHART SETUP //
+	/////////////////
+
+	// Clear the charts
+	dc.chartRegistry.clear();
+	if (map !== undefined) { map.remove(); }
+    //Define map/rowchart
+	var mapChart = dc.leafletChoroplethChart('#map-chart');
+	var rowChart = dc.rowChart('#row-chart');
+    
+    /////////////////////
+	// MAP CHART SETUP //
+	/////////////////////
+    
+    //This function recognizes a CTRL+click
+	$(document).keydown(function(event){
+		if(event.which=="17")
+			cntrlIsPressed = true;
+	});
+	$(document).keyup(function(){
+		cntrlIsPressed = false;
+	});
+	var cntrlIsPressed = false;     //default: CTRL not pressed
+	var click_filter = true;        //Setting which determines if chart is manually filtered (by click) or by some other function
+	var coming_from_map = false;    //Setting which determines if filter happens while coming from Map (moving to Tabular)
+	var coming_from_tab = false;    //Setting which determines if filter happens while coming from Tabular (moving to Map)
+
+	//Set up the map itself with all its properties
+    mapChart
+		.width($('#map-chart').width())
+		.height(800)
+		.dimension(whereDimension)
+		.group(whereGroupSum)
+		.center([0,0])
+		.zoom(0)
+		.geojson(d.Districts)
+		.colors(mapchartColors)
+		.colorCalculator(function(e){
+            //For lower-level indicators quintiles are used for coloring (all information for which is stored in mapchartColors)
+			if (meta_level[metric] > 3){ 
+				if (!e) {return '#cccccc';} else {return mapChart.colors()(e);}
+            //For higher-level indicator we use the thresholds stored in the created color_range object.
+			} else {
+				if (!e) {return '#cccccc';}
+				else if (e<=color_range[0].threshold) {return color_range[0].HEX;}
+				else if (e<=color_range[1].threshold) {return color_range[1].HEX;}
+				else if (e<=color_range[2].threshold) {return color_range[2].HEX;}
+				else if (e<=color_range[3].threshold) {return color_range[3].HEX;}
+				else if (e<=color_range[4].threshold) {return color_range[4].HEX;}
+			}
+		})
+		.featureKeyAccessor(function(feature){
+			return feature.properties.id;
+		})
+		.popup(function(d){
+			return lookup[d.key].concat(' - ',meta_label[metric],': ',isNaN(d.value) ? 'No Data' : dec1Format(d.value));
+		})
+		.renderPopup(true)
+		.turnOnControls(true)
+		.legend(dc.leafletLegend().position('topright'))
+
+		//Set up what happens when clicking on the map (popup appearing mainly)
+		.on('filtered',function(chart,filters){
+            
+            if (cntrlIsPressed) {
+				for (i=0;i<row_filters_old.length;i++){ if (chart.filters().indexOf(row_filters_old[i]) <= -1) { chart.filters().push(row_filters_old[i]); }; };
+			}
+            //If NOT CTRL+click the previous selected area is removed from the filter (the default in this library is actuall that clicking ADDS an area to the selection)
+			if(!cntrlIsPressed && click_filter) {
+				while (chart.filters().length > 1) {chart.filters().shift();}
+			}
+			map_filters = $.extend( [], chart.filters() );
+            
+            //When coming from Tabular View: update all information accordingly.
+			if (chart_show == 'map' && coming_from_tab) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (row_filters_old.length == 1) {$('.filter-count')[i].innerHTML = lookup[row_filters_old[0]];}
+					else if (row_filters_old.length > 1) { $('.filter-count')[i].innerHTML = row_filters_old.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};
+				updateHTML(row_filters_old);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];
+				if (row_filters_old.length > 0) { resetbutton.style.visibility = 'visible';
+				} else { resetbutton.style.visibility = 'hidden'; }
+			}
+            //When NOT coming from Tabular View
+			if (chart_show == 'map' && !coming_from_tab) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (map_filters.length == 1) {$('.filter-count')[i].innerHTML = lookup[map_filters[0]];}
+					else if (map_filters.length > 1) { $('.filter-count')[i].innerHTML = map_filters.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};
+				updateHTML(map_filters);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];
+				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible';
+				} else { resetbutton.style.visibility = 'hidden'; }
+			}
+		})
+        .on('renderlet',function(chart,filters){
+            if (polygon_layer) {
+                if (d.system == 'INFORM') {
+                    polygon_layer.setStyle({weight:0});
+                } else {
+                    polygon_layer.setStyle({weight:0.5});
+                }
+            }
+            
+        })
+	;
+
+
+
+	/////////////////////
+	// ROW CHART SETUP //
+	/////////////////////
+    
+    //Extra function needed to determine width of row-chart in various settings
+    if($(window).width() < 768) {
+        var rowChart_width = $('#tabular-wrapper').width();
+    } else {
+        var rowChart_width = $('#row-chart-container').width() - 370;
+    }
+    barheight = 20; //Height of one bar in Tabular View
+	var row_filters_old = [];
+	rowChart
+        .width(rowChart_width)
+		.height((barheight + 5) * data_final.length + 50)
+		.dimension(whereDimension_tab)
+		.group(whereGroupSum_tab)
+		.ordering(function(d) {return isNaN(d.value) ? 0 : -d.value; })
+		.fixedBarHeight(barheight)
+		.valueAccessor(function(d){ return isNaN(d.value) ? 0 : d.value; })
+		.colors(mapchartColors)
+		.colorCalculator(function(e){
+            //For lower-level indicators quintiles are used for coloring (all information for which is stored in mapchartColors)
+			if (meta_level[metric] > 3) {
+				if (!e) {return '#cccccc';} else {return mapChart.colors()(e.value);}
+            //For higher-level indicator we use the thresholds stored in the created color_range object.
+			} else {
+				if (!e) {return '#cccccc';}
+				else if (e.value<=color_range[0].threshold) {return color_range[0].HEX;}
+				else if (e.value<=color_range[1].threshold) {return color_range[1].HEX;}
+				else if (e.value<=color_range[2].threshold) {return color_range[2].HEX;}
+				else if (e.value<=color_range[3].threshold) {return color_range[3].HEX;}
+				else if (e.value<=color_range[4].threshold) {return color_range[4].HEX;}
+			}
+		})
+		.label(function(d) {
+			if (d.value == 0) {return '';} else {
+				return lookup[d.key] ? (isNaN(d.value) ? "No Data" : dec1Format(d.value)).concat(' - ',lookup[d.key]) : dec1Format(d.value).concat(' - ',d.key);
+			}
+		})
+		.title(function(d) {
+			return lookup[d.key] ? (isNaN(d.value) ? "No Data" : dec1Format(d.value)).concat(' - ',lookup[d.key]) : dec1Format(d.value).concat(' - ',d.key);
+		})
+		.on('filtered',function(chart,filters){
+            
+            //If NOT CTRL+click the previous selected area is removed from the filter (the default in this library is actuall that clicking ADDS an area to the selection)
+			if(!cntrlIsPressed && click_filter) {
+				while (chart.filters().length > 1) {chart.filters().shift();}
+			}
+			row_filters = $.extend( [], chart.filters() );
+            
+            //If coming from map: update all sidebar-information accordingly
+			if (chart_show == 'row' && coming_from_map) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (map_filters_old.length == 1) { $('.filter-count')[i].innerHTML = lookup[map_filters_old[0]]; }
+					else if (map_filters_old.length > 1) { $('.filter-count')[i].innerHTML = map_filters_old.length; }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};
+				updateHTML(map_filters_old);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];
+				if (map_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			}
+            //If not coming from map
+			if (chart_show == 'row'  && !coming_from_map) {
+				for (var i=0;i<$('.filter-count').length;i++){
+					if (row_filters.length == 1  || row_filters_old.length == 1) { $('.filter-count')[i].innerHTML = row_filters.length == 0 ? lookup[row_filters_old[0]] : lookup[row_filters[0]]; }
+					else if (row_filters.length > 1 || row_filters_old.length > 1) { $('.filter-count')[i].innerHTML = Math.max(row_filters.length,row_filters_old.length); }
+					else { $('.filter-count')[i].innerHTML = 'All '; }
+				};
+				row_filters.length == 0 ? updateHTML(row_filters_old) : updateHTML(row_filters);
+				var resetbutton = document.getElementsByClassName('reset-button')[0];
+				if (row_filters.length > 0 || row_filters_old.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+			}
+		})
+        //Make sure the row-text function (determines black/white color of text in bar-chart) also works after filtering the row-chart
+		.on('renderlet',function(chart,filters){
+			row_text(color_range);
+		})
+		.elasticX(false)
+		.x(d3.scale.linear().range([0,(rowChart.width())]).domain([0,11]))
+		.xAxis().scale(rowChart.x()).tickValues([])
+		;
+    
+    /////////////////////////
+	// ROW CHART FUNCTIONS //
+	/////////////////////////
+    
+    //Function to determine black/white color of text (to be best visible compared to background-color, etc.)
+	row_text = function(color_range) {
+        var color_level;
+		for (var i=0;i<$('.dc-chart g.row').length;i++){
+            row = $('.dc-chart g.row')[i];
+            fill = row.getElementsByTagName('rect')[0].getAttribute('fill');
+			selection = row.getElementsByTagName('rect')[0].getAttribute('class');
+			if (fill) {
+				for (j=0;j<color_range.length;j++){
+                    if (fill.toString().toLowerCase() == color_range[j].HEX.toLowerCase()) { color_level = j; break};
+                    
+				};
+			}
+            title = row.getElementsByTagName('title')[0].innerHTML;
+            if (!title) {
+                string = new XMLSerializer().serializeToString(row.getElementsByTagName('title')[0]);
+                pos = string.indexOf('>');
+                title = string.substring(pos+1,pos+4);
+            }
+			text = row.getElementsByTagName('text')[0];
+            //Four  conditions for black (instead of white text): 
+            // 1. if color_level is 0/1/2 (out of 0-4) which indicates light background-colors.  
+            // 2. if deselected (grey background)
+            // 3. If no fill-color is found
+            // 4. If the 0-10 value is < 3 (for quantile-based threshold indicators, it can happen that the above are not enough. This is a hard cut to make sure that for low-indicators we can see the text.)
+			if (selection == 'deselected' && title.substring(0,7) == 'No Data') { text.style.fill = 'white';}
+            else if (color_level <= 2 
+                || selection == 'deselected' 
+                || !fill 
+                || parseInt(title.substring(0,3)) < 3
+                ) { text.style.fill = 'black'; } 
+            else { text.style.fill = 'white';};
+		}
+	}
+    
+    //Function to sort either by Indicator Score (descending) or by Area Name (ascending)
+	sort = function(type) {
+		if (type === 'value') {
+			rowChart.ordering(function(d) {return isNaN(d.value) ? 0 : -d.value; });
+		} else if (type == 'name') {
+			rowChart.ordering(function(d) {if (d.value == 0) {return 'zzz';} else {return lookup[d.key];};});
+		}
+		rowChart.redraw();
+		row_text(color_range);
+	};
+    
+    //Function to immediately scroll back to the top (especially handy in mobile setting)
+    scrollRowChart = function() {
+        $('#tabular-wrapper').scrollTop(0);
+    };
+
+
+	///////////////////////////////
+	// SIDEBAR: INDICATOR CHANGE //
+	///////////////////////////////
+    
+	change_indicator = function(id) {
+        
+        metric = id;
+		metric_label = meta_label[id];
+		mapchartColors = mapchartColors_func(metric);
+		whereGroupSum.dispose();
+		whereGroupSum = whereDimension.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+		whereGroupSum_tab.dispose();
+		whereGroupSum_tab = whereDimension_tab.group().reduceSum(function(d) { if (d[metric]) {return d[metric];};});
+		mapChart
+			.group(whereGroupSum)
+			.colors(mapchartColors)
+			.colorCalculator(function(e){
+				if (meta_level[metric] > 3){ 
+					if (!e) {return '#cccccc';} else {return mapChart.colors()(e);}
+				} else {
+					if (!e) {return '#cccccc';}
+					else if (e<=color_range[0].threshold) {return color_range[0].HEX;}
+					else if (e<=color_range[1].threshold) {return color_range[1].HEX;}
+					else if (e<=color_range[2].threshold) {return color_range[2].HEX;}
+					else if (e<=color_range[3].threshold) {return color_range[3].HEX;}
+					else if (e<=color_range[4].threshold) {return color_range[4].HEX;}
+				}
+			})
+		;
+		rowChart
+			.group(whereGroupSum_tab)
+			.colors(mapchartColors)
+			.colorCalculator(function(e){
+				if (meta_level[metric] > 3){ 
+					if (!e) {return '#cccccc';} else {return mapChart.colors()(e.value);}
+				} else {
+					if (!e) {return '#cccccc';}
+					else if (e.value<=color_range[0].threshold) {return color_range[0].HEX;}
+					else if (e.value<=color_range[1].threshold) {return color_range[1].HEX;}
+					else if (e.value<=color_range[2].threshold) {return color_range[2].HEX;}
+					else if (e.value<=color_range[3].threshold) {return color_range[3].HEX;}
+					else if (e.value<=color_range[4].threshold) {return color_range[4].HEX;}
+				}
+			})
+		;
+        
+        //This is needed to make sure that indicator-changes do not affect selections in map or row-chart
+		if (chart_show == 'row' && row_filters.length >= 1 && map_filters_old.length >= 1) {
+            row_filters_old = $.extend( [], row_filters);
+			click_filter = false;
+			rowChart.filter([row_filters]);
+			click_filter = true;
+			rowChart.redraw();
+		} else if (chart_show == 'map' && map_filters.length >= 1) {
+            map_filters_old = $.extend( [], map_filters);
+			click_filter = false;
+            mapChart.filter(null);
+			mapChart.filter([map_filters_old]);
+			click_filter = true;
+			mapChart.redraw();
+        } else {
+			dc.redrawAll();
+		}
+        
+        //Run the functions that determines black/white text in row-chart
+		row_text(color_range);
+        
+        //Update some labels and colors based on new indicator
+		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
+		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
+        document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
+		document.getElementById('area_selection').style.color = color_range[3].HEX;
+	};
+
+    
+	/////////////////////////////
+	// SIDEBAR: METADATA POPUP //
+	/////////////////////////////
+
+	//Function to open the modal with information on indicator
+	info = function(id) {
+        
+		metric = id;
+		metric_label = meta_label[metric];
+        //Determine icon for popup
+		if (groups.indexOf(metric.substring(0,6)) > -1) {
+			metric_icon = img_path + metric.substring(0,6) + '.png';
+		} else {
+			metric_icon = img_path + metric.substring(0,2) + '.png';
+		}
+		document.getElementsByClassName('metric_icon')[0].setAttribute('src',metric_icon);
+		for (var i=0;i<$('.metric_label').length;i++){ $('.metric_label')[i].firstChild.innerHTML = metric_label; };
+        
+        //Empty current fillings first
+		for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = ''; };
+		for (var i=0;i<$('.metric_provider').length;i++){ $('.metric_provider')[i].innerHTML = ''; };
+		for (var i=0;i<$('.metric_source').length;i++){
+			$('.metric_source')[i].innerHTML = '';
+			$('.metric_source')[i].href = '';
+		};
+		for (var i=0;i<$('.metric_desc').length;i++){ $('.metric_desc')[i].innerHTML = ''; };
+        
+        //If no source-indicators found, report this
+		if (lookup_indicator[metric].length == 0) {
+			for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = 'No metadata found for this indicator'; };
+		}
+        
+        //Otherwise, if one source-indicator found, fill the popup with needed information
+		else if (lookup_indicator[metric].length == 1) {
+			metric_indicator = lookup_indicator_label[metric][0]; 
+			metric_provider = lookup_provider[metric][0]; 
+			metric_source = lookup_link[metric][0]; 
+			metric_desc = lookup_description[metric][0]; 
+			for (var i=0;i<$('.metric_indicator').length;i++){ $('.metric_indicator')[i].innerHTML = metric_indicator; };
+			for (var i=0;i<$('.metric_provider').length;i++){ $('.metric_provider')[i].innerHTML = metric_provider; };
+			for (var i=0;i<$('.metric_source').length;i++){
+				$('.metric_source')[i].innerHTML = metric_source;
+				$('.metric_source')[i].href = metric_source;
+			};
+			for (var i=0;i<$('.metric_desc').length;i++){ $('.metric_desc')[i].innerHTML = metric_desc; };
+        
+        //Otherwise, if >1 source-indicator found, fill the popup, but now in bullet-wise style    
+		} else if (lookup_indicator[metric].length > 1) {
+			for (var i=0;i<$('.metric_indicator').length;i++){
+				for (var j=0;j<lookup_provider[metric].length;j++) {
+					$('.metric_indicator')[i].innerHTML += '<li>' + lookup_indicator_label[metric][j] + '</li>';
+				};
+			}
+			for (var i=0;i<$('.metric_provider').length;i++){
+				for (var j=0;j<lookup_provider[metric].length;j++) {
+					$('.metric_provider')[i].innerHTML += '<li>' + lookup_provider[metric][j] + '</li>';
+				};
+			}
+			for (var i=0;i<$('.metric_source').length;i++){
+				for (var j=0;j<lookup_provider[metric].length;j++) {
+					$('.metric_source')[i].innerHTML += '<li>' + lookup_link[metric][j] + '</li>';
+					$('.metric_source')[i].href = undefined;
+				};
+			};
+			for (var i=0;i<$('.metric_desc').length;i++){
+				for (var j=0;j<lookup_provider[metric].length;j++) {
+					$('.metric_desc')[i].innerHTML += '<li>' + lookup_description[metric][j] + '</li>';
+				};
+			};
+
+		}
+        
+        //Show the popup
+		$('#infoModal').modal('show');
+	};
+    
+    
+	////////////////////////////////
+	// SIDEBAR: ACCORDION CLOSING //
+	////////////////////////////////
+
+	// Make sure that when opening another accordion-panel, the current one collapses
+	// LEVEL 1
+	var acc = document.getElementsByClassName('accordion-header level1');
+	var panel = document.getElementsByClassName('collapse level1');
+	var active = panel[0];
+	acc[0].onclick = function() {
+        active.classList.remove('in');
+        active = panel[0];
+    }
+    for (var i = 1; i < acc.length; i++) {
+		acc[i].onclick = function() {
+			var active_new = document.getElementById(this.id.replace('heading','collapse'));
+			if (active.id !== active_new.id) {
+				active.classList.remove('in');
+			}
+			active = active_new;
+		}
+	}
+	// LEVEL 2
+	var acc2 = document.getElementsByClassName('accordion-header level2');
+	var panel2 = document.getElementsByClassName('collapse level2');
+	var active2 = panel2[0]; //document.getElementsByClassName('collapse in level2')[0];
+	for (var i = 0; i < acc2.length; i++) {
+		acc2[i].onclick = function() {
+			var active_new2 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active2.id !== active_new2.id) {
+				active2.classList.remove('in');
+			}
+			active2 = active_new2;
+		}
+	}
+	// LEVEL 3
+	var acc3 = document.getElementsByClassName('accordion-header level3');
+	var panel3 = document.getElementsByClassName('collapse level3');
+	var active3 = panel3[0]; //document.getElementsByClassName('collapse in level3')[0];
+	for (var i = 0; i < acc3.length; i++) {
+		acc3[i].onclick = function() {
+			var active_new3 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active3.id !== active_new3.id) {
+				active3.classList.remove('in');
+			}
+			active3 = active_new3;
+		}
+	}
+	// LEVEL 4
+	var acc4 = document.getElementsByClassName('accordion-header level4');
+	var panel4 = document.getElementsByClassName('collapse level4');
+	var active4 = panel4[0]; //document.getElementsByClassName('collapse in level4')[0];
+	for (var i = 0; i < acc4.length; i++) {
+		acc4[i].onclick = function() {
+			var active_new4 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active4.id !== active_new4.id) {
+				active4.classList.remove('in');
+			}
+			active4 = active_new4;
+		}
+	}
+	// LEVEL 5
+	var acc5 = document.getElementsByClassName('accordion-header level5');
+	var panel5 = document.getElementsByClassName('collapse level5');
+	var active5 = panel5[0]; //document.getElementsByClassName('collapse in level5')[0];
+	for (var i = 0; i < acc5.length; i++) {
+		acc5[i].onclick = function() {
+			var active_new5 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active5.id !== active_new5.id) {
+				active5.classList.remove('in');
+			}
+			active5 = active_new5;
+		}
+	}
+	// LEVEL 6
+	var acc6 = document.getElementsByClassName('accordion-header level6');
+	var panel6 = document.getElementsByClassName('collapse level6');
+	var active6 = panel6[0]; //document.getElementsByClassName('collapse in level6')[0];
+	for (var i = 0; i < acc6.length; i++) {
+		acc6[i].onclick = function() {
+			var active_new6 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active6.id !== active_new6.id) {
+				active6.classList.remove('in');
+			}
+			active6 = active_new6;
+		}
+	}
+	// LEVEL 7
+	var acc7 = document.getElementsByClassName('accordion-header level7');
+	var panel7 = document.getElementsByClassName('collapse level7');
+	var active7 = panel7[0]; //document.getElementsByClassName('collapse in level7')[0];
+	for (var i = 0; i < acc7.length; i++) {
+		acc7[i].onclick = function() {
+			var active_new7 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active7.id !== active_new7.id) {
+				active7.classList.remove('in');
+			}
+			active7 = active_new7;
+		}
+	}
+	// LEVEL 8
+	var acc8 = document.getElementsByClassName('accordion-header level8');
+	var panel8 = document.getElementsByClassName('collapse level8');
+	var active8 = panel8[0]; //document.getElementsByClassName('collapse in level8')[0];
+	for (var i = 0; i < acc8.length; i++) {
+		acc8[i].onclick = function() {
+			var active_new8 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active8.id !== active_new8.id) {
+				active8.classList.remove('in');
+			}
+			active8 = active_new8;
+		}
+	}
+	// LEVEL 9
+	var acc9 = document.getElementsByClassName('accordion-header level9');
+	var panel9 = document.getElementsByClassName('collapse level9');
+	var active9 = panel9[0]; //document.getElementsByClassName('collapse in level9')[0];
+	for (var i = 0; i < acc9.length; i++) {
+		acc9[i].onclick = function() {
+			var active_new9 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active9.id !== active_new9.id) {
+				active9.classList.remove('in');
+			}
+			active9 = active_new9;
+		}
+	}
+	// LEVEL 10
+	var acc10 = document.getElementsByClassName('accordion-header level10');
+	var panel10 = document.getElementsByClassName('collapse level10');
+	var active10 = panel10[0]; //document.getElementsByClassName('collapse in level10')[0];
+	for (var i = 0; i < acc10.length; i++) {
+		acc10[i].onclick = function() {
+			var active_new10 = document.getElementById(this.id.replace('heading','collapse'));
+			if (active10.id !== active_new10.id) {
+				active10.classList.remove('in');
+			}
+			active10 = active_new10;
+		}
+	}
+
+    
+	///////////////////////////////////
+	// SIDEBAR: MAP & TABULAR SWITCH //
+	///////////////////////////////////
+
+	//Switch between MAP and TABULAR view
+    mapShow = function() {
+        
+        row_filters_old = $.extend( [], row_filters );
+        
+		//Zoom to selected countries in row-chart
+		if (row_filters_old.length == 0) {
+			zoomToGeom(d.Districts);
+		} else {
+			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			districts_temp.features = [];
+			for (var i=0;i<d.Districts.features.length;i++){
+				if (row_filters_old.indexOf(d.Districts.features[i].properties.id) > -1) {
+					districts_temp.features.push(d.Districts.features[i]);
+				}
+			}
+			zoomToGeom(districts_temp);
+		}
+        
+		if (chart_show == 'row') {
+			chart_show = 'map';
+			$('#row-chart-container').hide();
+			$('#map-chart').show();
+
+			click_filter = false;
+			coming_from_tab = true;
+			rowChart.filter(null);
+			mapChart.filter([row_filters]);
+            map_filters = $.extend( [], row_filters_old ); 
+            map_filters_old = $.extend( [], row_filters_old ); 
+			rowChart.filter(null);
+			click_filter = true;
+			coming_from_tab = false;
+		}
+
+
+
+	}
+
+	map_filters_old = [];
+	tabularShow = function() {
+        
+        chart_show = 'row';
+		$('#map-chart').hide();
+		document.getElementById('row-chart-container').style.visibility = 'visible';
+		$('#row-chart-container').show();
+
+		click_filter = false;
+		coming_from_map = true;
+		map_filters_old = $.extend( [], map_filters );
+        row_filters_old = $.extend( [], map_filters );
+		rowChart.filter([map_filters]);
+		mapChart.filter(null);
+		mapChart.filter([map_filters_old]);
+		rowChart.redraw();
+		click_filter = true;
+		coming_from_map = false;
+        
+	}
+    
+    // This changes the active-state styling between Map View and Tabular View buttons, after switching
+    $('.view-buttons button').click(function(e) {
+        $('.view-buttons button.active').removeClass('active');
+        var $this = $(this);
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }  
+        e.preventDefault();
+    });
+    
+    ///////////////////////////
+	// SIDEBAR: RESET BUTTON //
+	///////////////////////////
+
+	reset_function = function() {
+		dc.filterAll();
+		dc.redrawAll();
+		map_filters_old = [];
+		row_filters_old = [];
+		updateHTML(row_filters_old);
+		for (var i=0;i<$('.filter-count').length;i++){ $('.filter-count')[i].innerHTML = 'All '; };
+        var resetbutton = document.getElementsByClassName('reset-button')[0];
+		resetbutton.style.visibility = 'hidden';
+		if (chart_show == 'map') {zoomToGeom(d.Districts);};
+		if (chart_show == 'row') {row_text(color_range);};
+	}
+
+
+
+
+
+
+	//////////////////////////////
+	// HEADER FUNCTIONS: EXPORT //
+	//////////////////////////////
+
+	//Export to CSV function
+	export_csv = function() {
+
+		var content = data_final;
+		var finalVal = '';
+
+		for (var i = 0; i < content.length; i++) {
+			var value = content[i];
+			var key,innerValue,result;
+			if (i === 0) {
+				for (key in value) {
+					if (value.hasOwnProperty(key)) {
+						innerValue = meta_label[key] ? meta_label[key] : key;
+						result = innerValue.replace(/"/g, '');
+						if (result.search(/("|,|\n)/g) >= 0)
+							result = '' + result + '';
+						if (key !== 'pcode') finalVal += ',';
+						finalVal += result;
+					}
+				}
+			finalVal += '\n';
+			}
+
+			for (key in value) {
+				if (value.hasOwnProperty(key)) {
+					innerValue = JSON.stringify(value[key] == 0.01 ? 0 : value[key]);
+					result = innerValue.replace(/"/g, '');
+					if (result.search(/("|,|\n)/g) >= 0)
+						result = '' + result + '';
+					if (key !== 'pcode') finalVal += ',';
+					finalVal += result;
+				}
+			}
+
+			finalVal += '\n';
+		}
+
+		if (typeof L_PREFER_CANVAS !== 'undefined') {
+            var IEwindow = window.open();
+            IEwindow.document.write('sep=,\r\n' + finalVal);
+            IEwindow.document.execCommand('SaveAs', null,"export_change_extension_to_csv.txt");
+            IEwindow.document.close();
+            IEwindow.close();
+        } else {
+            var download = document.getElementById('download');
+            download.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(finalVal));
+            download.setAttribute('download', 'export.csv');
+            //download.click();
+        }
+	};
+
+	//Export to JSON (NOT shown in dashboard)
+	export_json = function() {
+		var myWindow = window.open('','','_blank');
+		myWindow.document.write(JSON.stringify(d.workflow_info))
+		myWindow.focus();
+	}
+
+	//Create parameter-specific URL and show it in popup to copy
+	function addParameterToURL(inform_model,workflow_id,metric,chart_show){
+		var _url = location.href;
+		_url = _url.split('?')[0];
+		_url += (_url.split('?')[1] ? '&':'?') + 'workflowgroup='+inform_model+'&workflow_id='+workflow_id+'&metric='+metric+'&view='+chart_show;
+		document.getElementById('shareable_URL').innerHTML = _url;
+		return _url;
+	}
+
+	share_URL = function() {
+		shareable_URL = addParameterToURL(d.inform_model,d.workflow_id,metric,chart_show);
+		$('#URLModal').modal('show');
+	}
+
+	//Export to GEOJSON
+	link_data = function() {
+        
+		if (d.system == 'INFORM'){
+			var url = url_global; 
+        } else {
+            var url = d.lookup_systems_url[d.system];
+        };
+		var excel = document.getElementById('excel');
+		excel.setAttribute('href', url);
+		//excel.click();
+	}
+
+
+    //////////////////////////////////
+	// HEADER FUNCTIONS: MODEL MENU //
+	//////////////////////////////////
+    
+    //Load the workflow-groups ..
+    var workflows = api_base + 'Workflows/WorkflowGroups';
+    d3.json(setting == 'api' ? workflows : 'data/workflows.json',function(data_workflows) {
+        
+        // .. which is only used to determine the maximum year
+        var max_year = 0;
+        for (var k=0;k<data_workflows.length;k++) {
+            if (data_workflows[k].indexOf('_') <= -1) {
+                var year = data_workflows[k].substring(6,10)*1;
+                var max_year = Math.max(year,max_year);
+            }
+        };
+        
+        // .. Then open the available systems
+        var systems = api_base + 'Workflows/Systems';
+        d3.json(setting == 'api' ? systems : 'data/systems.json',function(data_systems) {
+            d.Systems = data_systems; 
+            
+            // Create a lookup-table of systems to get the subnational link from (for function 'link_data')
+            var genLookup_systems = function (field){
+                var lookup_systems = {};
+                d.Systems.forEach(function(e){
+                    lookup_systems[e.Code] = String(e[field]);
+                });
+                return lookup_systems;
+            };
+            d.lookup_systems_url = genLookup_systems('PageUrl');
+            
+            //.. Find the HTML-element to which the model-options will be connected (and clean it up first)
+            var ul = document.getElementById('model-items');
+            while (ul.childElementCount > 0) { ul.removeChild(ul.firstChild);};
+            
+            //.. Loop through the systems and create HTML (1st dropdown) for each of them
+            for (var i=0;i<data_systems.length;i++) {
+                
+                // .. This filter only has affect when the goal is to filter on particular systems only
+                if (!filter_models || (filter_models && system_filter.indexOf(data_systems[i].Code) > -1)) {
+                    
+                    var li = document.createElement('li');
+                    li.setAttribute('class','dropdown-submenu');
+                    ul.appendChild(li);
+                    var a = document.createElement('a');
+                    a.setAttribute('class','dropdown-toggle export-button submenu-item models1');
+                    a.setAttribute('data-toggle','dropdown');
+                    a.setAttribute('href','#');
+                    a.innerHTML = data_systems[i].Fullname;
+                    li.appendChild(a);
+                    var fa = document.createElement('i');
+                    fa.setAttribute('class','fa fa-angle-left export-btn-arrow menu-arrow');
+                    fa.setAttribute('style','float:left');
+                    a.appendChild(fa);
+                    eval("var ul" + i +" = document.createElement('ul');");
+                    eval("ul" + i + ".setAttribute('class','dropdown-menu');");
+                    eval("li.appendChild(ul" + i + ");");
+                                        
+                    // Now loop through all the workflows (ALL each time, because we cannot filter by system in API)
+                    var workflow_info = api_base + 'workflows'; 
+                    (function (_i) {
+                        d3.json(setting == 'api' ? workflow_info : 'data/workflow_' + data_systems[_i].Code + '.json',function(workflow_info) {
+                            
+                            //Here we do immediately filter on only the workflows which relate to the current system (and in case of Global model, only those related to the current year)
+                            workflow_info = $.grep(workflow_info, function(e){ return e.System.toUpperCase() == data_systems[_i].Code
+                                                                    && ((e.System.toUpperCase() == 'INFORM' && e.WorkflowGroupName.substring(6,10) == max_year) || e.System.toUpperCase() !== 'INFORM')                            
+                                                                    && e.FlagGnaPublished               //Additional filter needed
+                                                                    && e.WorkflowGroupName !== ''       //Additional filter needed
+                                                                    ;});
+                            
+                            //For the global model, we sort by name so that the reruns go to the bottom
+                            if (data_systems[_i].Code == 'INFORM') {
+                                workflow_info.sort(function(a, b){
+                                    if(a.Name < b.Name) return -1;
+                                    if(a.Name > b.Name) return 1;
+                                    return 0;
+                                });
+                            }
+                            
+                            //Loop through the workflows and create HTML (2nd dropdown) for each of them.
+                            for (var j=0;j<workflow_info.length;j++) {
+                                                                 
+                                var li = document.createElement('li');
+                                eval("ul" + _i + ".appendChild(li);");
+                                var a = document.createElement('a');
+                                a.setAttribute('class','submenu-item');
+                                a.setAttribute('onClick','load_dashboard(\'' + workflow_info[j].WorkflowGroupName + '\',' + workflow_info[j].WorkflowId + ')');
+                                a.setAttribute('role','button');
+                                a.innerHTML = workflow_info[j].Name;
+                                li.appendChild(a);
+                             
+                            };
+                        
+                        });
+                    })(i);
+                }
+            };
+            //Functionality to make sure that 2nd dropdown disappears when clicking another element
+            $('.dropdown a.models0').on("click", function(e){
+                $('.dropdown-submenu a.models1').next('ul').css('display','none');
+            });
+            $('.dropdown-submenu a.models1').on("click", function(e){
+                $('.dropdown-submenu a.models1').not(this).next('ul').css('display','none');
+                $(this).next('ul').toggle();
+                e.stopPropagation();
+                e.preventDefault();
+            });
+        });
+        
+    });
+            
+            
+
+
+
+
+
+
+
+	/////////////////////////
+	// RENDER MAP AND PAGE //
+	/////////////////////////
+
+	//Render all dc-charts and -tables
+	dc.renderAll();
+    row_text(color_range);
+    
+    //Move zoom-buttons to the lower-right corner
+	var zoom_child = $('.leaflet-control-zoom')[0];
+	var zoom_parent = $('.leaflet-bottom.leaflet-right')[0];
+	zoom_parent.insertBefore(zoom_child,zoom_parent.childNodes[0]);
+    //In mobile, move the legend to the lower-right corner
+    if($(window).width() < 768) {
+        var legend_child = $(".info.legend.leaflet-control")[0];
+        var legend_parent = $(".leaflet-bottom.leaflet-right")[0];
+        legend_parent.insertBefore(legend_child,legend_parent.childNodes[0]);
+    }
+    
+    //Initialize map
+	map = mapChart.map();
+    
+    //Add (disputed) borders for global model
+    var polygon_layer;
+    for (var x in map._layers) {
+        if (map._layers[x]._layers) {
+            polygon_layer = map._layers[x];
+        }
+    }
+    if (d.system == 'INFORM') {
+        
+        polygon_layer.setStyle({weight:0});
+        
+        var solid_style = {
+            color: '#444444',
+            weight: 0.5
+        };
+        var dashed_style = {
+            color: '#444444',
+            weight: 1.0,
+            dashArray: '5,10'
+        }
+        var dotted_style = {
+            color: '#444444',
+            weight: 1.0,
+            dashArray: '2,5'
+        }
+        var lineStyles = function(feature) {
+            switch(feature.properties.CARTOGRAPH) {
+                case "International boundary": return solid_style; break;
+                case "Short international boundary": return solid_style; break;
+                case "Dashed": return dashed_style; break;
+                case "SDN-SSD": return dashed_style; break;
+                case "Bnd former Palestinian mandate": return dashed_style; break;
+                case "Abyei North": return dotted_style; break;
+                case "Abyei South": return dotted_style; break;
+                case "Dotted": return dotted_style; break;
+            }
+        }
+        var lines = d.borders.features;
+        var border_layer = L.geoJSON(lines,{style:lineStyles});
+        border_layer.addTo(map);
+        
+    } else {
+        polygon_layer.setStyle({weight:0.5});
+    }
+    
+    //Zoom to selection in map
+	function zoomToGeom(geom){
+		var bounds = d3.geo.bounds(geom);
+		map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
+	}
+	zoomToGeom(d.Districts);
+    
+    //Show map
+	if (chart_show == 'map') {
+		$('#row-chart-container').hide();
+	} else if (chart_show == 'row') {
+		tabularShow();
+	}
+    
+    //Final CSS
+    $(".sidebar-wrapper").addClass("in");
+    $('.view-buttons button.active').removeClass('active');
+    $('.view-buttons button.btn-map-view').addClass('active');
+};
+
+</script>
+
+</body>
+</html>

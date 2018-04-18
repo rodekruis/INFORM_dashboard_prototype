@@ -1,4 +1,4 @@
-ID;System;Indicator;Indicator_code;R_Color;G_Color;B_Color;ValueFrom;ValueTo;HEX;Foreground
+ID;System;Indicator;OutputIndicatorName;R_Color;G_Color;B_Color;ValueFrom;ValueTo;HEX;Foreground
 1;INFORM;InfoRM Risk Index;INFORM;255;200;191;0;1,9;#FFC8BF;NULL
 2;INFORM;InfoRM Risk Index;INFORM;254;145;129;2;3,4;#FE9181;NULL
 3;INFORM;InfoRM Risk Index;INFORM;254;90;60;3,5;4,9;#FE5A3C;NULL

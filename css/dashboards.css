@@ -44,11 +44,12 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
 .sidebar-wrapper {
   border: 3px solid #F3EEE3;
   height: 95%;
+  height: calc(100% - 166px);
   left: 0;
   overflow: auto;
   padding: 20px;
   position: absolute;
-  top: 114px;
+  top: 112px;
   width: 380px;
   z-index: 2;
   background-color: #F3EEE3;
@@ -270,6 +271,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   float: left;
   margin-right: 12px;
   padding: 10px;
+  border: solid;
+  border-width: 2px;
 }
 .panel-header-icon img {
   width: 20px;
@@ -664,13 +667,14 @@ a.handle:hover {
 }
 
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-clickable {
-	fill-opacity: .6;
-	stroke-width: .5;
+.leaflet-interactive { 
+    fill-opacity: .6;
+	/* stroke-width: .5; */
+    /* stroke: black; */
 }
-.leaflet-zoom-animated {
+/* .leaflet-zoom-animated {
 	fill-opacity: .6;
-}
+} */
 
 
 #loading-bar-spinner {
@@ -969,7 +973,7 @@ body {
   bottom: 0;
   left: -10px;
   top: 30px;
-  overflow: auto;
+  overflow-y: auto;
   position: absolute;
   margin-left: 380px;
   width: 80%;

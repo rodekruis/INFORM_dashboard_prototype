@@ -109,10 +109,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   bottom: 0;
   height: 100%;
   position: absolute;
-  /* left: 380px;  */
+  /* left: 380px; */
   top: 0;
-  width: 100%;
+  width:100%;
+  /* width: 80%; */
+  /* width: calc(100% - 380px); */
 }
+
+/* @media only screen and (max-width: 767px){
+  .map-wrapper{
+    left: 0px;
+    width: 100%;
+  }
+} */
 
 .zoom-level-nav-wrapper{
   width: 380px;
@@ -724,7 +733,7 @@ a.handle:hover {
 .reset-button:hover,
 .reset-button:focus{
 	visibility:hidden;
-	background-color: #045a8d;
+	background-color: #951301;
 	color: white;
 	text-decoration: none;
 	cursor:pointer;
@@ -945,7 +954,7 @@ body {
 }
 
 #model-items,#global-model-items{
-  min-width: 220px;
+  min-width: 250px;
 }
 
 @media only screen and (max-width: 1024px){

@@ -309,10 +309,19 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6{
   bottom: 0;
   height: 100%;
   position: absolute;
-  /* left: 380px;  */
+  /* left: 380px; */
   top: 0;
-  width: 100%;
+  width:100%;
+  /* width: 80%; */
+  /* width: calc(100% - 380px); */
 }
+
+/* @media only screen and (max-width: 767px){
+  .map-wrapper{
+    left: 0px;
+    width: 100%;
+  }
+} */
 
 .zoom-level-nav-wrapper{
   width: 380px;
@@ -867,9 +876,14 @@ a.handle:hover {
 }
 
 /* Make sure the colored polygons in the map are transparent, so you can see OSM information through it */
-.leaflet-interactive {
-	fill-opacity: .6;
+.leaflet-interactive { 
+    fill-opacity: .6;
+	/* stroke-width: .5; */
+    /* stroke: black; */
 }
+/* .leaflet-zoom-animated {
+	fill-opacity: .6;
+} */
 
 
 #loading-bar-spinner {
@@ -919,7 +933,7 @@ a.handle:hover {
 .reset-button:hover,
 .reset-button:focus{
 	visibility:hidden;
-	background-color: #045a8d;
+	background-color: #951301;
 	color: white;
 	text-decoration: none;
 	cursor:pointer;
@@ -1140,7 +1154,7 @@ body {
 }
 
 #model-items,#global-model-items{
-  min-width: 220px;
+  min-width: 250px;
 }
 
 @media only screen and (max-width: 1024px){
@@ -1288,7 +1302,6 @@ div.dc-chart{
     cursor: pointer;
 }
 
-
     </style>
         
     
@@ -1382,6 +1395,7 @@ div.dc-chart{
 							<span class="filter-count" id="area_selection">All </span>
 							<span style="font-size: 12px"> selected</span>
 							<a class="reset-button" onclick="reset_function()">Select all</a>
+                            <a class="reset-button" onclick="zoom_function()">Zoom</a>
 						</div>
 						<div class="row"></div>
 						<div class='tablearea' id='general'></div>
@@ -3211,13 +3225,14 @@ dc.leafletChoroplethChart = function (parent, chartGroup) {
 
 // If you want to create a copy only for SAHEL: set filter_models = true & system_filter = ["INFORM_SAH"];
 var filter_models = false;
-var system_filter = ["INFORM_SAH"]; //["INFORM_ESAF", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAH", "INFORM_CCA", "INFORM_COL"];
+var system_filter = []; //["INFORM_ESAF", "INFORM_GTM", "INFORM_LAC", "INFORM_LBN", "INFORM_SAH", "INFORM_CCA", "INFORM_COL"];
 
 // Also needed (for the parameter-specific URL) is the exact base-path of the dashboard page.
 var dashboard_pagename = 'Dashboard-Test';
 var dashboard_location = 'http://www.inform-index.org/' + dashboard_pagename; 
+var prototype_location = 'https://rodekruis.github.io/INFORM_dashboard_prototype/';
  
-var setting = 'api'; //'prototype','api'  //Setting used during development to quickly switch to Github-page settings (using hardcopy .json-files)
+var setting = 'prototype'; //'prototype','api'  //Setting used during development to quickly switch to Github-page settings (using hardcopy .json-files)
 
 //////////////////////
 // DEFINE VARIABLES //
@@ -3276,13 +3291,23 @@ load_dashboard = function(inform_model,workflow_id) {
 	//Determine if a parameter-specific URL was entered, and IF SO, set the desired parameters
 	var url = location.href;
 	if (url.indexOf('?') > -1) {
-		url = url.split('?')[1];
-		directURLload = true;
-		inform_model = url.split('&')[0].split('=')[1];
-		workflow_id = url.split('&')[1].split('=')[1];
-		metric = url.split('&')[2].split('=')[1];
-		chart_show = url.split('&')[3].split('=')[1];
-        window.history.pushState({}, document.title, setting == 'api' ? dashboard_location : 'https://rodekruis.github.io/INFORM_dashboard_prototype/');
+        url = url.split('?')[1];
+        console.log(url);
+		if (url.split('&')[0].split('=')[0] == 'filter_models') {
+            filter_models = url.split('&')[0].split('=')[1];
+            console.log(filter_models);
+            system_filter = url.split('&')[1].split('=')[1].split(',');
+            console.log(system_filter);
+            directURLload = false;
+            window.history.pushState({}, document.title, setting == 'api' ? dashboard_location : prototype_location);
+        } else {
+            directURLload = true;
+            inform_model = url.split('&')[0].split('=')[1];
+            workflow_id = url.split('&')[1].split('=')[1];
+            metric = url.split('&')[2].split('=')[1];
+            chart_show = url.split('&')[3].split('=')[1];
+            window.history.pushState({}, document.title, setting == 'api' ? dashboard_location : prototype_location);
+        }
 	} else {
 		directURLload = false;
 	}
@@ -3370,7 +3395,9 @@ load_dashboard = function(inform_model,workflow_id) {
                                     document.getElementById('indicator-button').style.backgroundColor = d.default_color;
                                     document.getElementById('area_selection').style.color = d.default_color;
                                     document.getElementsByClassName('reset-button')[0].style.backgroundColor = d.default_color;
+                                    document.getElementsByClassName('reset-button')[1].style.backgroundColor = d.default_color;
                                     document.getElementsByClassName('reset-button')[0].style.visibility = 'hidden';
+                                    document.getElementsByClassName('reset-button')[1].style.visibility = 'hidden';
                                     document.getElementById('model-title').innerHTML = d.workflow_name;
                                     for (var i=0;i<$('.level1.in').length;i++){ $('.level1.in')[i].classList.remove('in');};
                                     for (var i=0;i<$('.collapse.in').length;i++){ $('.collapse.in')[i].classList.remove('in');};
@@ -3748,6 +3775,7 @@ var generateCharts = function (d){
 	mapchartColors = mapchartColors_func(metric);
 	document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
 	document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
+	document.getElementsByClassName('reset-button')[1].style.backgroundColor = color_range[3].HEX;
 	document.getElementById('area_selection').style.color = color_range[3].HEX;
     
     //We need a similar, but separate function to use for all the sidebar-bars (that show when selecting one country). It gives as output one specific color for one specific indicator.
@@ -4184,8 +4212,9 @@ var generateCharts = function (d){
 				};
 				updateHTML(row_filters_old);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];
-				if (row_filters_old.length > 0) { resetbutton.style.visibility = 'visible';
-				} else { resetbutton.style.visibility = 'hidden'; }
+				if (row_filters_old.length > 0) { resetbutton.style.visibility = 'visible';} else { resetbutton.style.visibility = 'hidden'; }
+				var zoombutton = document.getElementsByClassName('reset-button')[1];
+				if (row_filters_old.length > 0) { zoombutton.style.visibility = 'visible';} else { zoombutton.style.visibility = 'hidden'; }
 			}
             //When NOT coming from Tabular View
 			if (chart_show == 'map' && !coming_from_tab) {
@@ -4196,8 +4225,9 @@ var generateCharts = function (d){
 				};
 				updateHTML(map_filters);
 				var resetbutton = document.getElementsByClassName('reset-button')[0];
-				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible';
-				} else { resetbutton.style.visibility = 'hidden'; }
+				if (map_filters.length > 0) { resetbutton.style.visibility = 'visible'; } else { resetbutton.style.visibility = 'hidden'; }
+				var zoombutton = document.getElementsByClassName('reset-button')[1];
+				if (map_filters.length > 0) { zoombutton.style.visibility = 'visible'; } else { zoombutton.style.visibility = 'hidden'; }
 			}
 		})
         .on('renderlet',function(chart,filters){
@@ -4424,6 +4454,7 @@ var generateCharts = function (d){
 		document.getElementById('metric_label').firstChild.innerHTML = metric_label;
 		document.getElementById('indicator-button').style.backgroundColor = color_range[3].HEX;
         document.getElementsByClassName('reset-button')[0].style.backgroundColor = color_range[3].HEX;
+        document.getElementsByClassName('reset-button')[1].style.backgroundColor = color_range[3].HEX;
 		document.getElementById('area_selection').style.color = color_range[3].HEX;
 	};
 
@@ -4655,10 +4686,24 @@ var generateCharts = function (d){
         
         row_filters_old = $.extend( [], row_filters );
         
-		//Zoom to selected countries in row-chart
-		if (row_filters_old.length == 0) {
+        //Zoom to selected countries in row-chart
+        // if (chart_show == 'map') {
+            // var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			// districts_temp.features = [];
+			// for (var i=0;i<d.Districts.features.length;i++){
+				// if (map_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+					// districts_temp.features.push(d.Districts.features[i]);
+				// }
+			// }
+			// zoomToGeom(districts_temp);
+        // } else 
+        if (row_filters_old.length == 0) {
 			zoomToGeom(d.Districts);
 		} else {
+            
+            var zoombutton = document.getElementsByClassName('reset-button')[1];
+            zoombutton.style.visibility = 'visible';
+            
 			var districts_temp = JSON.parse(JSON.stringify(d.Districts));
 			districts_temp.features = [];
 			for (var i=0;i<d.Districts.features.length;i++){
@@ -4691,6 +4736,9 @@ var generateCharts = function (d){
 
 	map_filters_old = [];
 	tabularShow = function() {
+        
+        var zoombutton = document.getElementsByClassName('reset-button')[1];
+		zoombutton.style.visibility = 'hidden';
         
         chart_show = 'row';
 		$('#map-chart').hide();
@@ -4736,7 +4784,19 @@ var generateCharts = function (d){
 		if (chart_show == 'map') {zoomToGeom(d.Districts);};
 		if (chart_show == 'row') {row_text(color_range);};
 	}
-
+    
+    zoom_function = function() {
+        if (chart_show == 'map') {
+            var districts_temp = JSON.parse(JSON.stringify(d.Districts));
+			districts_temp.features = [];
+			for (var i=0;i<d.Districts.features.length;i++){
+				if (map_filters.indexOf(d.Districts.features[i].properties.id) > -1) {
+					districts_temp.features.push(d.Districts.features[i]);
+				}
+			}
+			zoomToGeom(districts_temp);
+        }
+    }
 
 
 
@@ -5022,6 +5082,7 @@ var generateCharts = function (d){
     //Zoom to selection in map
 	function zoomToGeom(geom){
 		var bounds = d3.geo.bounds(geom);
+        console.log(bounds);
 		map.fitBounds([[bounds[0][1],bounds[0][0]],[bounds[1][1],bounds[1][0]]]);
 	}
 	zoomToGeom(d.Districts);
